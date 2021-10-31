@@ -41,7 +41,12 @@ const CodeBlock = ({ children: exampleCode, ...props }) => {
   }, []);
 
   if (props['react-live']) {
-    return <LoadableComponent code={exampleCode} />;
+    if (props['hide-code']) {
+      return <LoadableComponent code={exampleCode} hideCode={true} />;
+    } else {
+      return <LoadableComponent code={exampleCode}  />;
+    }
+    
   } else {
     return (
       <Highlight {...defaultProps} Prism={Prism} code={exampleCode} language={(props.className)?props.className.split("-")[1] :"javascript"} theme={theme}>

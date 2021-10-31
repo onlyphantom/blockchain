@@ -19,11 +19,17 @@ exports.createPages = ({ graphql, actions }) => {
                 node {
                   fields {
                     id
-                  }
-                  tableOfContents
-                  fields {
                     slug
                   }
+                  frontmatter {
+                    metaTitle
+                    metaDescription
+                    date
+                    author
+                    slug
+                    keywords
+                  }
+                  tableOfContents
                 }
               }
             }
@@ -38,7 +44,7 @@ exports.createPages = ({ graphql, actions }) => {
         // Create blog posts pages.
         result.data.allMdx.edges.forEach(({ node }) => {
           createPage({
-            path: node.fields.slug ? node.fields.slug : '/',
+            path: node.frontmatter.slug || node.fields.slug ? node.fields.slug : '/',
             component: path.resolve('./src/templates/docs.js'),
             context: {
               id: node.fields.id,
@@ -81,16 +87,17 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
     }
 
     if (config.gatsby && config.gatsby.trailingSlash) {
+      
       createNodeField({
         name: `slug`,
         node,
-        value: value === '' ? `/` : `/${value}/`,
+        value: node.frontmatter.slug || value === '' ? `/` : `/${value}/`,
       });
     } else {
       createNodeField({
         name: `slug`,
         node,
-        value: `/${value}`,
+        value: node.frontmatter.slug || `/${value}`,
       });
     }
 

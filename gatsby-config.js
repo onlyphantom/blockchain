@@ -48,6 +48,9 @@ const plugins = [
       anonymize: false,
     },
   },
+  // added by @onlyphantom
+  'gatsby-transformer-remark',
+  'gatsby-plugin-antd',
 ];
 // check and add algolia
 if (config.header.search && config.header.search.enabled && config.header.search.algoliaAppId && config.header.search.algoliaAdminKey) {

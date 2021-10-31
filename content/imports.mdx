@@ -1,0 +1,46 @@
+---
+title: "Imports"
+metaTitle: "An introduction to importing React components"
+metaDescription: "This is some meta description"
+date: 2021-11-01
+author: Samuel Chan
+slug: /imports-101
+---
+
+import React  from 'react'
+import { Button, Alert } from 'antd'
+
+You can import your own components.
+
+<Button type="primary">Primary Button</Button>
+    <Button>Default Button</Button>
+    <Button type="dashed">Dashed Button</Button>
+<Alert message="Success Text" type="success" />
+
+An example of interactive code:
+```javascript react-live=true
+const elem = <button style={{color: 'seagreen'}}>
+                Change me to blue.
+             </button>
+render(elem)
+```
+
+
+```javascript react-live=true hide-code
+const App = () => {
+
+    const [val, setVal] = React.useState(1704)
+
+    return (
+        <div>
+            <h1>Hashing</h1>
+
+            <p>
+                {val} Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi voluptas tenetur dignissimos 
+                <br/> Aspernatur, corrupti repellat debitis officia, odit doloribus consequatur unde amet similique ipsum laborum eveniet, maxime saepe. Inventore aliquam consequatur perferendis iste veritatis mollitia veniam odit.
+            </p>
+        </div>
+    )
+}
+render(App)
+```
