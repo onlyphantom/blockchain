@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
 
 export const Sidebar = styled('aside')`
-  width: 100%;
+  width: 220px;
+  min-width: 220px;
   border-right: 1px solid #ede7f3;
   height: 100vh;
   overflow: auto;
