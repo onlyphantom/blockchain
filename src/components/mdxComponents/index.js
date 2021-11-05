@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
+import TeX from "@matejmazur/react-katex";
 
 import CodeBlock from './codeBlock';
 import AnchorTag from './anchor';
@@ -76,6 +77,23 @@ export default {
   ),
   code: CodeBlock,
   a: AnchorTag,
+  div: (props) => {
+    if (props.className.includes("math-display")) {
+      import("katex/dist/katex.min.css");
+      // see docs: https://www.npmjs.com/package/@matejmazur/react-katex
+      return <TeX settings={{ macros: { '*': '\\cdot' } }} block>
+        {props.children}
+      </TeX>;
+    }
+    return <div {...props} />;
+  },
+  span: (props) => {
+    if (props.className.includes("math-inline")) {
+      import("katex/dist/katex.min.css");
+      return <TeX settings={{ macros: { '*': '\\cdot' } }} math={props.children} />;
+    }
+    return <span {...props} />;
+  },
   // TODO add `img`
   // TODO add `blockquote`
   // TODO add `ul`
