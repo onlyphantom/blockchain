@@ -72,7 +72,6 @@ export default class MDXRuntimeTest extends Component {
     const metaKeywords = mdx.frontmatter.keywords;
     const metaDate = mdx.frontmatter.date;
 
-    console.log(metaDate);
     let canonicalUrl = config.gatsby.siteUrl;
 
     canonicalUrl =
