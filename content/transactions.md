@@ -33,7 +33,7 @@ Supposed Alice wants to pay Bob 1 ETH, and the gas price is
 
 An example of interactive code:
 ```javascript react-live=true
-const elem = <button style={{color: 'seagreen'}}>
+const elem = <button style={{color: 'burlywood'}}>
                 Change me to blue.
              </button>
 render(elem)
