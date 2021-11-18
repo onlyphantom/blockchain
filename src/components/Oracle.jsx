@@ -5,7 +5,6 @@ const Oracle = () => {
 
     const [val, setVal] = React.useState({})
     // const [api, setApi] = React.useState(null)
-    const [amt, setAmt] = React.useState(0)
 
     // React.useEffect(()=>{
     //     fetch('https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=YourApiKeyToken')
@@ -50,8 +49,6 @@ const Oracle = () => {
                 <Input 
                     addonBefore="ETH"
                     placeholder="Amount of ETH To Transfer" 
-                    // style={{width: '50%', marginTop: '1%'}}
-                    onChange={(e) => setAmt(e.target.value)}
                 />
             </Form.Item>
             <Form.Item
