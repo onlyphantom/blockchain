@@ -17,19 +17,25 @@ const Oracle = () => {
   };
 
   const getApi = (amount, apiKey) => {
-    fetch(
-      `https://api.etherscan.io/api?module=gastracker&action=gasoracle&amount=${amount}&apikey=${apiKey}`
-    );
-    const url_oracle = 'https://api.etherscan.io/api?module=gastracker&action=gasoracle';
+    // fetch(
+    //   `https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=${apiKey}`
+    // );
+    let url_time = `https://api.etherscan.io/api?module=gastracker&action=gasestimate&gasprice=${amount}`;
+    let url_oracle = `https://api.etherscan.io/api?module=gastracker&action=gasoracle`;
 
     if (apiKey) {
       console.log('Found apiKey. Using', apiKey);
+      url_time += `&apiKey=${apiKey}`;
       url_oracle += `&apikey=${apiKey}`;
     }
 
     fetch(url_oracle)
       .then((res) => res.json())
-      .then((data) => setVal(data.result));
+      .then((data) => setVal((prev) => ({ ...prev, oracle: data.result })));
+
+    fetch(url_time)
+      .then((res) => res.json())
+      .then((data) => setVal((prev) => ({ ...prev, time: data.result })));
   };
 
   return (
@@ -51,7 +57,7 @@ const Oracle = () => {
       </Form.Item>
 
       <Form.Item name="recommendations" valuePropName="checked">
-        <Checkbox style={{ color: '#61a0e0' }}>Price Recommendations</Checkbox>
+        <Checkbox style={{ color: '#61a0e0' }}> 💡 Price Recommendations</Checkbox>
       </Form.Item>
 
       <Form.Item label=" ">
