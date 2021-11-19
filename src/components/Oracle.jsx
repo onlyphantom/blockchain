@@ -1,5 +1,18 @@
 import React from 'react';
-import { Input, Alert, Form, Button, Checkbox } from 'antd';
+import { Input, Alert, Form, Button, Checkbox, Descriptions } from 'antd';
+
+const Table = ({ val }) => {
+  return (
+    <Descriptions title="Gas Estimate" bordered>
+      <Descriptions.Item label="Time" span={3}>
+        {val.time}
+      </Descriptions.Item>
+      <Descriptions.Item label="Suggested Base Fee" span={2}>
+        19.66666666616
+      </Descriptions.Item>
+    </Descriptions>
+  );
+};
 
 const Oracle = () => {
   const [val, setVal] = React.useState({});
@@ -17,9 +30,6 @@ const Oracle = () => {
   };
 
   const getApi = (amount, apiKey) => {
-    // fetch(
-    //   `https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=${apiKey}`
-    // );
     let url_time = `https://api.etherscan.io/api?module=gastracker&action=gasestimate&gasprice=${amount}`;
     let url_oracle = `https://api.etherscan.io/api?module=gastracker&action=gasoracle`;
 
@@ -39,36 +49,40 @@ const Oracle = () => {
   };
 
   return (
-    <Form onFinish={formSubmit} layout="vertical" initialValues={{ recommendations: true }}>
-      <h2>Gas Oracle from Etherscan</h2>
-      <Form.Item name="apiKey" label="API Key">
-        <Input.Password
-          placeholder="Enter your Etherscan API key (Optional)"
-          style={{ width: '80%' }}
-        />
-      </Form.Item>
+    <>
+      <Form onFinish={formSubmit} layout="vertical" initialValues={{ recommendations: true }}>
+        <h2>Gas Oracle from Etherscan</h2>
+        <Form.Item name="apiKey" label="API Key">
+          <Input.Password
+            placeholder="Enter your Etherscan API key (Optional)"
+            style={{ width: '80%' }}
+          />
+        </Form.Item>
 
-      <Form.Item
-        name="amount"
-        label="Amount"
-        style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
-      >
-        <Input addonBefore="Gas Price" placeholder="Price per unit of gas in wei" />
-      </Form.Item>
+        <Form.Item
+          name="amount"
+          label="Amount"
+          style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+        >
+          <Input addonBefore="Gas Price" placeholder="Price per unit of gas in wei" />
+        </Form.Item>
 
-      <Form.Item name="recommendations" valuePropName="checked">
-        <Checkbox style={{ color: '#61a0e0' }}> 💡 Price Recommendations</Checkbox>
-      </Form.Item>
+        <Form.Item name="recommendations" valuePropName="checked">
+          <Checkbox style={{ color: '#61a0e0' }}> 💡 Price Recommendations</Checkbox>
+        </Form.Item>
 
-      <Form.Item label=" ">
-        <Button type="primary" htmlType="submit">
-          Get Estimate
-        </Button>
-      </Form.Item>
+        <Form.Item label=" ">
+          <Button type="primary" htmlType="submit">
+            Get Estimate
+          </Button>
+        </Form.Item>
 
-      <p style={{ color: 'white' }}>{JSON.stringify(val)}</p>
-      <Alert description="⛽ The gas prices are returned in Gwei." type="info" showIcon />
-    </Form>
+        <p style={{ color: 'white' }}>{JSON.stringify(val)}</p>
+        <Alert description="⛽ The gas prices are returned in Gwei." type="info" showIcon />
+      </Form>
+
+      {Object.keys(val).length > 0 && <Table val={val} />}
+    </>
   );
 };
 
