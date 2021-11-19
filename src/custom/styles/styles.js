@@ -13,9 +13,15 @@ const customStyles = css`
         border: none;
     }
 
-    .ant-form-item-label > label {
+    .ant-form-item-label > label, 
+    .ant-descriptions-item-content {
         color: #61a0e0;
     }
+
+    .ant-descriptions-bordered .ant-descriptions-item-label {
+        background-color: rgb(147 205 255 / 40%);
+    }
+    
 }
 `;
 

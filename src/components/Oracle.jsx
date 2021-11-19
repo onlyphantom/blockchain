@@ -8,7 +8,19 @@ const Table = ({ val }) => {
         {val.time}
       </Descriptions.Item>
       <Descriptions.Item label="Suggested Base Fee" span={2}>
-        19.66666666616
+        {val.oracle.suggestBaseFee}
+      </Descriptions.Item>
+      <Descriptions.Item label="Safe Gas Price" span={2}>
+        {val.oracle.SafeGasPrice}
+      </Descriptions.Item>
+      <Descriptions.Item label="Proposed Gas Price" span={2}>
+        {val.oracle.ProposeGasPrice}
+      </Descriptions.Item>
+      <Descriptions.Item label="Fast Gas Price" span={2}>
+        {val.oracle.FastGasPrice}
+      </Descriptions.Item>
+      <Descriptions.Item label="Gas Used Ratio" span={3}>
+        {val.oracle.gasUsedRatio}
       </Descriptions.Item>
     </Descriptions>
   );
@@ -17,12 +29,6 @@ const Table = ({ val }) => {
 const Oracle = () => {
   const [val, setVal] = React.useState({});
   // const [api, setApi] = React.useState(null)
-
-  // React.useEffect(()=>{
-  //     fetch('https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=YourApiKeyToken')
-  //     .then(res => res.json())
-  //     .then(data => setVal(data.result))
-  // }, [])
 
   const formSubmit = (values) => {
     console.log('values', values);
