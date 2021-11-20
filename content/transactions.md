@@ -7,7 +7,7 @@ author: Samuel Chan
 keywords: ["hashing, algorithm, blockchain"]
 ---
 import { Edit, StyledHeading, StyledMainWrapper } from '../src/components/styles/Docs';
-import { Input } from 'antd';
+import { Alert } from 'antd';
 import Oracle from '../src/components/Oracle'
 
 
@@ -44,11 +44,17 @@ In practice, since we have little control over the computational cost of a contr
 
 Paying more gas fee increases the incentives of miners (validators) to include the transaction into a block.
 
+#### Interactive Demo
+The following Demo fetches an estimation of time (in seconds) for a transaction to be included on the Ethereum blockchain. 
+
+If 💡 Price Recommendations is checked (default), it also optionally fetches the current Safe, Proposed and Gas Prices:
+
 > You can obtain an API key for the following interactive example by registering for an account on [Etherscan](https://etherscan.io/)
 
 <Oracle />
 
-### Gas Price
+#### A note on EIP-1559 (August 5, 2021)
+<Alert description="Safe/Proposed/Fast gas price recommendations are now modeled as Priority Fees." type="info" showIcon />
 
 
 An example of interactive code:
