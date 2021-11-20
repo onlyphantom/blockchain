@@ -8,19 +8,19 @@ const Table = ({ val }) => {
         {val.time}
       </Descriptions.Item>
       <Descriptions.Item label="Suggested Base Fee" span={2}>
-        {val.oracle.suggestBaseFee}
+        {val.oracle?.suggestBaseFee || 'Not provided'}
       </Descriptions.Item>
       <Descriptions.Item label="Safe Gas Price" span={2}>
-        {val.oracle.SafeGasPrice}
+        {val.oracle?.SafeGasPrice || 'Not provided'}
       </Descriptions.Item>
       <Descriptions.Item label="Proposed Gas Price" span={2}>
-        {val.oracle.ProposeGasPrice}
+        {val.oracle?.ProposeGasPrice || 'Not provided'}
       </Descriptions.Item>
       <Descriptions.Item label="Fast Gas Price" span={2}>
-        {val.oracle.FastGasPrice}
+        {val.oracle?.FastGasPrice || 'Not provided'}
       </Descriptions.Item>
       <Descriptions.Item label="Gas Used Ratio" span={3}>
-        {val.oracle.gasUsedRatio}
+        {val.oracle?.gasUsedRatio || 'Not provided'}
       </Descriptions.Item>
     </Descriptions>
   );
@@ -32,10 +32,10 @@ const Oracle = () => {
 
   const formSubmit = (values) => {
     console.log('values', values);
-    getApi(values.amount, values.apiKey);
+    getApi(values);
   };
 
-  const getApi = (amount, apiKey) => {
+  const getApi = ({ amount, apiKey, recommendations }) => {
     let url_time = `https://api.etherscan.io/api?module=gastracker&action=gasestimate&gasprice=${amount}`;
     let url_oracle = `https://api.etherscan.io/api?module=gastracker&action=gasoracle`;
 
@@ -45,9 +45,11 @@ const Oracle = () => {
       url_oracle += `&apikey=${apiKey}`;
     }
 
-    fetch(url_oracle)
-      .then((res) => res.json())
-      .then((data) => setVal((prev) => ({ ...prev, oracle: data.result })));
+    if (recommendations) {
+      fetch(url_oracle)
+        .then((res) => res.json())
+        .then((data) => setVal((prev) => ({ ...prev, oracle: data.result })));
+    }
 
     fetch(url_time)
       .then((res) => res.json())

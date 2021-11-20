@@ -20,6 +20,7 @@ const customStyles = css`
 
     .ant-descriptions-bordered .ant-descriptions-item-label {
         background-color: rgb(147 205 255 / 40%);
+        font-weight: 600;
     }
     
 }
