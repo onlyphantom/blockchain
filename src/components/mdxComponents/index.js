@@ -78,7 +78,7 @@ export default {
   code: CodeBlock,
   a: AnchorTag,
   div: (props) => {
-    if (props.className.includes("math-display")) {
+    if (props.className?.includes("math-display")) {
       import("katex/dist/katex.min.css");
       // see docs: https://www.npmjs.com/package/@matejmazur/react-katex
       return <TeX settings={{ macros: { '*': '\\cdot' } }} block>
@@ -88,7 +88,7 @@ export default {
     return <div {...props} />;
   },
   span: (props) => {
-    if (props.className.includes("math-inline")) {
+    if (props.className?.includes("math-inline")) {
       import("katex/dist/katex.min.css");
       return <TeX settings={{ macros: { '*': '\\cdot' } }} math={props.children} />;
     }

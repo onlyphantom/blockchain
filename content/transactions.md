@@ -53,9 +53,22 @@ If 💡 Price Recommendations is checked (default), it also optionally fetches t
 
 <Oracle />
 
-#### A note on EIP-1559 (August 5, 2021)
+### EIP-1559 (August 5, 2021)
 <Alert description="Safe/Proposed/Fast gas price recommendations are now modeled as Priority Fees." type="info" showIcon />
 
+EIP-1559 changes Ethereum's market mechanisms for transaction fees. It replaces the first-price auction and replaces it with a fixed-price sale. 
+
+This reduces the guesswork on gas required for each transaction since an explicit base fee for the next block is to be included. Users that want to prioritize their transaction can instead add a "tip" to pay the validators through setting a priority. 
+
+In conclusion, because blocks on the blockchain have a fixed size, only a set amount of transactions can be included in any one block. When network activity becomes busy, setting a high **Max priority fee** on your transactions pushes it to the front of the queue by incentivizing the validators to consider this transaction first. 
+
+<div style="width: 240px; margin-left: auto; margin-right: auto">
+
+![gasfee on metamask](images/gasfee.png)
+
+</div>
+
+#### EIP-1559 Gas Burning
 
 An example of interactive code:
 ```javascript react-live=true
