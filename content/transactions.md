@@ -44,7 +44,7 @@ In practice, since we have little control over the computational cost of a contr
 
 Paying more gas fee increases the incentives of miners (validators) to include the transaction into a block.
 
-#### Interactive Demo
+#### Experiment
 The following Demo fetches an estimation of time (in seconds) for a transaction to be included on the Ethereum blockchain. 
 
 If 💡 Price Recommendations is checked (default), it also optionally fetches the current Safe, Proposed and Gas Prices:
@@ -54,11 +54,10 @@ If 💡 Price Recommendations is checked (default), it also optionally fetches t
 <Oracle />
 
 ### EIP-1559 (August 5, 2021)
-<Alert description="Safe/Proposed/Fast gas price recommendations are now modeled as Priority Fees." type="info" showIcon />
 
-EIP-1559 changes Ethereum's market mechanisms for transaction fees. It replaces the first-price auction and replaces it with a fixed-price sale. 
+The implementation of EIP-1559 in the [London Upgrade](#thelondonupgrade) changes Ethereum's market mechanisms for transaction fees. It replaces the first-price auction and replaces it with a base fee model where the fee is changed dynamically based on network activity. 
 
-This reduces the guesswork on gas required for each transaction since an explicit base fee for the next block is to be included. Users that want to prioritize their transaction can instead add a "tip" to pay the validators through setting a priority. 
+This reduces the guesswork on gas required for each transaction since an explicit base fee for the next block is to be included. Users that want to prioritize their transaction can instead add a "tip" (in Metamask, this is the _Max priority fee_) to pay the validators through setting a priority. 
 
 In conclusion, because blocks on the blockchain have a fixed size, only a set amount of transactions can be included in any one block. When network activity becomes busy, setting a high **Max priority fee** on your transactions pushes it to the front of the queue by incentivizing the validators to consider this transaction first. 
 
@@ -68,16 +67,50 @@ In conclusion, because blocks on the blockchain have a fixed size, only a set am
 
 </div>
 
-#### EIP-1559 Gas Burning
 
-An example of interactive code:
-```javascript react-live=true
-const elem = <button style={{color: 'burlywood'}}>
-                Change me to blue.
-             </button>
-render(elem)
-```
+> **Selecting the right gas fee depends on the type of transaction and how important it is to you.**
+> ##### High
+> This is best for time sensitive transactions (like Swaps) as it increases the likelihood of a successful transaction. If a Swap takes too long to process it may fail and result in losing some of your gas fee.
+>
+> ##### Medium
+> A medium gas fee is good for sending, withdrawing or other non-time sensitive transactions. This setting will most often result in a successful transaction.
+>
+> ##### Low
+>  A lower gas fee should only be used when processing time is less important. Lower fees make it hard predict when (or if) your transaction will be successful.
+> 
+> Source: Metamask
+
+The material impact of this EIP is to have transaction fees be more predictable for the user. Wallets and decentralized apps would also reduce their reliance on external oracles since the base fee is managed by the protocol itself. 
+
+This doesn't mean that transaction fees are cheaper since the intent of this EIP is on predictable base fee, and not necessarily cheaper gas (this is instead the intent of [Ethereum Layer 2 Rollups](https://ethereum.org/en/developers/docs/scaling/layer-2-rollups/)). 
+
+#### Ethereum's Gas Burning Mechanism
+With EIP-1559,the ETH spent as base fee in each transaction is "burnt", i.e removed from the supply pool. This makes ETH more scarce and in theory puts deflationary pressure on the overall Ethereum supply. As of this writing (22nd November 2021), Ethereum has achieved a 66.67% reduction in ETH issuance since EIP-1559 is deployed. When net reduction is above 100%, it would mean Ethereum is burning more ETH than it is issuing. 
+
+
+<Alert message={
+   <p>An <a href='https://github.com/mohamedmansour/ethereum-burn-stats' target="_blank" rel="nofollow">open source</a> project called <a href='https://watchtheburn.com/' target="_blank" rel="nofollow">Watch the burn</a> has been set up by the community to provide analytics on this mechanism.</p> 
+} type="info" showIcon icon='🔥' />
+
+Modeling exactly how deflationary EIP-1559 will be is an area of active research, but some estimates that the annual supply rate of ETH would be reduced by 1.4%.
+
 
 ### The London Upgrade
 
+A summary of <a id="Gas Fee after the London Upgrade" name="Gas Fee after the London Upgrade"></a> the London Upgrade:
+- Implemented on August 5th, 2021, to make transacton fees more predictable for users by overhauling the gas fee mechanism  
+- Every block now has a base fee (the minimum price per unit of gas for inclusion in this block, determined by supply and demand for block space). The base fee will increase and decrease by 12.5% after blocks are more than 50% full. For example, if a block is 100% full the base fee increases by 12.5%; if it is 50% full the base fee will be the same; if it is 0% full the base fee would decrease by 12.5%
 
+
+### Actions
+- [ ] Use the Gas Oracle [Experiment](#experiment) set up above, find the **estimated time** right now for an Ethereum transaction that pays 200 Gwei of gas fee (_it is strongly recommended that you obtain an API key from Etherscan.io_)
+
+- [ ] Use the Gas Oracle [Experiment](#experiment) set up above, find the **Low-priority Gas Price** for an Ethereum transaction right now 
+(_it is strongly recommended that you obtain an API key from Etherscan.io_)
+
+- [ ] Log in to your MetaMask wallet (or your preferred crypto wallet), mock a transaction from a Test Network (Goerli, Kovan, Rinkeby etc) but edit the gas fee to get some familiarity with the priority fee mechanics (low / medium / high). You should be able to edit your gas limit, priority fee and max fee for your transaction. **Make sure you are doing this on a Test Network**. You can reject the transaction at the end of your experimentation.
+
+- [ ] Explore how much ETH has been burned in total on [Watch The Burn](https://watchtheburn.com/)
+
+### Knowledge Check
+- EIP-1559 in the London Upgrade lowers the transaction fee across the Ethereum blockchain. True or False?

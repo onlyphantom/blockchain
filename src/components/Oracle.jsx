@@ -86,7 +86,11 @@ const Oracle = () => {
         </Form.Item>
 
         {/* <p style={{ color: 'white' }}>{JSON.stringify(val)}</p> */}
-        <Alert description="⛽ The gas prices are returned in Gwei." type="info" showIcon />
+        <Alert
+          description="⛽ The gas prices are returned in Gwei. Additionally, Safe/Proposed/Fast gas price recommendations are now modeled as Priority Fees."
+          type="info"
+          showIcon
+        />
       </Form>
 
       {Object.keys(val).length > 0 && <Table val={val} />}
