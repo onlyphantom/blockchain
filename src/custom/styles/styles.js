@@ -23,6 +23,18 @@ const customStyles = css`
         font-weight: 600;
     }
     
+    .ant-divider-horizontal.ant-divider-with-text::before, .ant-divider-horizontal.ant-divider-with-text::after {
+        color: #61a0e0;
+    }
+
+    .ant-divider-inner-text {
+        color: #61a0e0;
+    }
+
+    code {
+        background: rgb(59 119 137 / 70%)!important;
+        color: white;
+    }
 }
 `;
 

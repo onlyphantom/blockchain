@@ -9,7 +9,7 @@ keywords: ["hashing, algorithm, blockchain"]
 import { Edit, StyledHeading, StyledMainWrapper } from '../src/components/styles/Docs';
 import { Alert } from 'antd';
 import GasFeeOracle from '../src/components/reactComponents/GasFeeOracle'
-
+import { KnowledgeCheckTransactions } from '../src/components/reactComponents/KnowledgeCheck'
 
 <StyledHeading>{props.frontmatter.metaTitle}</StyledHeading>
 
@@ -117,8 +117,7 @@ In summary, because blocks on the blockchain have a fixed size, only a set amoun
 
 </div>
 
-
-> **Selecting the right gas fee depends on the type of transaction and how important it is to you.**
+Metamask has some simple guidelines to picking the right gas fee: 
 > 
 > **High**: This is best for time sensitive transactions (like Swaps) as it increases the likelihood of a successful transaction. If a Swap takes too long to process it may fail and result in losing some of your gas fee.
 > 
@@ -168,6 +167,8 @@ A summary of <a id="Gas Fee after the London Upgrade" name="Gas Fee after the Lo
 
 - [ ] Explore how much ETH has been burned in total on [Watch The Burn](https://watchtheburn.com/)
 
-### Knowledge Check
-- EIP-1559 in the London Upgrade lowers the transaction fee across the Ethereum blockchain. True or False?
+
+<KnowledgeCheckTransactions />
+
+
 - Although a transaction includes a limit, any gas not used in a transaction is returned to the user. True or False?
