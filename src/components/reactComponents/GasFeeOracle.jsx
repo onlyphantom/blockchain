@@ -26,7 +26,7 @@ const Table = ({ val }) => {
   );
 };
 
-const Oracle = () => {
+const GasFeeOracle = () => {
   const [val, setVal] = React.useState({});
   // const [api, setApi] = React.useState(null)
 
@@ -98,4 +98,4 @@ const Oracle = () => {
   );
 };
 
-export default Oracle;
+export default GasFeeOracle;

@@ -8,7 +8,7 @@ keywords: ["hashing, algorithm, blockchain"]
 ---
 import { Edit, StyledHeading, StyledMainWrapper } from '../src/components/styles/Docs';
 import { Alert } from 'antd';
-import Oracle from '../src/components/Oracle'
+import GasFeeOracle from '../src/components/reactComponents/GasFeeOracle'
 
 
 <StyledHeading>{props.frontmatter.metaTitle}</StyledHeading>
@@ -76,19 +76,40 @@ If 💡 Price Recommendations is checked (default), it also optionally fetches t
 
 > You can obtain an API key for the following interactive example by registering for an account on [Etherscan](https://etherscan.io/)
 
-<Oracle />
+<GasFeeOracle />
 
 ### EIP-1559 (August 5, 2021)
 
 The implementation of EIP-1559 in the [London Upgrade](#thelondonupgrade) changes Ethereum's market mechanisms for transaction fees. It replaces the first-price auction and replaces it with a base fee model where the fee is changed dynamically based on network activity. 
 
-This reduces the guesswork on gas required for each transaction since an explicit base fee for the next block is to be included. Users that want to prioritize their transaction can instead add a "tip" (in Metamask, this is the _Max priority fee_) to pay the validators through setting a priority. This tip is taken as compensation to the miners for executing and propagation the transaction. The total transaction fee is as such:
+This base fee is an algorithmically determined price, calculated by comparing the size of the previous block (amount of gas used for all the transactions) with the target size (15 million gas). If the block size is greater than the target block size, the protocol will increase the base fee for the following block -- and decrease it if block size is less than the target price. The protocol hence achieves an equilibrium block size of 15 million on average through this process described as _tâtonnement_.
 
-Gas units (limits) \* (Base Fee + Tip)
+#### Base Fee and Tips
+To be eligible for inclusion, the offered price per gas must at least equal the base fee. As mentioned above, this base fee is calculated independent of the current block but is instead determined by the blocks before it, making transaction fees more predictable. This reduces the guesswork on gas required for each transaction. 
 
-<!-- Using the example above, with Alice paying Bob 2 ETH,   -->
+This base fee is "burned", removing it from circulation.
 
-In conclusion, because blocks on the blockchain have a fixed size, only a set amount of transactions can be included in any one block. When network activity becomes busy, setting a high **Max priority fee** on your transactions pushes it to the front of the queue by incentivizing the validators to consider this transaction first. 
+Users that want to prioritize their transaction can instead add a "tip" (in Metamask, this is the _Max priority fee_) to pay the validators through setting a priority. This tip is taken as compensation to the miners for executing and propagation the transaction. The total transaction fee is as such:
+
+<div className="math-display">
+{'Gas Units \\cdot Base Fee + Tip'}
+</div>
+
+Using the example above, with Alice still paying Bob 2 ETH, and gas limit remain the same 21,000 units, what's left is to incorporate the calculation of (1) Base Fee and (2) Tip. 
+
+Assuming the transaction happens on block number 6, and block number 5's base fee is 142.38 gwei (<span className="math-inline">100 \cdot 1.125^3</span>). Supposed block number 5 has a size of 30M, block 6's base price is hence (<span className="math-inline">142.38 \cdot 1.125 = 160.178 </span>). Alice also included a tip of 15 gwei, giving her the following transaction cost:
+
+<div className="math-display">
+{'21000 \\cdot (160.178 + 15) = 3678738'}
+</div>
+
+That's 3,678,738 gwei, or 0.003678 ETH.
+
+When the transaction is included, 2.003678 ETH is deducted from Alice's balance. 2 ETH is credited to Bob's balance. 0.00336374 ETH is burned and miners receive 0.000315 ETH of tip.
+
+Additionally, Alice can set a max fee (`maxFeePerGas`) for the transaction. Any difference between the max fee and the actual fee (max fee - (base fee + priority fee)) is refunded to Alice so she can set a maximum amount and not worry about overpaying well above the base fee when the transaction is executed.
+
+In summary, because blocks on the blockchain have a fixed size, only a set amount of transactions can be included in any one block. When network activity becomes busy, setting a high **Max priority fee** on your transactions pushes it to the front of the queue by incentivizing the validators to consider this transaction first. 
 
 <div style="width: 240px; margin-left: auto; margin-right: auto">
 
@@ -98,14 +119,12 @@ In conclusion, because blocks on the blockchain have a fixed size, only a set am
 
 
 > **Selecting the right gas fee depends on the type of transaction and how important it is to you.**
-> ##### High
-> This is best for time sensitive transactions (like Swaps) as it increases the likelihood of a successful transaction. If a Swap takes too long to process it may fail and result in losing some of your gas fee.
->
-> ##### Medium
-> A medium gas fee is good for sending, withdrawing or other non-time sensitive transactions. This setting will most often result in a successful transaction.
->
-> ##### Low
->  A lower gas fee should only be used when processing time is less important. Lower fees make it hard predict when (or if) your transaction will be successful.
+> 
+> **High**: This is best for time sensitive transactions (like Swaps) as it increases the likelihood of a successful transaction. If a Swap takes too long to process it may fail and result in losing some of your gas fee.
+> 
+> **Medium**: A medium gas fee is good for sending, withdrawing or other non-time sensitive transactions. This setting will most often result in a successful transaction.
+> 
+>  **Low**: A lower gas fee should only be used when processing time is less important. Lower fees make it hard predict when (or if) your transaction will be successful.
 > 
 > Source: Metamask
 
@@ -121,17 +140,23 @@ With EIP-1559,the ETH spent as base fee in each transaction is "burnt", i.e remo
    <p>An <a href='https://github.com/mohamedmansour/ethereum-burn-stats' target="_blank" rel="nofollow">open source</a> project called <a href='https://watchtheburn.com/' target="_blank" rel="nofollow">Watch the burn</a> has been set up by the community to provide analytics on this mechanism.</p> 
 } type="info" showIcon icon='🔥' />
 
-Modeling exactly how deflationary EIP-1559 will be is an area of active research, but some estimates that the annual supply rate of ETH would be reduced by 1.4%.
-
+Modeling exactly how deflationary EIP-1559 will be is an area of active research, but some estimates that the annual supply rate of ETH would be reduced by 1.4%. Today, similar proposals have been drafted for other blockchains, such as [this proposal for the Binance Smart Chain which introduces a regular fee-burning mechanism](https://www.binance.org/en/blog/introducing-bep-95-with-a-real-time-burning-mechanism/),
 
 ### The London Upgrade
 
-
-
 A summary of <a id="Gas Fee after the London Upgrade" name="Gas Fee after the London Upgrade"></a> the London Upgrade:
-- Implemented on August 5th, 2021, to make transacton fees more predictable for users by overhauling the gas fee mechanism  
-- Every block now has a base fee (the minimum price per unit of gas for inclusion in this block, determined by supply and demand for block space). The base fee will increase and decrease by 12.5% after blocks are more than 50% full. For example, if a block is 100% full the base fee increases by 12.5%; if it is 50% full the base fee will be the same; if it is 0% full the base fee would decrease by 12.5%
 
+- Implemented on August 5th, 2021, to make transacton fees more predictable for users by overhauling the gas fee mechanism
+
+- Replaces the fixed-size blocks with variable-size blocks, so users did not have to wait for high demand to reduce during periods of high network demand
+
+- Each block has a target size of 15 million gas but, the size of blocks will increase or decrease in accordance with network demand, up until the block limit of 30 million gas (2x the target block size)
+
+- Every block now has a base fee (the minimum price per unit of gas for inclusion in this block, determined by supply and demand for block space). The base fee will increase and decrease by 12.5% after blocks are more than 50% full. For example, if a block is 100% full the base fee increases by 12.5%; if it is 50% full the base fee will be the same; if it is 0% full the base fee would decrease by 12.5%. The exponential increase of 12.5% makes it economically non-viable for block size to remain high indefinitely
+
+- Prior to the Longond Upgrade, miners receive the total gas fee from any transaction included in a block. Now, a priority fee (tip) mechanism is introduced to incentivize miners to include a transaction in the block. Miners will still find it economically viable to mine empty blocks as they receive the same block reward
+
+- A sender can additionally specify a maximum limit they are willing to pay (`maxFeePerGas`), and sender is refunded the difference between the max fee and the sum of the base fee and tip. The sender will never pay more than the market price for gas on that block (`baseFeePerGas`)
 
 ### Actions
 - [ ] Use the Gas Oracle [Experiment](#experiment) set up above, find the **estimated time** right now for an Ethereum transaction that pays 200 Gwei of gas fee (_it is strongly recommended that you obtain an API key from Etherscan.io_)

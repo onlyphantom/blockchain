@@ -4,7 +4,7 @@ metaTitle: "Welcome to LearnBlockchain.Academy"
 metaDescription: "This is the meta description"
 ---
 
-Some introduction text. Lists out all the headings from h1 to h6. Easy to customise.
+Still under development. Follow [Samuel Chan](https://github.com/onlyphantom) to follow my progress on this.
 
 # Heading H1
 Heading 1 text
