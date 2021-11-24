@@ -340,7 +340,7 @@ export const baseStyles = css`
   .socialWrapper li a {
     display: contents;
   }
-  .discordBtn, .twitterBtn {
+  .discordBtn, .fbBtn {
     border-radius: 4px;
     border: solid 1px #d1d2d3;
     background-color: #f1f5f8;
@@ -354,13 +354,13 @@ export const baseStyles = css`
     opacity: .8;
     cursor: pointer;
   }
-  .twitterBtn img {
+  .fbBtn img {
     width: 12px !important;
   }
   .discordBtn img {
     width: 10px !important;
   }
-  .discordBtn:hover, .twitterBtn:hover {
+  .discordBtn:hover, .fbBtn:hover {
     opacity: 1;
   }
   .discordBtn {
