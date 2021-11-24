@@ -47,7 +47,7 @@ Supposed we put a gas limit of 50,000 for a simple ETH transfer, and the EVM con
 
 However, if we specify too little gas (say, 20,000) for the same transaction, the EVM will consume the 20,000 gas units in its attempt to fulfill the transaction, but unsuccessfully. The EVM then reverts any changes, but since the miner has already done the 20,000 gas units worth of work, that gas is consumed.
 
-### Historical Overview
+## Historical Overview
 
 Historically (prior to The London Upgrade on August 5th, 2021), transaction fees on Ethereum are determined by the [Gas price](https://etherscan.io/chart/gasprice) * Gas units (gas used by the transaction). 
 
@@ -59,7 +59,7 @@ Supposed Alice wants to pay Bob 2 ETH, and that this transaction costs 21,000 un
 
 A sum of 2.0042 ETH would be deducted from Alice's account, and Bob would be credited 2 ETH. The remainder of 0.0042 is historically paid to the miners (validators). 
 
-#### Gas Price vs Gas Unit
+### Gas Price vs Gas Unit
 As a recap:
 
 - **Gas price** on the Ethereum network is determined by the **demand and supply** forces
@@ -69,7 +69,7 @@ In practice, since we have little control over the computational cost of a contr
 
 Paying more gas fee increases the incentives of miners (validators) to include the transaction into a block.
 
-#### Experiment
+### Experiment
 The following Demo fetches an estimation of time (in seconds) for a transaction to be included on the Ethereum blockchain. 
 
 If 💡 Price Recommendations is checked (default), it also optionally fetches the current Safe, Proposed and Gas Prices:
@@ -78,13 +78,13 @@ If 💡 Price Recommendations is checked (default), it also optionally fetches t
 
 <GasFeeOracle />
 
-### EIP-1559 (August 5, 2021)
+## EIP-1559 (August 5, 2021)
 
 The implementation of EIP-1559 in the [London Upgrade](#thelondonupgrade) changes Ethereum's market mechanisms for transaction fees. It replaces the first-price auction and replaces it with a base fee model where the fee is changed dynamically based on network activity. 
 
 This base fee is an algorithmically determined price, calculated by comparing the size of the previous block (amount of gas used for all the transactions) with the target size (15 million gas). If the block size is greater than the target block size, the protocol will increase the base fee for the following block -- and decrease it if block size is less than the target price. The protocol hence achieves an equilibrium block size of 15 million on average through this process described as _tâtonnement_.
 
-#### Base Fee and Tips
+### Base Fee and Tips
 To be eligible for inclusion, the offered price per gas must at least equal the base fee. As mentioned above, this base fee is calculated independent of the current block but is instead determined by the blocks before it, making transaction fees more predictable. This reduces the guesswork on gas required for each transaction. 
 
 This base fee is "burned", removing it from circulation.
@@ -131,7 +131,7 @@ The material impact of this EIP is to have transaction fees be more predictable 
 
 This doesn't mean that transaction fees are cheaper since the intent of this EIP is on predictable base fee, and not necessarily cheaper gas (this is instead the intent of [Ethereum Layer 2 Rollups](https://ethereum.org/en/developers/docs/scaling/layer-2-rollups/)). 
 
-#### Ethereum's Gas Burning Mechanism
+### Ethereum's Gas Burning Mechanism
 With EIP-1559,the ETH spent as base fee in each transaction is "burnt", i.e removed from the supply pool. This makes ETH more scarce and in theory puts deflationary pressure on the overall Ethereum supply. As of this writing (22nd November 2021), Ethereum has achieved a 66.67% reduction in ETH issuance since EIP-1559 is deployed. When net reduction is above 100%, it would mean Ethereum is burning more ETH than it is issuing. 
 
 
@@ -157,7 +157,8 @@ A summary of <a id="Gas Fee after the London Upgrade" name="Gas Fee after the Lo
 
 - A sender can additionally specify a maximum limit they are willing to pay (`maxFeePerGas`), and sender is refunded the difference between the max fee and the sum of the base fee and tip. The sender will never pay more than the market price for gas on that block (`baseFeePerGas`)
 
-### Actions
+### Knowledge Check
+#### Practical Exercises
 - [ ] Use the Gas Oracle [Experiment](#experiment) set up above, find the **estimated time** right now for an Ethereum transaction that pays 200 Gwei of gas fee (_it is strongly recommended that you obtain an API key from Etherscan.io_)
 
 - [ ] Use the Gas Oracle [Experiment](#experiment) set up above, find the **Low-priority Gas Price** for an Ethereum transaction right now 
@@ -169,6 +170,3 @@ A summary of <a id="Gas Fee after the London Upgrade" name="Gas Fee after the Lo
 
 
 <KnowledgeCheckTransactions />
-
-
-- Although a transaction includes a limit, any gas not used in a transaction is returned to the user. True or False?

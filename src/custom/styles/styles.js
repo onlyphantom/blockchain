@@ -31,6 +31,10 @@ const customStyles = css`
         color: #61a0e0;
     }
 
+    .ant-radio-wrapper, .ant-radio-group, .ant-form-item, .ant-form {
+        color: inherit;
+    }
+
     code {
         background: rgb(59 119 137 / 70%)!important;
         color: white;
