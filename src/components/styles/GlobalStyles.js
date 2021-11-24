@@ -355,7 +355,8 @@ export const baseStyles = css`
     cursor: pointer;
   }
   .fbBtn img {
-    width: 12px !important;
+    // width: 12px !important;
+    padding-bottom: 1px;
   }
   .discordBtn img {
     width: 10px !important;

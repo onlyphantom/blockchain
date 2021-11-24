@@ -18,14 +18,14 @@ const config = {
     social: `<li>
 		    <a href="https://www.facebook.com/groups/blockchainindonesia" target="_blank" rel="noopener">
 		      <div class="fbBtn">
-		        <img src='src/components/images/fb.svg' alt={'Facebook group'}/>
+		        <img src='https://raw.githubusercontent.com/onlyphantom/blockchain/main/src/components/images/fb.svg' alt='Facebook group'/>
 		      </div>
 		    </a>
 		  </li>`,
 		// 	<li>
-		//     <a href="https://discordapp.com/invite/hasura" target="_blank" rel="noopener">
+		//     <a href="https://discordapp.com/invite/supertypeai" target="_blank" rel="noopener">
 		//       <div class="discordBtn">
-		//         <img src='https://graphql-engine-cdn.hasura.io/learn-hasura/assets/homepage/discord-brands-block.svg' alt={'Discord'}/>
+		//         <img src='https://raw.githubusercontent.com/onlyphantom/blockchain/main/src/components/images/discord-brands-block.svg' alt={'Discord'}/>
 		//       </div>
 		//     </a>
 		//   </li>`,
