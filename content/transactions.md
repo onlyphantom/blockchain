@@ -89,7 +89,7 @@ To be eligible for inclusion, the offered price per gas must at least equal the 
 
 This base fee is "burned", removing it from circulation.
 
-Users that want to prioritize their transaction can instead add a "tip" (in Metamask, this is the _Max priority fee_) to pay the validators through setting a priority. This tip is taken as compensation to the miners for executing and propagation the transaction. The total transaction fee is as such:
+Users that want to prioritize their transaction can instead add a "tip" (the _Max priority fee_ being the maximum amount you're willing to pay as tip) to pay the validators through setting a priority. This tip is taken as compensation to the miners for executing and propagation the transaction. The total transaction fee is as such:
 
 <div className="math-display">
 {'Gas Units \\cdot Base Fee + Tip'}
@@ -145,7 +145,7 @@ Modeling exactly how deflationary EIP-1559 will be is an area of active research
 
 A summary of <a id="Gas Fee after the London Upgrade" name="Gas Fee after the London Upgrade"></a> the London Upgrade:
 
-- Implemented on August 5th, 2021, to make transacton fees more predictable for users by overhauling the gas fee mechanism
+- Implemented on August 5th, 2021, to make transaction fees more predictable for users by overhauling the gas fee mechanism
 
 - Replaces the fixed-size blocks with variable-size blocks, so users did not have to wait for high demand to reduce during periods of high network demand
 

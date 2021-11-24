@@ -5,6 +5,14 @@ export const KnowledgeCheckTransactions = () => {
   const [form] = Form.useForm();
   const [correctness, setCorrectness] = React.useState({ q1: false, q2: false, q3: false });
 
+  const validateAnswer = (userAnswer, correctAnswer, errorMsg) => {
+    if (userAnswer === correctAnswer) {
+      return Promise.resolve();
+    } else {
+      return Promise.reject(new Error(errorMsg || 'Incorrect answer, please try again.'));
+    }
+  };
+
   const correct = { q1: 'false', q2: 'c', q3: 'b' };
 
   const onAttempt = () => {
@@ -28,7 +36,22 @@ export const KnowledgeCheckTransactions = () => {
         EIP-1559 in the London Upgrade is effective at lowering the transaction fee across the
         Ethereum blockchain.
       </p>
-      <Form.Item name="q1" required>
+      <Form.Item
+        name="q1"
+        required
+        validateTrigger="onSubmit"
+        rules={[
+          () => ({
+            validator(_, value) {
+              return validateAnswer(
+                value,
+                correct.q1,
+                'EIP-1559 overhauled the gas fee mechanism to make transction fees more predictable by comparing the size of the previous block (as a proxy of its market demand for block space); it is not the intent to make transactions cheaper, but rather to make it more predictable.'
+              );
+            },
+          }),
+        ]}
+      >
         <Radio.Group buttonStyle="solid">
           <Radio.Button value="true">True</Radio.Button>
           <Radio.Button value="false">False</Radio.Button>
