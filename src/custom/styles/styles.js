@@ -14,8 +14,9 @@ const customStyles = css`
     }
 
     .ant-form-item-label > label, 
-    .ant-descriptions-item-content {
-        color: #61a0e0;
+    .ant-descriptions-item-content, 
+    .ant-descriptions-title {
+        color: inherit;
     }
 
     .ant-descriptions-bordered .ant-descriptions-item-label {

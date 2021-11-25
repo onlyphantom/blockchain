@@ -1,12 +1,12 @@
 ---
 title: "Transactions"
-metaTitle: "Blockchain transactions and gas fees"
-metaDescription: "This is some meta description"
+metaTitle: "Transactions on Ethereum (Currency, Gas Mechanisms, EIP-1559)"
+metaDescription: "Understanding how Ethereum transactions work"
 date: 2021-11-01
 author: Samuel Chan
-keywords: ["hashing, algorithm, blockchain"]
+keywords: ["hashing, ethereum, blockchain"]
 ---
-import { Edit, StyledHeading, StyledMainWrapper } from '../src/components/styles/Docs';
+import { StyledHeading } from '../src/components/styles/Docs';
 import { Alert } from 'antd';
 import GasFeeOracle from '../src/components/reactComponents/GasFeeOracle'
 import { KnowledgeCheckTransactions } from '../src/components/reactComponents/KnowledgeCheck'
