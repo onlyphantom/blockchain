@@ -62,10 +62,25 @@ export const KnowledgeCheckTransactions = () => {
         Question 2
       </Divider>
       <p>
-        A transaction can include a maximum limit, but how does Ethereum treat any gas not used in a
-        transaction?
+        A transaction can include a `maxFeePerGas`, but how does Ethereum treat any gas not used in
+        a transaction?
       </p>
-      <Form.Item name="q2" required>
+      <Form.Item
+        name="q2"
+        required
+        validateTrigger="onSubmit"
+        rules={[
+          () => ({
+            validator(_, value) {
+              return validateAnswer(
+                value,
+                correct.q2,
+                'Gas used in the transaction is the base fee + priority fee. The difference between maxFeePerGas and this actual fee is refunded to the sender'
+              );
+            },
+          }),
+        ]}
+      >
         <Radio.Group>
           <Space direction="vertical">
             <Radio value="a">Any gas not used is burnt under EIP-1559</Radio>
@@ -81,7 +96,22 @@ export const KnowledgeCheckTransactions = () => {
       <p>
         Which of the following is <em>not correct</em> about the priority fee?
       </p>
-      <Form.Item name="q3" required>
+      <Form.Item
+        name="q3"
+        required
+        validateTrigger="onSubmit"
+        rules={[
+          () => ({
+            validator(_, value) {
+              return validateAnswer(
+                value,
+                correct.q3,
+                'Priority fee is paid directly to the miners in order to incentivize them to include a transaction into a block.'
+              );
+            },
+          }),
+        ]}
+      >
         <Radio.Group>
           <Space direction="vertical">
             <Radio value="a">It is also treated as a tip to the miner</Radio>
@@ -105,7 +135,17 @@ export const KnowledgeCheckTransactions = () => {
       {Object.values(correctness).every(Boolean) && (
         <Alert
           message="Well done!"
-          description="You have completed the Knowledge Check!"
+          description={
+            <p>
+              As an additional reward, you've discovered
+              <img
+                style={{ width: 16, marginLeft: 4, marginRight: 4 }}
+                src="https://assets.coingecko.com/coins/images/13866/large/ZMT_Token.png?1637241562"
+              />
+              <b>30 ZMT tokens</b> from our sponsor Zipmex (Promo code:
+              <a href="#"> LEARNBLOCKCHAIN2021</a>).
+            </p>
+          }
           type="success"
           icon="🎉"
           showIcon

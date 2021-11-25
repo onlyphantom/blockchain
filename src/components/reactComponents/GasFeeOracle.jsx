@@ -70,7 +70,7 @@ const GasFeeOracle = () => {
         <Form.Item
           name="amount"
           label="Amount"
-          style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+          style={{ display: 'inline-block', width: 'calc(80%)' }}
         >
           <Input addonBefore="Gas Price" placeholder="Price per unit of gas in wei" />
         </Form.Item>
