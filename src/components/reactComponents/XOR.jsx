@@ -2,17 +2,25 @@ import React from 'react';
 import { Row, Col, Input, Form, Button, Divider, Checkbox, Descriptions } from 'antd';
 
 const XOREncrypt = () => {
+  const [form] = Form.useForm();
+  const [plainText, setPlainText] = React.useState('');
+  const [key, setKey] = React.useState('');
+
   return (
     <div>
-      <Form>
+      <Form name="cipher" form={form}>
         <Row gutter={8}>
           <Col span={12}>
             <h5>Encryption</h5>
             <Form.Item>
-              <Input placeholder="Plain Text Password" maxLength={8} />
+              <Input
+                placeholder="Plain Text Password"
+                maxLength={8}
+                onChange={(e) => setPlainText(e.target.value)}
+              />
             </Form.Item>
             <Form.Item>
-              <Input placeholder="Key" />
+              <Input placeholder="Key" onChange={(e) => setKey(e.target.value)} />
             </Form.Item>
             <Form.Item>
               <Button type="primary">Encrypt</Button>
@@ -22,7 +30,7 @@ const XOREncrypt = () => {
             <h6>Step-by-step Encryption</h6>
             <Descriptions title="Encryption Process" bordered>
               <Descriptions.Item span={3} label="Plain Text">
-                Let Me In!
+                Hello
               </Descriptions.Item>
               <Descriptions.Item span={3} label="ASCII">
                 104 101 108 108 111

@@ -1,7 +1,7 @@
 ---
-title: "Blockchain Cryptography"
-metaTitle: "Understanding the cryptography concepts used in Bitcoin and Ethereum protocols"
-metaDescription: "Understanding the cryptography concepts used in Bitcoin and Ethereum protocols"
+title: "Cryptography 101"
+metaTitle: "Understanding the cryptography concepts used in development of blockchain protocols"
+metaDescription: "Precursor to understanding the cryptography concepts that inspire Blockchain and the original Bitcoin protocol"
 date: 2021-11-25
 author: Samuel Chan
 keywords: ["hashing, ethereum, blockchain"]

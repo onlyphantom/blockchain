@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Space, Alert, Form, Button, Radio, Divider } from 'antd';
+import { Space, Alert, Form, Button, Radio, Divider } from 'antd';
 
 export const KnowledgeCheckTransactions = () => {
   const [form] = Form.useForm();
