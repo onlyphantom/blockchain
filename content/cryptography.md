@@ -28,3 +28,8 @@ To understand this, move onto the first experiment to see how we can use the XOR
 
 ## Asymmetric cryptography
 
+
+
+
+## Practical Exercises
+- [ ] Use the XOR [Experiment](#experiment1) set up above, paste the following value `` into the plain text field and observe the relationship between the input, the ASCII and the Binary. Compare this to [Wikipedia's ASCII control code chart](https://en.wikipedia.org/wiki/ASCII#Control_code_chart) to strengthen your understanding of this subject
