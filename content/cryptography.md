@@ -21,8 +21,8 @@ To understand this, move onto the first experiment to see how we can use the XOR
 
 ### Experiment 1
 - The XOR Cipher is one of the most common cryptographic technique that sits right at the heart of many modern day ciphers  
-- XOR is a logical operator, which transforms binary digits through an "Exclusive OR" filter ("logic gate")
-- Each key on the keyboard is already represented by a number known as the ASCII code. Since there's 8 bits to a byte, this means each key is a combination of 8 binary code
+- XOR is a logical operator, which transforms binary digits through an "Exclusive OR" filter ("logic gate", with the symbol ⊕)
+- Each key on the keyboard is already represented by a number known as the ASCII code. Since there's 8 bits to a byte, this means each key is a combination of 8 binary code. This includes characters accented characters such as `é` even if such a character key may not be present on your keyboard
 
 <XOR />
 
