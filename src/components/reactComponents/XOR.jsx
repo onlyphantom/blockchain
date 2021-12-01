@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Row, Col, Input, Form, Button, Divider, message } from 'antd';
 import {
   BulbOutlined,
-  LockOutlined,
+  UnlockFilled,
   LockFilled,
   KeyOutlined,
   CopyOutlined,
@@ -18,10 +18,12 @@ const toBinaryRepr = (str) =>
     .join('');
 
 const XOREncrypt = () => {
-  const [form] = Form.useForm();
-  const [plainText, setPlainText] = React.useState('');
-  const [key, setKey] = React.useState('10101010');
-  const [encrypted, setEncrypted] = React.useState(null);
+  const [formEn] = Form.useForm();
+  const [formDe] = Form.useForm();
+  const [plainText, setPlainText] = useState('');
+  const [key, setKey] = useState('10101010');
+  const [encrypted, setEncrypted] = useState(null);
+  const [decrypted, setDecrypted] = useState(null);
 
   const onChangeBinaryDigitOnly = (e) => {
     const value = e.target.value;
@@ -39,25 +41,38 @@ const XOREncrypt = () => {
     }
   };
 
-  const xorCipher = (values) => {
-    const plainText = toBinaryRepr(values.plain);
-    const key = values.key;
-
-    console.log('values', plainText, key);
-
+  const xorOps = (message, key) => {
     const cipherText = [];
-    for (let i = 0; i < plainText.length; i++) {
-      const char = plainText[i];
+    for (let i = 0; i < message.length; i++) {
+      const char = message[i];
       const keyChar = key[i % key.length];
       const xor = char ^ keyChar;
       cipherText.push(xor);
     }
-    setEncrypted(cipherText.join(''));
+    return cipherText.join('');
+  };
+
+  const xorCipher = ({ plain, key }) => {
+    const plainText = toBinaryRepr(plain);
+    console.log('values', plainText, key);
+    setEncrypted(xorOps(plainText, key));
+  };
+
+  const xorDecrypt = ({ message, key }) => {
+    console.log('decrypt', message, key);
+    // perform xor on message using key
+    const cipherText = xorOps(message, key);
+    console.log('cipherText', cipherText);
+    // find ascii from binary
+    const ascii = cipherText.match(/.{1,8}/g).map((c) => parseInt(c, 2));
+    // find string from ascii
+    const plainText = String.fromCharCode(...ascii);
+    setDecrypted(plainText);
   };
 
   return (
     <div>
-      <Form name="cipher" form={form} initialValues={{ key: key }} onFinish={xorCipher}>
+      <Form name="cipher" form={formEn} initialValues={{ key: key }} onFinish={xorCipher}>
         <Row gutter={8}>
           <Col span={24}>
             <h3>Encryption</h3>
@@ -123,13 +138,16 @@ const XOREncrypt = () => {
           </Col>
         </Row>
         <Divider />
+      </Form>
+
+      <Form name="decrypt" form={formDe} onFinish={xorDecrypt}>
         <Row>
           <Col span={24}>
             <h3>Decryption</h3>
-            <Form.Item>
+            <Form.Item name="message">
               <Input placeholder="Received Message" />
             </Form.Item>
-            <Form.Item>
+            <Form.Item name="key">
               <Input placeholder="Key" />
             </Form.Item>
             <Form.Item>
@@ -137,7 +155,15 @@ const XOREncrypt = () => {
                 <IconText icon={KeyOutlined} text="Decrypt" />
               </Button>
             </Form.Item>
-            <Form.Item></Form.Item>
+
+            {decrypted && (
+              <>
+                <h5>
+                  <UnlockFilled /> Decrypted Binary
+                </h5>
+                <p>{decrypted}</p>
+              </>
+            )}
           </Col>
         </Row>
       </Form>
