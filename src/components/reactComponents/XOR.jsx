@@ -1,16 +1,5 @@
 import React from 'react';
-import {
-  Row,
-  Col,
-  Input,
-  Form,
-  Button,
-  Divider,
-  Checkbox,
-  Descriptions,
-  message,
-  Space,
-} from 'antd';
+import { Row, Col, Input, Form, Button, Divider, message } from 'antd';
 import {
   BulbOutlined,
   LockOutlined,
@@ -63,9 +52,7 @@ const XOREncrypt = () => {
       const xor = char ^ keyChar;
       cipherText.push(xor);
     }
-    console.log(cipherText.join(''));
     setEncrypted(cipherText.join(''));
-    return cipherText.join('');
   };
 
   return (
