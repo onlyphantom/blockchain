@@ -1,8 +1,26 @@
 import React from 'react';
-import { Row, Col, Input, Form, Button, Divider, Checkbox, Descriptions } from 'antd';
-import { BulbOutlined } from '@ant-design/icons';
+import {
+  Row,
+  Col,
+  Input,
+  Form,
+  Button,
+  Divider,
+  Checkbox,
+  Descriptions,
+  message,
+  Space,
+} from 'antd';
+import {
+  BulbOutlined,
+  LockOutlined,
+  LockFilled,
+  KeyOutlined,
+  CopyOutlined,
+} from '@ant-design/icons';
 
 import { IconText } from './utils/UX';
+import { copyToClipboard } from './utils/helpers';
 
 const toBinaryRepr = (str) =>
   str
@@ -14,6 +32,7 @@ const XOREncrypt = () => {
   const [form] = Form.useForm();
   const [plainText, setPlainText] = React.useState('');
   const [key, setKey] = React.useState('10101010');
+  const [encrypted, setEncrypted] = React.useState(null);
 
   const onChangeBinaryDigitOnly = (e) => {
     const value = e.target.value;
@@ -45,6 +64,7 @@ const XOREncrypt = () => {
       cipherText.push(xor);
     }
     console.log(cipherText.join(''));
+    setEncrypted(cipherText.join(''));
     return cipherText.join('');
   };
 
@@ -53,7 +73,7 @@ const XOREncrypt = () => {
       <Form name="cipher" form={form} initialValues={{ key: key }} onFinish={xorCipher}>
         <Row gutter={8}>
           <Col span={24}>
-            <h5>Encryption</h5>
+            <h3>Encryption</h3>
             <Form.Item name="plain">
               <Input
                 placeholder="Plain Text Password"
@@ -73,6 +93,8 @@ const XOREncrypt = () => {
                   .split('')
                   .map((c) => c.charCodeAt(0))
                   .join(', ')}
+                <br />
+                <br />
                 <h5> ➡️ Binary Representation</h5>
                 {toBinaryRepr(plainText)}
               </>
@@ -93,35 +115,30 @@ const XOREncrypt = () => {
 
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                Encrypt
+                <IconText icon={LockFilled} text="Encrypt" />
               </Button>
             </Form.Item>
+
+            {encrypted && (
+              <>
+                <h5> ➡️ Encrypted Binary</h5>
+                <p>{encrypted}</p>
+                <Button
+                  onClick={() => {
+                    message.success('Copied to clipboard!');
+                    copyToClipboard(encrypted);
+                  }}
+                >
+                  <IconText icon={CopyOutlined} text="Copy to Clipboard" />
+                </Button>
+              </>
+            )}
           </Col>
         </Row>
-        <Row>
-          <Divider />
-          <h6>Step-by-step Encryption</h6>
-          <Descriptions title="Encryption Process">
-            <Descriptions.Item span={3} label="Plain Text">
-              Hello
-            </Descriptions.Item>
-            <Descriptions.Item span={3} label="ASCII">
-              104 101 108 108 111
-            </Descriptions.Item>
-            <Descriptions.Item span={3} label="Binary">
-              01001000 01100101 01101100 01101100 01101111
-            </Descriptions.Item>
-            <Descriptions.Item span={3} label="XOR">
-              01010101 01010101 01010101 01010101
-            </Descriptions.Item>
-            <Descriptions.Item span={3} label="Encrypted">
-              01010101 01010101 01010101 01010101
-            </Descriptions.Item>
-          </Descriptions>
-        </Row>
+        <Divider />
         <Row>
           <Col span={24}>
-            <h5>Decryption</h5>
+            <h3>Decryption</h3>
             <Form.Item>
               <Input placeholder="Received Message" />
             </Form.Item>
@@ -129,7 +146,9 @@ const XOREncrypt = () => {
               <Input placeholder="Key" />
             </Form.Item>
             <Form.Item>
-              <Button type="primary">Decrypt</Button>
+              <Button type="primary" htmlType="submit">
+                <IconText icon={KeyOutlined} text="Decrypt" />
+              </Button>
             </Form.Item>
             <Form.Item></Form.Item>
           </Col>

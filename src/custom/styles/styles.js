@@ -40,6 +40,12 @@ const customStyles = css`
         background: rgb(59 119 137 / 70%)!important;
         color: white;
     }
+
+    .ant-btn-primary, .ant-btn-primary:focus,
+    .ant-btn-primary:active, .ant-btn-primary.active, .ant-btn-primary:active:focus, .ant-btn-primary:active:hover, .ant-btn-primary.active:focus, .ant-btn-primary.active:hover, .ant-btn-primary:active:focus:hover, .ant-btn-primary:active:hover:focus, .ant-btn-primary.active:focus:hover, .ant-btn-primary.active:hover:focus {
+        background: #3b7789;
+        border-color: #3b7789;
+    }
 }
 `;
 
