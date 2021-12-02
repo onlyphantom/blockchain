@@ -157,7 +157,7 @@ A summary of <a id="Gas Fee after the London Upgrade" name="Gas Fee after the Lo
 
 - A sender can additionally specify a maximum limit they are willing to pay (`maxFeePerGas`), and sender is refunded the difference between the max fee and the sum of the base fee and tip. The sender will never pay more than the market price for gas on that block (`baseFeePerGas`)
 
-### Knowledge Check
+## Knowledge Check
 #### Practical Exercises
 - [ ] Use the Gas Oracle [Experiment](#experiment) set up above, find the **estimated time** right now for an Ethereum transaction that pays 200 Gwei of gas fee (_it is strongly recommended that you obtain an API key from Etherscan.io_)
 
