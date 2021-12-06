@@ -46,7 +46,83 @@ Block ciphers and stream ciphers are two categories of symmetric cryptography. P
 ## Asymmetric cryptography
 In the experiment we see earlier, the sender and receiver has to first establish and agree upon a key in advance. Therein lies a problem: what if the sender's message gets intercepted, along with the key, in its transmission to the receiver? 
 
-Ron Rivest, Adi Shamir and Leonald Adleman proposed an idea: using two different keys, one for encryption and the other for decryption. This type of cryptography is referred to as asymmetric cryptography.
+In 1977, Ron Rivest, Adi Shamir and Leonald Adleman proposed the RSA algorithm, and with it, the use of two different keys: one for encryption and the other for decryption. 
+
+- Private key is a randomly generated key used to decrypt messages and is held privately by the user. In RSA, a private key of 1024-bit or 2048-bit is used, while other asymmetic cryptography schemes may choose different lengths.
+- Public key is the counterpart of a private-public key pair that is published by the key owner to be known publicly. Anyone wishing to send a message to the key owner do so by encrypting the message using the published public key before sending it. For each encryption key, there would only be one corresponding decryption key.
+- Nobody else is capable of decrypting the message as long as the corresponding private key is kept securely by the intended recipient. 
+
+### RSA Algorithm
+
+> Can the reader say what two numbers multiplied together will produce the number 8,616,460,799? I think it unlikely that anyone but myself will ever know.
+> 
+> <i>Principles of Science, 1874, by William Stanley Jevons</i>
+
+If you're wondering, the answer to Jevon's number is 89,681 and 96,079 as factored by Charles J. Busk in 1889.
+
+You can try and do a quick experiment by picking two prime numbers, let's say 29 and 43.
+
+<div className='math-display'>
+{'29 \\cdot 43 = 1247 '}
+</div>
+
+1,247 isn't exactly a difficult number to factor (it should still take a person with a calculator a respectable amount of time), but when a sufficiently large prime number such as 6,284,963 is presented then this is a much harder problem. <br/>When you start to consider finding the factors of the number 35,452,590,104,031,691,935,943, we're now exceeding the limits of what computers can handle in any reasonable amount of time.
+
+RSA builds on the idea of what is known as the **integer factorization problem**, which states that the multiplication of two large prime numbers is easy but factoring (returning it back to two original numbers) it is computationally difficult. Prime numbers, as you may recall from Math class, are numbers greater than 1 with exactly two factors, 1 and itself (e.g 2,3,5,7,11,13...). Another idea we'll borrow from number theory is Euler's function, which is described below.
+
+#### Euler's Totient Function
+
+Theorem: if <span className='math-inline'>p</span> is prime, and <span className='math-inline'>n</span> is any positive integer, then <span className='math-inline'>\phi(p^{n}) = p^{n-1}(p-1)</span>.
+
+For quick reference, here's a handy table:
+<table id='primeTable'>
+    <tbody><tr ><th>integer <i>n</i></th>
+    <td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td>
+    <td>7</td><td>8</td>
+    <td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td>
+    <td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td>
+    </tr>
+    <tr ><th>φ(<i>n</i>)</th>
+    <td>1</td><td>1</td><td>2</td><td>2</td><td>4</td><td>2</td>
+    <td>6</td><td>4</td>
+    <td>6</td><td>4</td><td>10</td><td>4</td><td>12</td><td>6</td>
+    <td>8</td><td>8</td><td>16</td><td>6</td><td>18</td><td>8</td>
+    </tr>
+    </tbody>
+</table> 
+
+- <span className="math-inline">\phi(8) = 4</span> because there are 4 positive integers less than 8 that are coprime to 8, i.e 1, 3, 5 and 7 shares only a factor of 1. 6 is not included because it shares a common factor of 2. 
+<div className="math-display">{'\\phi(20) = \\phi(2^{2}5^{1}) = 2^{2-1}(2-1)5^{1-1}(5-1) = 2 * 1 * 1 * 4 = 8'}</div>
+- <span className="math-inline">\phi(20) = 8</span> because the distinct prime factors of 20 are 2 and 5; half of the integers between 1 and 20 are divisible by 2 (leaving ten), and from the remaining odd numbers, two out of ten are divisible by 5 (5, 10, 15...) so 20-10-2=8.
+    - The coprime of 20 is hence 1,3,7,9,11,13,17,19. Notice that 9 is included because it doesn't share a factor with 20 that is greater than 1.
+
+![Euler](images/eulerphi.png)
+- The points at the top line that looks linear represent <span className='math-inline'>\phi(p)</span> when <span className='math-inline'>p</span> is a prime number, which works out to be <span className='math-inline'>p-1</span>. Since prime numbers have no factors greater than 1, <span className='math-inline'>\phi(P)=P-1</span>. In other words, all integer between <span className="math-inline">1</span> to <span className="math-inline">P-1</span> are co-prime to <span className="math-inline">P</span>. 
+- Another interesting fact is that the Phi function is also multiplicative: <span className='math-inline'>\phi(P \cdot Q) = \phi(P)\cdot\phi(Q)</span> if P and Q are co-primes. So if we know <span className="math-inline">N</span> is a product of two primes <span className="math-inline">P</span> and <span className="math-inline">Q</span>, then <span className="math-inline">\phi(N) = (P-1) \cdot (Q-1)</span>.
+
+
+#### RSA Key Generation
+
+An RSA key pair is generated in the following procedure:
+
+1. Select <span className='math-inline'>p</span> and <span className='math-inline'>q</span>, two large prime numbers.
+2. Multiply <span className='math-inline'>p</span> and <span className='math-inline'>q</span> together to get <span className='math-inline'>N</span>.
+3. Let <span className='math-inline'>T = (p-1)(q-1)</span>. This is known as the [Euler Totient Function](https://en.wikipedia.org/wiki/Euler%27s_totient_function), which we explored above.
+4. Choose two numbers, <span className='math-inline'>e</span> and <span className='math-inline'>d</span>, such that <span className='math-inline'>(e \cdot d )\mod T = 1 </span>. <span className='math-inline'>e</span> is for encryption (the public key), and <span className='math-inline'>d</span> is for decryption (the private key). 
+    1. <span className='math-inline'>e</span> and <span className='math-inline'>d</span> must be coprime to <span className='math-inline'>T</span>, and <span className='math-inline'>e</span> must be less than <span className='math-inline'>T</span>.
+5. Publish <span className='math-inline'>N</span> and <span className='math-inline'>e</span> as the public key, and keep <span className='math-inline'>d</span> as the private key.
+
+Let's begin by picking two prime numbers; let's say 3 and 5. Following the procedure above, 
+1. <span className='math-inline'>p</span> and <span className='math-inline'>q</span> are 3 and 5 respectively.
+2. <span className='math-inline'>N</span> = 3 * 5 = 15
+3. <span className='math-inline'>T = (3-1) * (5-1) = 8</span>
+4. Since <span className='math-inline'>e</span> and <span className='math-inline'>d</span> must be co-prime to <span className='math-inline'>T</span>, and <span className='math-inline'>e</span> must be less than <span className='math-inline'>T</span> (8), 
+    1. the candidates for <span className='math-inline'>e</span> are 2,3,4,5,6 and 7 (less than 8, can't be 1 since it needs to be a co-prime)
+    2. 2, 4 and 6 are ruled out because they are not co-prime to 8 (they have shared factors of 2 with 8).
+    3. we have 3, 5 and 7 left. 
+    4. If we pick 3 from the candidate pool above, possible values of <span className='math-inline'>d</span>, such that it satisfies <span className='math-inline'>(e \cdot d )\mod T = 1 </span>, can be narrowed down to 3(product of 9), 11(product of 33), 19(product of 57) etc
+    5. We hence pick 19 for <span className='math-inline'>d</span> and 3 for <span className='math-inline'>e</span>
+5. Publish (5, 15) as the public key, and keep 19 as the private key. 
 
 
 

@@ -46,6 +46,18 @@ const customStyles = css`
         background: #3b7789;
         border-color: #3b7789;
     }
+
+
+
+    // non-antd styles
+    // ...
+    // ...
+
+    #primeTable .td {
+        padding: 0.8rem 0.5rem;
+    }
+
+
 }
 `;
 
