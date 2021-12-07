@@ -159,7 +159,7 @@ const XOREncrypt = () => {
             {decrypted && (
               <>
                 <h5>
-                  <UnlockFilled /> Decrypted Binary
+                  <UnlockFilled /> Decrypted Message
                 </h5>
                 <p>{decrypted}</p>
               </>

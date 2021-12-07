@@ -8,6 +8,7 @@ keywords: ["hashing, ethereum, blockchain"]
 ---
 import { Alert } from 'antd';
 import XOR from '../src/components/reactComponents/XOR'
+import RSA from '../src/components/reactComponents/RSA'
 
 ## Cryptography
 A blockchain is a chain of blocks (an array of data) linked together through clever use of cryptography. To truly appreciate the design of blockchain, one is well served by his/her understanding of the cryptographic primitives underlying blockchain.
@@ -94,7 +95,7 @@ For quick reference, here's a handy table:
 - <span className="math-inline">\phi(8) = 4</span> because there are 4 positive integers less than 8 that are coprime to 8, i.e 1, 3, 5 and 7 shares only a factor of 1. 6 is not included because it shares a common factor of 2. 
 <div className="math-display">{'\\phi(20) = \\phi(2^{2}5^{1}) = 2^{2-1}(2-1)5^{1-1}(5-1) = 2 * 1 * 1 * 4 = 8'}</div>
 - <span className="math-inline">\phi(20) = 8</span> because the distinct prime factors of 20 are 2 and 5; half of the integers between 1 and 20 are divisible by 2 (leaving ten), and from the remaining odd numbers, two out of ten are divisible by 5 (5, 10, 15...) so 20-10-2=8.
-    - The coprime of 20 is hence 1,3,7,9,11,13,17,19. Notice that 9 is included because it doesn't share a factor with 20 that is greater than 1.
+    - The co-prime of 20 is hence 1,3,7,9,11,13,17,19. Notice that 9 is included because it doesn't share a factor with 20 that is greater than 1.
 
 ![Euler](images/eulerphi.png)
 - The points at the top line that looks linear represent <span className='math-inline'>\phi(p)</span> when <span className='math-inline'>p</span> is a prime number, which works out to be <span className='math-inline'>p-1</span>. Since prime numbers have no factors greater than 1, <span className='math-inline'>\phi(P)=P-1</span>. In other words, all integer between <span className="math-inline">1</span> to <span className="math-inline">P-1</span> are co-prime to <span className="math-inline">P</span>. 
@@ -122,8 +123,9 @@ Let's begin by picking two prime numbers; let's say 3 and 5. Following the proce
     3. we have 3, 5 and 7 left. 
     4. If we pick 3 from the candidate pool above, possible values of <span className='math-inline'>d</span>, such that it satisfies <span className='math-inline'>(e \cdot d )\mod T = 1 </span>, can be narrowed down to 3(product of 9), 11(product of 33), 19(product of 57) etc
     5. We hence pick 19 for <span className='math-inline'>d</span> and 3 for <span className='math-inline'>e</span>
-5. Publish (5, 15) as the public key, and keep 19 as the private key. 
+5. Publish (3, 15) as the public key, and keep 19 as the private key. 
 
+<RSA />
 
 
 ## A note on modern cryptography
@@ -131,6 +133,7 @@ At this point, I should stress that the XOR Cipher experiment you've seen are me
 
 Almost all of modern ciphers (including [AES](#aes), Keccak and SHA-2) feature the use of XOR Cipher as a key component but techniques such as permutations and confusions lend the algorithm other much-desired features that we will discuss in details in the following section.
 
+In practice, we use a modulus of size in the order of 1024 bits. That is over 300 decimal digits.
 
 ## Hexadecimals
 ### Text to Hexadecimals
@@ -241,6 +244,30 @@ openssl enc -base64 -in tmpmessage.bin -out tmpmessage.b64
 cat tmpmessage.b64
 # results: U2FsdGVkX1/Xb7z+bv9Z9ePRO8Jz74JQQEjwCGr0zoSjX1AP6z1H+yqgOFWBKSJwfEvqk1wu1e5Cur3BQAkRCvF1lA2nazXWxsO66d/yn06F4liaziT682zOW7FdfN23hQja1OQMX+DQ7g4S3jamH/VIxR4AkABxlxHR3VMnUxtU2niWMKgne/t+8JHz8cvNSEI1dDk4yvudmypcBImpSrqrJwFq0Q3HjLq9AnYoi0vxlykdSvPE55kqxXrLKUKUWxEu08qJEJE/7izgIyRLwwhigYrpYejRIzWlcluTS9N0EOulQh9Xsuomsxabd4AqgAw8kJwdM7bhaUrtmQk4uJ9ToknxXnXbR1/1
 ```
+- [ ] In the following editor, change `secretNumber` and observe the change in values for `encrypted` and `decrypted`.
+    Notice that the encrypted value is different from the original message, but the exact same formula when applied with the 
+    corresponding secrete key, result in the original message. You can do this for any valid private-public key pair.
+
+    ```javascript react-live=true
+    const keys = { publicK: 5, privateK: 11, n: 14};
+
+    let {publicK, privateK, n} = keys;
+
+    // CHANGE secretNumber to a number between 0 and 13
+    // must be a number smaller than n
+    let secretNumber = 2;
+    
+    const formula = (x, key) => x ** key % n;
+    let encrypted = formula(secretNumber, publicK);
+
+    const elem = (<div>
+        <h4>Original Message: {secretNumber}</h4>
+        <h4>Encrypted: {encrypted}</h4>
+        <h4>Decrypted: {formula(encrypted, privateK)}</h4>
+    </div>)
+    render(elem)
+    ```
+
 
 #### Knowledge Check
 1. What would be the right decimal value for the hex of `0x22B`?

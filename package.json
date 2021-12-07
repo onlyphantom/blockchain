@@ -19,6 +19,7 @@
     "@styled-icons/fa-solid": "^10.32.0",
     "algoliasearch": "^4.9.1",
     "antd": "^4.16.13",
+    "bignumber.js": "^9.0.1",
     "dotenv": "^8.5.1",
     "emotion": "^11.0.0",
     "emotion-server": "^11.0.0",

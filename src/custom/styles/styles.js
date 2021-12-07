@@ -53,9 +53,15 @@ const customStyles = css`
     // ...
     // ...
 
+    pre{
+        color: white
+    }
+
     #primeTable .td {
         padding: 0.8rem 0.5rem;
     }
+
+
 
 
 }
