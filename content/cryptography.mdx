@@ -53,6 +53,10 @@ In 1977, Ron Rivest, Adi Shamir and Leonald Adleman proposed the RSA algorithm, 
 - Public key is the counterpart of a private-public key pair that is published by the key owner to be known publicly. Anyone wishing to send a message to the key owner do so by encrypting the message using the published public key before sending it. For each encryption key, there would only be one corresponding decryption key.
 - Nobody else is capable of decrypting the message as long as the corresponding private key is kept securely by the intended recipient. 
 
+Supposed Alice would like to receive private messages from her friends, she could generate two keys: public and private. She could then broadcast her public key to her friends, and each of her friends would then be able to encrypt messages using her public key to her friends. It doesn't matter if the public key is known by
+anyone who is not the intended recipient, as long as the private key is kept secret. Support Bob, a friend of Alice would like to send a message, Bob would first encrypt the message using Alice's public key, and then send it to Alice.
+Again, it does not matter if the message was intercepted by anyone who is not the intended recipient, since the private key is kept secret and hasn't left Alice's computer -- and only the private key can decrypt the message.
+
 ### RSA Algorithm
 
 > Can the reader say what two numbers multiplied together will produce the number 8,616,460,799? I think it unlikely that anyone but myself will ever know.
@@ -113,25 +117,66 @@ An RSA key pair is generated in the following procedure:
     1. <span className='math-inline'>e</span> and <span className='math-inline'>d</span> must be coprime to <span className='math-inline'>T</span>, and <span className='math-inline'>e</span> must be less than <span className='math-inline'>T</span>.
 5. Publish <span className='math-inline'>N</span> and <span className='math-inline'>e</span> as the public key, and keep <span className='math-inline'>d</span> as the private key.
 
-Let's begin by picking two prime numbers; let's say 3 and 5. Following the procedure above, 
+Let's begin by picking two prime numbers; let's say 3 and 11. Following the procedure above, 
 1. <span className='math-inline'>p</span> and <span className='math-inline'>q</span> are 3 and 5 respectively.
-2. <span className='math-inline'>N</span> = 3 * 5 = 15
-3. <span className='math-inline'>T = (3-1) * (5-1) = 8</span>
-4. Since <span className='math-inline'>e</span> and <span className='math-inline'>d</span> must be co-prime to <span className='math-inline'>T</span>, and <span className='math-inline'>e</span> must be less than <span className='math-inline'>T</span> (8), 
-    1. the candidates for <span className='math-inline'>e</span> are 2,3,4,5,6 and 7 (less than 8, can't be 1 since it needs to be a co-prime)
-    2. 2, 4 and 6 are ruled out because they are not co-prime to 8 (they have shared factors of 2 with 8).
-    3. we have 3, 5 and 7 left. 
-    4. If we pick 3 from the candidate pool above, possible values of <span className='math-inline'>d</span>, such that it satisfies <span className='math-inline'>(e \cdot d )\mod T = 1 </span>, can be narrowed down to 3(product of 9), 11(product of 33), 19(product of 57) etc
-    5. We hence pick 19 for <span className='math-inline'>d</span> and 3 for <span className='math-inline'>e</span>
-5. Publish (3, 15) as the public key, and keep 19 as the private key. 
+2. <span className='math-inline'>N</span> = 3 * 11 = 33
+3. <span className='math-inline'>T = (3-1) * (11-1) = 20</span>
+4. Since <span className='math-inline'>e</span> and <span className='math-inline'>d</span> must be co-prime to <span className='math-inline'>T</span>, and <span className='math-inline'>e</span> must be **prime** and **less than <span className='math-inline'>T</span> (20)** and **not a factor** of <span className='math-inline'>T</span>, 
+    1. the candidates for <span className='math-inline'>e</span> are 3,7,9,... (greater than 1, less than 20)
+    2. 2, 4, 6, 8, 10 are ruled out because they are not co-prime to 20 (they have shared factors).
+    3. If we pick 3 from the candidate pool above, possible values of <span className='math-inline'>d</span>, such that it satisfies <span className='math-inline'>(e \cdot d )\mod T = 1 </span>, is selected. 7 qualifies (7 * 3 mod 20 = 1). 
+    4. We hence pick 7 for <span className='math-inline'>d</span> and 3 for <span className='math-inline'>e</span>
+5. Publish (3, 33) as the public key, and keep (7, 33) as the private key. 
+
+### Experiment 2
 
 <RSA />
+
+#### RSA in Practice
+
+Be reminded that calculating <span className='math-inline'>x^k \mod n</span> is easy but 
+the inverse <span className='math-inline'>c^-k \mod n</span> is very difficult for a sufficiently large number of <span className='math-inline'>n</span>. The problem becomes easy,
+if we are able to factor <span className='math-inline'>n</span> into a product of two primes, using what we've learned in Euler's Totient Function.
+
+In practice, a modulus of size in the thousands is not feasible to factor, and e 
+often pick a value such as 1,024 bits (309 decimal digits). A large number allow us to encode a full-length message
+in a single block, convert it to hexadecimal and then convert it into a decimal.
+
+Often, we also generate a random session key and use that to encrypt the plaintext with a computationally efficient, symmetrical algorithm like DES or [AES-128](#aes).
+We then use the more computationally expensive public key encryption algorithm to encrypt the session key.
+
+The receiver, upon receiving the packet, decrypts it with the private key (`(d,n)`) and in turn, uses the session key that was extracted to decrypt the ciphertext for the plain text message.
+The transmission may include in plaintext details of the encryption algorithm, encoding, zero-padding, and other details. As long as the secret key is kept private by the intended recipient, only the receiver can decrypt the message.
 
 
 ## A note on modern cryptography
 At this point, I should stress that the XOR Cipher experiment you've seen are merely illustrative and greatly simplified for pedagogical reasons. With a longer input (eg. plain text), our key would now have to be repeated such that patterns may emerge to any adversary. If the key is exactly of the same length as the input, then there would be no repeats (one-time padding), meaning that with sufficient randomness and key length, the XOR that we implemented would still present a rather formidable challenge.
 
 Almost all of modern ciphers (including [AES](#aes), Keccak and SHA-2) feature the use of XOR Cipher as a key component but techniques such as permutations and confusions lend the algorithm other much-desired features that we will discuss in details in the following section.
+
+In the [second experiment](#experiment2), I've implemented an RSA algorithm with `e`, `d` and `N` being 29, 41 and 133 respectively. This is grossly insecure, but with sufficiently large prime numbers, our experiment is a good example of how modern cryptography is built.
+Over the years, cryptographers have created new challenges in this field, leading up to the 617-digit [RSA-2048](https://en.wikipedia.org/wiki/RSA_numbers#RSA-2048), which isn't thought "to be factorizable for many years to come" unless enormous advances are made in computational power or algorithms / number theory. As of this writing, only up to RSA-250 (250 digits) has been factored (February 2020)
+using approximately 2700 CPU core-years on a 2.1GHz Intel Xeon Gold 6130 CPU. 
+
+The factoring of RSA-200 (200 decimal digits) by a collection of parallel computers took approximately the equivalent of 75 years of work for a single 2.2 GHz Opteron-based computer.
+The factoring of RSA-768 (232 decimal digits) by a collection of parallel computers took approximately the equivalent of 2,000 years of computing for the same computer. 
+```
+RSA-250 = 2140324650240744961264423072839333563008614715144755017797754920881418023447
+          1401366433455190958046796109928518724709145876873962619215573630474547705208
+          0511905649310668769159001975940569345745223058932597669747168173806936489469
+          9871578494975937497937
+
+RSA-250 = 6413528947707158027879019017057738908482501474294344720811685963202453234463
+          0238623598752668347708737661925585694639798853367
+        × 3337202759497815655622601060535511422794076034476755466678452098702384172921
+          0037080257448673296881877565718986258036932062711
+```
+
+RSA-260, RSA-270 and onwards have not been factored so far.
+
+Another thing to note is that as long as advances in computing hardware along with availability of computational power do not catch up with the magnitude of the cryptographic puzzles, we can
+have good faith in the security systems of modern cryptography. In any case, scaling the difficulty of math problems a computer need to solve is
+certainly a lot more attainable than scaling the computational power of a computer.
 
 In practice, we use a modulus of size in the order of 1024 bits. That is over 300 decimal digits.
 

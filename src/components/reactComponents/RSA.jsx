@@ -40,8 +40,6 @@ const asciiToString = (array) => {
 
 const RSA = () => {
   const [publicKey, setPublicKey] = useState({ e: 29, n: 133 });
-  //   const [publicKey, setPublicKey] = useState({ e: 3, n: 15 });
-  //   const [privateKey, setPrivateKey] = useState(19);
   const [privateKey, setPrivateKey] = useState(41);
   const [encrypted, setEncrypted] = useState(null);
   const [decrypted, setDecrypted] = useState(null);
@@ -86,7 +84,7 @@ const RSA = () => {
 
   return (
     <div>
-      <Divider orientation="left">Encrypt a Message</Divider>
+      <Divider orientation="left">Encrypt a Message with RSA</Divider>
       <Row>
         <Col span={12}>
           <Form form={formEn} name="encrypt" onFinish={encrypt} onFinishFailed={onFinishFailed}>
@@ -95,7 +93,7 @@ const RSA = () => {
               name="encrypt"
               rules={[{ required: true, message: 'You have to leave a private message here.' }]}
             >
-              <Input.TextArea rows={6} />
+              <Input.TextArea rows={6} style={{ width: '100%', minWidth: 360 }} />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
@@ -112,7 +110,7 @@ const RSA = () => {
           </Form>
         </Col>
       </Row>
-      <Divider orientation="left">Decrypt a Message</Divider>
+      <Divider orientation="left">Decrypt a Message with RSA</Divider>
       <Row>
         <Col span={12}>
           <Form form={formDe} name="decrypt" onFinish={decrypt} onFinishFailed={onFinishFailed}>
@@ -121,7 +119,7 @@ const RSA = () => {
               name="decrypt"
               rules={[{ required: true, message: 'You have to leave a private message here.' }]}
             >
-              <Input.TextArea rows={6} />
+              <Input.TextArea rows={6} style={{ width: '100%', minWidth: 360 }} />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
