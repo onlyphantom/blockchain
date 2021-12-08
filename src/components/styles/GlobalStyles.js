@@ -3,6 +3,17 @@ import { css } from '@emotion/react';
 export const baseStyles = css`
   @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap');
   @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Vollkorn:ital,wght@0,600;1,500&display=swap');
+
+  :root {
+    --type-body: Open Sans, Helvetica, Arial, sans-serif;
+    --type-quote: Vollkorn;
+    --quote-image-width: 140px;
+    --border-rad: 7px;
+    --accent-color: hsl(322deg 85% 65%);
+    --quote-bg: hsl(0 0% 97%);
+  }
+
   * {
     margin: 0;
     padding: 0;
@@ -28,7 +39,7 @@ export const baseStyles = css`
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif,
       'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 
-    font-size: 16px;
+    font-size: 18px;
     scroll-behavior: smooth;
   }
 
@@ -324,12 +335,96 @@ export const baseStyles = css`
     caret-color: #fff;
   }
   blockquote {
-    color: #0c8c86;
-    margin: 0px 0px 24px;
-    padding: 0px 0px 0px 12px;
-    border-left: 4px solid rgb(230, 236, 241);
-    border-color: rgb(230, 236, 241);
+    position: relative;
+    margin: 40px 0;
+    padding: 1.6em 2.4em .7em calc(1.4em + var(--quote-image-width));
+    font: italic 1.2rem var(--type-quote);
+    border-radius: var(--border-rad);
+    border: 2px solid white;
+    box-shadow: 2px 2px 4px hsl(0 0% 0% / 20%);
+    text-indent: 1.6em;
   }
+
+  @media (min-width: 768px) {
+    blockquote {
+      margin: 40px 60px;
+    }
+  }
+
+  blockquote::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: var(--border-rad);
+    box-shadow:
+      inset -2px -2px 1px hsl(0 0% 100%),
+      inset 2px 2px 4px hsl(0 0% 0% / 20%);
+  }
+
+  blockquote::after {
+    content: "❝";
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    top: -2px;
+    transform: translate(-50%, -50%);
+    width: 1.3em;
+    height: 1.3em;
+    background: white;
+    box-shadow: 0 4px 5px -1px hsla(0 0% 0% / 20%);
+    border-radius: 999px;
+    display: grid;
+    place-content: center;
+    padding-top: .5em;
+    color: var(--accent-color);
+    font-size: 36px;
+    font-style: normal;
+    text-indent: 0;
+  }
+
+  .blockquote-author-image {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: var(--quote-image-width);
+    height: 100%;
+    opacity: 0.75;
+    background: var(--accent-color) var(--image) no-repeat center / cover;
+    background-blend-mode: hard-light;
+    border-top-left-radius: var(--border-rad);
+    border-bottom-left-radius: var(--border-rad);
+    background-repeat: no-repeat;
+    max-width:100%;
+    max-height:100%;
+    vertical-align: middle;
+  }
+
+  cite {
+    display: block;
+    margin-top: 30px;
+    text-indent: 0;
+    text-align: center;
+    font: bold .9rem var(--type-body);
+    text-transform: uppercase;
+    color: hsl(0 0% 20%);
+  }
+
+  @media (min-width: 768px) {
+    cite {
+      margin-left: calc(1rem - var(--quote-image-width));
+    }
+  }
+
+  .cite-last-name {
+    background: var(--accent-color);
+    color: var(--quote-bg);
+  }
+
   .socialWrapper {
     display: flex;
     align-items: center;

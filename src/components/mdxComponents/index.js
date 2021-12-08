@@ -94,6 +94,10 @@ export default {
     }
     return <span {...props} />;
   },
+  ul: (props) => <ul className="list-unstyled" {...props} />,
+  ol: (props) => <ol className="list-unstyled" {...props} />,
+  li: (props) => <li className="list-item" {...props} />,
+  blockquote: (props) => <blockquote className="blockquote" {...props} />,
   // TODO add `img`
   // TODO add `blockquote`
   // TODO add `ul`

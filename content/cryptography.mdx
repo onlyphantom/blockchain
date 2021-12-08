@@ -9,6 +9,10 @@ keywords: ["encryption, decryption, aes, blockchain, bitcoin, cryptography 101"]
 import { Alert } from 'antd';
 import XOR from '../src/components/reactComponents/XOR'
 import RSA from '../src/components/reactComponents/RSA'
+import { Tags } from '../src/components/reactComponents/utils/UX';
+
+<Tags name="Topics" list={props.frontmatter.keywords[0].split(',')} />
+
 
 ## Cryptography
 A blockchain is a chain of blocks (an array of data) linked together through clever use of cryptography. To truly appreciate the design of blockchain, one is well served by his/her understanding of the cryptographic primitives underlying blockchain.
@@ -59,9 +63,15 @@ Again, it does not matter if the message was intercepted by anyone who is not th
 
 ### RSA Algorithm
 
-> Can the reader say what two numbers multiplied together will produce the number 8,616,460,799? I think it unlikely that anyone but myself will ever know.
-> 
-> <i>Principles of Science, 1874, by William Stanley Jevons</i>
+<blockquote className="quote">
+    <p>
+        Can the reader say what two numbers multiplied together will produce the number 8,616,460,799? I think it unlikely that anyone but myself will ever know.
+    </p>
+    <cite>Principles of Science, 1874, by William Stanley <span class="cite-last-name">Jevons</span></cite>
+    <div className="blockquote-author-image" style={{
+        backgroundImage: `url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/PSM_V11_D660_William_Stanley_Jevons.jpg/330px-PSM_V11_D660_William_Stanley_Jevons.jpg')`
+    }} />
+</blockquote>
 
 If you're wondering, the answer to Jevon's number is 89,681 and 96,079 as factored by Charles J. Busk in 1889.
 
@@ -286,7 +296,7 @@ In the [Practice Exercises](#practicalexercises) section, you will be asked to p
 ## Knowledge Check 
 ### Practical Exercises
 - [ ] Use the XOR [Experiment](#experiment1) set up above, paste the following value `` into the plain text field and observe the relationship between the input, the ASCII and the Binary. Compare this to [Wikipedia's ASCII control code chart](https://en.wikipedia.org/wiki/ASCII#Control_code_chart) to strengthen your understanding of this subject
-- [ ] You can perform an AES encryption using tools that are probably shipped with your machine already. If you are on a Linux machine, chances are that OpenSSL is already installed for you. Proceed to run the following command (replace `LICENSE` with a sample text file)   
+- [ ] You can perform an AES encryption using tools that are probably shipped with your machine already (Linux, MacOS, Windows 11+). If you are on a Linux machine, chances are that OpenSSL is already installed for you. Proceed to run the following command (replace `LICENSE` with a sample text file)   
     ```bash
     openssl enc -aes-256-cbc -in LICENSE -out tmpmessage.bin
     # to convert binary to readable text
@@ -360,15 +370,12 @@ Similarly, in the code examples below you may come across `.enc` for the first t
 You can then use the following command to encrypt/decrypt a message:
 
 ```bash
+# encrypt with public key
+openssl rsautl -encrypt -in message.txt -out message.enc -pubin -inkey public.pem
 
-# encrypt
-
-openssl rsautl -encrypt -inkey public.pem -pubin -in message.txt -out message.enc
-
-# decrypt
-
-openssl rsautl -decrypt -inkey private.pem -in message.enc -out message.txt
-
+# decrypt with private key (note: -inkey is the same as -in)
+# use pkeyutl to decrypt the message
+openssl rsautl -decrypt -in message.enc -inkey private.pem -out message.txt
 ```
 
 #### Knowledge Check
