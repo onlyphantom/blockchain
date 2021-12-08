@@ -178,7 +178,7 @@ Another thing to note is that as long as advances in computing hardware along wi
 have good faith in the security systems of modern cryptography. In any case, scaling the difficulty of math problems a computer need to solve is
 certainly a lot more attainable than scaling the computational power of a computer.
 
-In practice, we use a modulus of size in the order of 1024 bits. That is over 300 decimal digits.
+In practice, we use a modulus of size in the order of 1024 bits. That is over 300 decimal digits. 
 
 ## Hexadecimals
 ### Text to Hexadecimals
@@ -281,14 +281,14 @@ Since AES has become a standard, most CPU hardware and chip vendors have built-i
 ### Practical Exercises
 - [ ] Use the XOR [Experiment](#experiment1) set up above, paste the following value `` into the plain text field and observe the relationship between the input, the ASCII and the Binary. Compare this to [Wikipedia's ASCII control code chart](https://en.wikipedia.org/wiki/ASCII#Control_code_chart) to strengthen your understanding of this subject
 - [ ] You can perform an AES encryption using tools that are probably shipped with your machine already. If you are on a Linux machine, chances are that OpenSSL is already installed for you. Proceed to run the following command (replace `LICENSE` with a sample text file)   
-```bash
-openssl enc -aes-256-cbc -in LICENSE -out tmpmessage.bin
-# to convert binary to readable text
-openssl enc -base64 -in tmpmessage.bin -out tmpmessage.b64
-# print the message
-cat tmpmessage.b64
-# results: U2FsdGVkX1/Xb7z+bv9Z9ePRO8Jz74JQQEjwCGr0zoSjX1AP6z1H+yqgOFWBKSJwfEvqk1wu1e5Cur3BQAkRCvF1lA2nazXWxsO66d/yn06F4liaziT682zOW7FdfN23hQja1OQMX+DQ7g4S3jamH/VIxR4AkABxlxHR3VMnUxtU2niWMKgne/t+8JHz8cvNSEI1dDk4yvudmypcBImpSrqrJwFq0Q3HjLq9AnYoi0vxlykdSvPE55kqxXrLKUKUWxEu08qJEJE/7izgIyRLwwhigYrpYejRIzWlcluTS9N0EOulQh9Xsuomsxabd4AqgAw8kJwdM7bhaUrtmQk4uJ9ToknxXnXbR1/1
-```
+    ```bash
+    openssl enc -aes-256-cbc -in LICENSE -out tmpmessage.bin
+    # to convert binary to readable text
+    openssl enc -base64 -in tmpmessage.bin -out tmpmessage.b64
+    # print the message
+    cat tmpmessage.b64
+    # results: U2FsdGVkX1/Xb7z+bv9Z9ePRO8Jz74JQQEjwCGr0zoSjX1AP6z1H+yqgOFWBKSJwfEvqk1wu1e5Cur3BQAkRCvF1lA2nazXWxsO66d/yn06F4liaziT682zOW7FdfN23hQja1OQMX+DQ7g4S3jamH/VIxR4AkABxlxHR3VMnUxtU2niWMKgne/t+8JHz8cvNSEI1dDk4yvudmypcBImpSrqrJwFq0Q3HjLq9AnYoi0vxlykdSvPE55kqxXrLKUKUWxEu08qJEJE/7izgIyRLwwhigYrpYejRIzWlcluTS9N0EOulQh9Xsuomsxabd4AqgAw8kJwdM7bhaUrtmQk4uJ9ToknxXnXbR1/1
+    ```
 - [ ] In the following editor, change `secretNumber` and observe the change in values for `encrypted` and `decrypted`.
     Notice that the encrypted value is different from the original message, but the exact same formula when applied with the 
     corresponding secrete key, result in the original message. You can do this for any valid private-public key pair.
@@ -312,6 +312,39 @@ cat tmpmessage.b64
     </div>)
     render(elem)
     ```
+- [ ] You can generate a private-public key pair using the following command:
+    ```bash
+    openssl genrsa -out private.pem 1024
+    # Generating RSA private key, 1024 bit long modulus (2 primes)
+    # .................................+++++
+    # ...+++++
+    # e is 65537 (0x010001)
+    openssl rsa -in private.pem -pubout -out public.pem
+    # writing RSA key
+    ```
+
+    Use `cat` to view the content of our keys:
+    ```bash
+    cat public.pem
+    # output:
+    -----BEGIN PUBLIC KEY-----
+    MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDuieQ0vY98sIjJouuVFdmlkzBj
+    0N+AL6fpxBLXtJOJIZF+3jMt9M5UTFoQWIeUUBfj3SEEcF+GIxM9WIwAypdPfdQk
+    cADaYqjxupzw9kk4Fm8Hc8bxYQCI0CTWUwP5NaxeDL7tlC/zrp/kt70Jjm4Y8f+E
+    xhovw6lvl1c6tKAFqwIDAQAB
+    -----END PUBLIC KEY-----
+    ``` 
+
+    You can then use the following command to encrypt/decrypt a message:
+    ```bash
+    # encrypt
+    openssl rsautl -encrypt -inkey public.pem -pubin -in message.txt -out message.enc
+    # decrypt
+    openssl rsautl -decrypt -inkey private.pem -in message.enc -out message.txt
+    ```
+
+
+    
 
 
 #### Knowledge Check
