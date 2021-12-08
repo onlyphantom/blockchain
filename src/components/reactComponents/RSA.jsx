@@ -51,7 +51,6 @@ const RSA = () => {
     let x = new BigNumber(117);
     let ascii = [115, 97, 109, 117, 101, 108, 132];
     let y = applyEquation(ascii, publicKey.e, publicKey.n);
-    console.log('y', y);
   }, []);
 
   const encrypt = (values) => {

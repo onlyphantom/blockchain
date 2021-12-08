@@ -9,10 +9,9 @@ keywords: ["encryption, decryption, aes, blockchain, bitcoin, cryptography 101"]
 import { Alert } from 'antd';
 import XOR from '../src/components/reactComponents/XOR'
 import RSA from '../src/components/reactComponents/RSA'
-import { Tags } from '../src/components/reactComponents/utils/UX';
+import { Tags, Quote } from '../src/components/reactComponents/utils/UX';
 
 <Tags name="Topics" list={props.frontmatter.keywords[0].split(',')} />
-
 
 ## Cryptography
 A blockchain is a chain of blocks (an array of data) linked together through clever use of cryptography. To truly appreciate the design of blockchain, one is well served by his/her understanding of the cryptographic primitives underlying blockchain.
@@ -62,16 +61,13 @@ anyone who is not the intended recipient, as long as the private key is kept sec
 Again, it does not matter if the message was intercepted by anyone who is not the intended recipient, since the private key is kept secret and hasn't left Alice's computer -- and only the private key can decrypt the message.
 
 ### RSA Algorithm
+<Quote 
+    text="Can the reader say what two numbers multiplied together will produce the number 8,616,460,799? I think it unlikely that anyone but myself will ever know." 
+    src="Principles of Science, 1874"
+    author="William Stanley Jevons"
+    img="https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/PSM_V11_D660_William_Stanley_Jevons.jpg/330px-PSM_V11_D660_William_Stanley_Jevons.jpg"
+/>
 
-<blockquote className="quote">
-    <p>
-        Can the reader say what two numbers multiplied together will produce the number 8,616,460,799? I think it unlikely that anyone but myself will ever know.
-    </p>
-    <cite>Principles of Science, 1874, by William Stanley <span class="cite-last-name">Jevons</span></cite>
-    <div className="blockquote-author-image" style={{
-        backgroundImage: `url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/PSM_V11_D660_William_Stanley_Jevons.jpg/330px-PSM_V11_D660_William_Stanley_Jevons.jpg')`
-    }} />
-</blockquote>
 
 If you're wondering, the answer to Jevon's number is 89,681 and 96,079 as factored by Charles J. Busk in 1889.
 
@@ -296,7 +292,7 @@ In the [Practice Exercises](#practicalexercises) section, you will be asked to p
 ## Knowledge Check 
 ### Practical Exercises
 - [ ] Use the XOR [Experiment](#experiment1) set up above, paste the following value `` into the plain text field and observe the relationship between the input, the ASCII and the Binary. Compare this to [Wikipedia's ASCII control code chart](https://en.wikipedia.org/wiki/ASCII#Control_code_chart) to strengthen your understanding of this subject
-- [ ] You can perform an AES encryption using tools that are probably shipped with your machine already (Linux, MacOS, Windows 11+). If you are on a Linux machine, chances are that OpenSSL is already installed for you. Proceed to run the following command (replace `LICENSE` with a sample text file)   
+- [ ] You can perform an AES encryption using tools that are probably shipped with your machine already (Linux, MacOS, Windows 11+). If you are on a Linux machine, chances are that OpenSSL is already installed for you ([installation guide for Windows 10 and earlier here](https://docs.google.com/document/d/1jnXKn2lomOOureI9wca4btxzxXvBhGyGKMNdmg6x2ck/edit)). Proceed to run the following command (replace `LICENSE` with a sample text file)   
     ```bash
     openssl enc -aes-256-cbc -in LICENSE -out tmpmessage.bin
     # to convert binary to readable text

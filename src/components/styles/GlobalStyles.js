@@ -6,12 +6,8 @@ export const baseStyles = css`
   @import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Vollkorn:ital,wght@0,600;1,500&display=swap');
 
   :root {
-    --type-body: Open Sans, Helvetica, Arial, sans-serif;
-    --type-quote: Vollkorn;
     --quote-image-width: 140px;
-    --border-rad: 7px;
-    --accent-color: hsl(322deg 85% 65%);
-    --quote-bg: hsl(0 0% 97%);
+    --accent-color: #3b7789;
   }
 
   * {
@@ -334,15 +330,21 @@ export const baseStyles = css`
   input, textarea, [contenteditable] {
     caret-color: #fff;
   }
+
+
   blockquote {
     position: relative;
     margin: 40px 0;
-    padding: 1.6em 2.4em .7em calc(1.4em + var(--quote-image-width));
-    font: italic 1.2rem var(--type-quote);
-    border-radius: var(--border-rad);
+    padding: 1.6em 2.4em .7em;
+    font: italic 1.2rem Vollkorn;
+    border-radius: 7px;
     border: 2px solid white;
     box-shadow: 2px 2px 4px hsl(0 0% 0% / 20%);
     text-indent: 1.6em;
+  }
+
+  .quote-img {
+    padding: 1.6em 2.4em .7em calc(1.4em + var(--quote-image-width));
   }
 
   @media (min-width: 768px) {
@@ -360,10 +362,6 @@ export const baseStyles = css`
     top: 0;
     right: 0;
     bottom: 0;
-    border-radius: var(--border-rad);
-    box-shadow:
-      inset -2px -2px 1px hsl(0 0% 100%),
-      inset 2px 2px 4px hsl(0 0% 0% / 20%);
   }
 
   blockquote::after {
@@ -396,12 +394,12 @@ export const baseStyles = css`
     opacity: 0.75;
     background: var(--accent-color) var(--image) no-repeat center / cover;
     background-blend-mode: hard-light;
-    border-top-left-radius: var(--border-rad);
-    border-bottom-left-radius: var(--border-rad);
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
     background-repeat: no-repeat;
     max-width:100%;
     max-height:100%;
-    vertical-align: middle;
+    background-position: center;
   }
 
   cite {
@@ -409,20 +407,13 @@ export const baseStyles = css`
     margin-top: 30px;
     text-indent: 0;
     text-align: center;
-    font: bold .9rem var(--type-body);
+    font: bold .9rem Open Sans,Helvetica,Arial,sans-serif
     text-transform: uppercase;
-    color: hsl(0 0% 20%);
+    color: #3b7789;
   }
 
-  @media (min-width: 768px) {
-    cite {
-      margin-left: calc(1rem - var(--quote-image-width));
-    }
-  }
-
-  .cite-last-name {
-    background: var(--accent-color);
-    color: var(--quote-bg);
+  .cite-author{
+    color: var(--accent-color)
   }
 
   .socialWrapper {

@@ -49,3 +49,24 @@ export const Tags = ({ name, list }) => {
     </>
   );
 };
+
+export const Quote = ({ text, src, author, img, cover }) => {
+  return (
+    <blockquote className={img ? 'quote-img' : 'quote-no-img'}>
+      <p>{text}</p>
+      <cite>
+        {src && <small>{src}</small>} {author && <span class="cite-author">{author}</span>}
+      </cite>
+
+      {img && (
+        <div
+          className="blockquote-author-image"
+          style={{
+            backgroundImage: `url(${img})`,
+            backgroundSize: cover ? 'cover' : 'auto',
+          }}
+        />
+      )}
+    </blockquote>
+  );
+};
