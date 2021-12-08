@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { ThemeProvider as EmotionThemeProvider, Global, css } from '@emotion/react';
+import { ThemeProvider, Global, css } from '@emotion/react';
 
 import { lightTheme, darkTheme } from './index';
 import Header from '../Header';
 import { baseStyles } from '../styles/GlobalStyles';
 import { styles } from '../../custom/styles/styles';
 
-class ThemeProvider extends React.Component {
+class ThemeProviderWrapper extends React.Component {
   state = {
     // isDarkThemeActive: false,
     isDarkThemeActive: true,
@@ -43,10 +43,10 @@ class ThemeProvider extends React.Component {
           isDarkThemeActive={isDarkThemeActive}
           toggleActiveTheme={this.toggleActiveTheme}
         />
-        <EmotionThemeProvider theme={currentActiveTheme}>{children}</EmotionThemeProvider>
+        <ThemeProvider theme={currentActiveTheme}>{children}</ThemeProvider>
       </div>
     );
   }
 }
 
-export default ThemeProvider;
+export default ThemeProviderWrapper;

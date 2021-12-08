@@ -1,17 +1,19 @@
 ---
-title: "Hashing"
-metaTitle: "An introduction to hashing"
-metaDescription: "This is some meta description"
-date: 2021-11-01
+title: "Cryptography 102"
+metaTitle: "Hashing and Signatures"
+metaDescription: "Precursor to understanding the cryptography concepts that inspire Blockchain and the original Bitcoin protocol"
+date: 2021-12-8
 author: Samuel Chan
-keywords: ["hashing, algorithm, blockchain"]
+keywords: ["cryptography, blockchain, bitcoin, cryptography 101"]
 ---
 import { Edit, StyledHeading, StyledMainWrapper } from '../src/components/styles/Docs';
+import { Tags } from '../src/components/reactComponents/utils/UX';
 
 <StyledHeading>{props.frontmatter.metaTitle}</StyledHeading>
-<p>{props.frontmatter.metaDescription}</p>
-<p>{props.frontmatter.metaDate}</p>
-<p>{JSON.stringify(props.frontmatter)}</p>
+<p>{JSON.stringify(props)}</p>
+
+<Tags name="Topics" list={props.frontmatter.keywords[0].split(',')} />
+
 
 An example of interactive code:
 ```javascript react-live=true

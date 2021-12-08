@@ -1,5 +1,5 @@
 import React from 'react';
-import { Space, Popover } from 'antd';
+import { Space, Popover, Tag, Divider } from 'antd';
 
 export const IconText = ({ icon, text, iconhover }) => (
   <Space>
@@ -18,3 +18,34 @@ export const IconText = ({ icon, text, iconhover }) => (
     )}
   </Space>
 );
+
+const tagColors = [
+  'magenta',
+  'red',
+  'volcano',
+  'orange',
+  'gold',
+  'lime',
+  'green',
+  'cyan',
+  'blue',
+  'geekblue',
+  'purple',
+];
+
+export const Tags = ({ name, list }) => {
+  return (
+    <>
+      <Divider orientation="left">{name}</Divider>
+      <div>
+        {list.map((item, index) => {
+          return (
+            <Tag key={index} color={tagColors[index]}>
+              {item}
+            </Tag>
+          );
+        })}
+      </div>
+    </>
+  );
+};

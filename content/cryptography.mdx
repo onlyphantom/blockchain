@@ -4,7 +4,7 @@ metaTitle: "Understanding the cryptography concepts used in development of block
 metaDescription: "Precursor to understanding the cryptography concepts that inspire Blockchain and the original Bitcoin protocol"
 date: 2021-11-25
 author: Samuel Chan
-keywords: ["hashing, ethereum, blockchain"]
+keywords: ["encryption, decryption, aes, blockchain, bitcoin, cryptography 101"]
 ---
 import { Alert } from 'antd';
 import XOR from '../src/components/reactComponents/XOR'
@@ -275,7 +275,13 @@ When permutations is used, its effect is that the adversary must intercept a suf
 
 Confusion on the other hand mixes the secret key into the state (`AddRoundKey` and `SubBytes` operations), and its use of the key schedule also underlines the confusion concept. As we think about it, this is a public, well-documented algorithm meaning an adversary can go from cipher text to plain text by reversing the process if not for the presence of the secret key we incorporate to perform the XOR operation. The confusion and permutations that is incorporated nonetheless make it such that any small change (uppercase S to lowercase S) would result in large changes.
 
-Since AES has become a standard, most CPU hardware and chip vendors have built-in instructions to perform AES and these are implementations that are incredibly efficienct and fast. In the [Practice Exercises](#practicalexercises) section, you will be asked to perform one of these on your machine.
+Since AES has become a standard, most CPU hardware and chip vendors have built-in instructions 
+to perform AES and these are implementations that are incredibly efficienct and fast. 
+
+The reference of the Bitcoin source code provides implementations of both a node and a wallet. Its implementation of the wallet uses AES-256 and is called `crypto/aes`. Encryption however
+isn't part of the Bitcoin protocol as its akin to a public, distributed ledger and data flows within the network unencrypted. 
+
+In the [Practice Exercises](#practicalexercises) section, you will be asked to perform one of these on your machine.
 
 ## Knowledge Check 
 ### Practical Exercises
@@ -312,40 +318,76 @@ Since AES has become a standard, most CPU hardware and chip vendors have built-i
     </div>)
     render(elem)
     ```
-- [ ] You can generate a private-public key pair using the following command:
-    ```bash
-    openssl genrsa -out private.pem 1024
-    # Generating RSA private key, 1024 bit long modulus (2 primes)
-    # .................................+++++
-    # ...+++++
-    # e is 65537 (0x010001)
-    openssl rsa -in private.pem -pubout -out public.pem
-    # writing RSA key
-    ```
+- [ ] You can generate a private-public key pair using the following command. Pay special attention to how the public key is derived 
+from the private key due to their mathematical relations.
 
-    Use `cat` to view the content of our keys:
-    ```bash
-    cat public.pem
-    # output:
-    -----BEGIN PUBLIC KEY-----
-    MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDuieQ0vY98sIjJouuVFdmlkzBj
-    0N+AL6fpxBLXtJOJIZF+3jMt9M5UTFoQWIeUUBfj3SEEcF+GIxM9WIwAypdPfdQk
-    cADaYqjxupzw9kk4Fm8Hc8bxYQCI0CTWUwP5NaxeDL7tlC/zrp/kt70Jjm4Y8f+E
-    xhovw6lvl1c6tKAFqwIDAQAB
-    -----END PUBLIC KEY-----
-    ``` 
+```bash
+openssl genrsa -out private.pem 1024
+# Generating RSA private key, 1024 bit long modulus (2 primes)
+# .................................+++++
+# ...+++++
+# e is 65537 (0x010001)
+openssl rsa -in private.pem -pubout -out public.pem
+# output: 
+# writing RSA key
+# Use `cat` to view the content of our keys:
+cat public.pem
+```
 
-    You can then use the following command to encrypt/decrypt a message:
-    ```bash
-    # encrypt
-    openssl rsautl -encrypt -inkey public.pem -pubin -in message.txt -out message.enc
-    # decrypt
-    openssl rsautl -decrypt -inkey private.pem -in message.enc -out message.txt
-    ```
+And an example output of `public.pem`:
 
 
-    
+```bash
+-----BEGIN PUBLIC KEY-----
 
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDuieQ0vY98sIjJouuVFdmlkzBj
+0N+AL6fpxBLXtJOJIZF+3jMt9M5UTFoQWIeUUBfj3SEEcF+GIxM9WIwAypdPfdQk
+cADaYqjxupzw9kk4Fm8Hc8bxYQCI0CTWUwP5NaxeDL7tlC/zrp/kt70Jjm4Y8f+E
+xhovw6lvl1c6tKAFqwIDAQAB
+
+-----END PUBLIC KEY-----
+``` 
+
+
+The `.pem` extension may make you feel uneasy but it's just a text-based file (it is short for "[Privacy Enhanced Mail](https://www.rfc-editor.org/rfc/rfc1422)", initially intended for secure email services).
+
+You could have used `.txt` instead for this exercise but PEM is a standard format for encoding keys and certificates.
+
+
+Similarly, in the code examples below you may come across `.enc` for the first time. This is just a file extension for encrypted files. You can use `cat` to read the content of the file;
+
+
+You can then use the following command to encrypt/decrypt a message:
+
+```bash
+
+# encrypt
+
+openssl rsautl -encrypt -inkey public.pem -pubin -in message.txt -out message.enc
+
+# decrypt
+
+openssl rsautl -decrypt -inkey private.pem -in message.enc -out message.txt
+
+```
 
 #### Knowledge Check
 1. What would be the right decimal value for the hex of `0x22B`?
+2. Given the following private key, and [this encrypted message](https://github.com/onlyphantom/blockchain/blob/main/etc/message.enc?raw=true), what is the decrypted message (plain text)? Note: you need to keep the line that says `----BEGIN RSA PRIVATE KEY-----` as well as the `----END RSA PRIVATE KEY-----` at the end of the lines.
+    ```bash
+    -----BEGIN RSA PRIVATE KEY-----
+    MIICXQIBAAKBgQDuieQ0vY98sIjJouuVFdmlkzBj0N+AL6fpxBLXtJOJIZF+3jMt
+    9M5UTFoQWIeUUBfj3SEEcF+GIxM9WIwAypdPfdQkcADaYqjxupzw9kk4Fm8Hc8bx
+    YQCI0CTWUwP5NaxeDL7tlC/zrp/kt70Jjm4Y8f+Exhovw6lvl1c6tKAFqwIDAQAB
+    AoGBALPRhxKrA4u/mJ5IDseoXRYQSx4zywha5H24rWumWMG7aG73GiW+sfuiQxKn
+    ai1H43qGq+kovRnlPw+zvHasQjrZw/Y0ZArYmh3IvX4xBLzWXGND7HvgxEFYiMhG
+    Alj0a5sXixKoWAQBkuwDtv4ANiz5ZeupxwqkCuLmCENImq/BAkEA+0xHCwno5ptn
+    1vdbaIALQ9tPZfyLGuyviYGZ6inLYhAoRuAmzVzrdFreTWELcw409OzvB5465V77
+    Kctsx8Fq0wJBAPMAfxrqeDUJdrj+h5Ifk5zd6dazCod90LYosYDHSALivy1UGdqQ
+    OhwDf6JpFU39OT2/LHkOJHESb12hz0nsgskCQCWhmInoo/3Ui8o/JGsTsZwpvUwS
+    c2pGw0qeI8RTGefHb6CddHIQVhoIeX2w6JwEJp3+1RSY90zd2lK56cJIDo0CQCwa
+    3/cLrYu6zwCeug6MiqdDI+kjD/stm88kLat5ABn9+8MHa7XezZ0+CVF6DzLbjiMl
+    6rWCGp0nQm1VLCF3uvkCQQDgN3XXSFVqNFATNCX5o4xDQu8s3qaMPndSZ4DJU5Kh
+    v7f+Wud4lLCyB3uv/F5/qioppO6SQiT+D9w0GXcleufq
+    -----END RSA PRIVATE KEY-----
+    ```
