@@ -16,7 +16,52 @@ import { Tags, Quote } from '../src/components/reactComponents/utils/UX';
 ## Cryptography
 A blockchain is a chain of blocks (an array of data) linked together through clever use of cryptography. To truly appreciate the design of blockchain, one is well served by his/her understanding of the cryptographic primitives underlying blockchain.
 
-Broadly speaking, we can classify cryptography into one of two forms: symmetric and asymettric cryptography.
+
+### Caesar Cipher
+Most textbooks begin their introduction to classical cryptography with the Caesar cipher. The idea being that the ciphertext is 
+a modified version of the plaintext, where each letter is shifted by a fixed number of places. The shift is determined by the key.
+Put simply, one replace each letter in the plaintext with a different letter that is a fixed number of places away in the alphabet.
+
+The effect of a left rotation of 3 places can be seen as follows:
+
+```
+Plaintext:  THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG
+Ciphertext: QEB NRFZH YOLTK CLU GRJMP LSBO QEB IXWV ALD
+```
+
+Expressed mathematically, this gives us the following formula for an encryption:
+
+<div className='math-display'>
+{'E_n(x) = (x + n) mod 26'}
+</div>
+
+And the following formula for decryption:
+
+<div className='math-display'>
+{'D_n(x) = (x - n) mod 26'}
+</div>
+
+This is a very simple encryption scheme named after Julius Caesar, said to use it with a right shift of three (<span className='math-inline'>A \rightarrow D</span>
+) to protect messages of military significance.
+
+2000 years larer, fugitive Mafia boss Bernardo Provenzano (_capo dei capi_, "the boss of bosses") uses a variation known as the _pizzini_ code which right-shift each letter by three places before replacing each letter with numbers corresponding to the new position.
+One such note (out of at least 350 recovered) read "I met 512151522 191212154 and we agreed that we will see each other after the holidays..." (decoded as "Binnu Riina"). Provenzano is perhaps 
+the most elusive fugitive of the Mafia, having evaded capture several times after being involved in two high-profile bombings that killed
+prosecutors, eliminating rival bosses and having spent 43 years living as a fugitive. 
+
+In 2011, Rajib Karim was convicted in the United Kingdom of terrorism offences after using the Caesar cipher to communicate with Bangladeshi Islamic activists 
+discussing plots to blow up British Airways planes.
+
+<Quote 
+    text="If he had anything confidential to say, he wrote it in cipher, that is, by so changing the order of the letters of the alphabet, that not a word could be made out. If anyone wishes to decipher these, and get at their meaning, he must substitute the fourth letter of the alphabet, namely D, for A, and so with the others." 
+    src="Life of Julius Caesar "
+    author="Suetonius"
+    img="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Gaius_Iulius_Caesar_%28Vatican_Museum%29.jpg/330px-Gaius_Iulius_Caesar_%28Vatican_Museum%29.jpg"
+    cover={true}
+/>
+
+The focus of the following sections are on modern ciphers and cryptography. Broadly speaking, we can classify 
+modern cryptography into one of two forms: symmetric and asymmetric cryptography.
 
 ## Symmetric cryptography
 Also called **secret key cryptography** or **shared key cryptography**, symmetric cryptography uses a key to encrypt the data and the same key for decrypting the data. This key must be agreed on before the data exchange take place between the communicating parties.

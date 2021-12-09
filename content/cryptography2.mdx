@@ -4,6 +4,7 @@ metaTitle: "Cryptography in Blockchain"
 metaDescription: "Hashing and Signatures used in the original Bitcoin protocol"
 date: 2021-12-8
 author: Samuel Chan
+slug: '/cryptography-in-blockchain'
 keywords: ["cryptography, blockchain, bitcoin, cryptography 101"]
 ---
 import { Quote, Tags } from '../src/components/reactComponents/utils/UX';
@@ -20,12 +21,26 @@ Its implementation of the wallet uses [AES-256](../cryptography#aes) and is
 called `crypto/aes`. Independent developers can use the reference implementation to 
 create wallets in the form of mobile apps, web wallets, or even hardware wallets.
 
-Encryption however isn't part of the Bitcoin protocol as its akin to a public, distributed ledger and data flows within the network unencrypted. 
-Blockchain, however, uses hash functions to ensure that the data is not tampered with ("signature"), an
-idea that we will explore in much greater depth in the following sections.
+Encryption however isn't part of the Bitcoin protocol as its akin to a public, distributed ledger 
+and data flows within the network unencrypted. Blockchain, however, uses hash functions to ensure that 
+the data is not tampered with ("signature"), an idea that we will explore in much greater depth in the 
+following sections.
+
+Readers are encouraged to complete the [Cryptography 101](../cryptography) chapter before continuing.
 
 ## Hash Functions
+As compared to encryption functions, hash functions are one-way functions, keyless and serve to validate the integrity of data. As such, hashes are
+a representation of digital signatures. On a high level, this is how we could use hashing:
 
+1. Write our message to a file
+2. Use the SHA256 algorithm to hash the message
+3. Store the hash in a file and optionally encrypt it with the private key resulting in a digitally signed message
+4. Send the message to the recipient
+5. Recipient verify the hash by comparing it to the hash stored in the file
+
+
+
+![](images/hashing.png)
 
 
 <Quote 

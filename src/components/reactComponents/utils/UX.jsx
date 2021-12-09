@@ -69,7 +69,7 @@ export const Quote = ({ text, src, author, img, cover }) => {
     <blockquote className={img ? 'quote-img' : 'quote-no-img'}>
       <p>{text}</p>
       <cite>
-        {src && <small>{src}</small>} {author && <span class="cite-author">{author}</span>}
+        {src && <small>{src}</small>} {author && <span className="cite-author">{author}</span>}
       </cite>
 
       {img && (

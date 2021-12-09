@@ -61,10 +61,10 @@ export default class MDXRuntimeTest extends Component {
       .map(slug => {
         if (slug) {
           const { node } = allMdx.edges.find(({ node }) => node.fields.slug === slug);
-
           return { title: node.fields.title, url: node.fields.slug };
         }
       });
+      console.log("nav", nav)
 
     // meta tags
     const metaTitle = mdx.frontmatter.metaTitle;
