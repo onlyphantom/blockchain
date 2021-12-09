@@ -6452,6 +6452,14 @@
     "antd" "^4.0.0"
     "babel-plugin-import" "^1.13.0"
 
+"gatsby-plugin-catch-links@^4.3.0":
+  "integrity" "sha512-uG7f6XCY6z7xGkaoDnGNs5twfDOciT1coBnSMM8RZNybOE6tNgvE9MBBBfGGaQiWUwq+eCAutNBAkjMlC3J71g=="
+  "resolved" "https://registry.npmjs.org/gatsby-plugin-catch-links/-/gatsby-plugin-catch-links-4.3.0.tgz"
+  "version" "4.3.0"
+  dependencies:
+    "@babel/runtime" "^7.15.4"
+    "escape-string-regexp" "^1.0.5"
+
 "gatsby-plugin-emotion@^7.0.0":
   "integrity" "sha512-owgL4bE2cj0CvJ98akIlcOT8UVWMyOnwFvPJ4J39Rog6ZCZSEvuM+KvBDL8ZsiSPjEKdy9T/YA+rEoMD0ZcGgA=="
   "resolved" "https://registry.npmjs.org/gatsby-plugin-emotion/-/gatsby-plugin-emotion-7.0.0.tgz"

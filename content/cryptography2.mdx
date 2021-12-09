@@ -1,51 +1,38 @@
 ---
-title: "Cryptography 102"
-metaTitle: "Hashing and Signatures"
-metaDescription: "Precursor to understanding the cryptography concepts that inspire Blockchain and the original Bitcoin protocol"
+title: "Cryptography in Blockchain"
+metaTitle: "Cryptography in Blockchain"
+metaDescription: "Hashing and Signatures used in the original Bitcoin protocol"
 date: 2021-12-8
 author: Samuel Chan
 keywords: ["cryptography, blockchain, bitcoin, cryptography 101"]
 ---
-import { Edit, StyledHeading, StyledMainWrapper } from '../src/components/styles/Docs';
-import { Tags } from '../src/components/reactComponents/utils/UX';
-
-<StyledHeading>{props.frontmatter.metaTitle}</StyledHeading>
-<p>{JSON.stringify(props)}</p>
+import { Quote, Tags } from '../src/components/reactComponents/utils/UX';
 
 <Tags name="Topics" list={props.frontmatter.keywords[0].split(',')} />
 
+## Encryption and Bitcoin
+The reference of the Bitcoin source code provides implementations of 
+both a node and a wallet. The wallet is responsible for generating and storing
+public and private keys, through which the node can encrypt and decrypt messages, 
+allowing the user to send and receive bitcoins.
 
-An example of interactive code:
-```javascript react-live=true
-const elem = <button style={{color: 'seagreen'}}>
-                Change me to blue.
-             </button>
-render(elem)
-```
+Its implementation of the wallet uses [AES-256](../cryptography#aes) and is 
+called `crypto/aes`. Independent developers can use the reference implementation to 
+create wallets in the form of mobile apps, web wallets, or even hardware wallets.
 
-<div className="math-display">
-{'\\frac{\\text{m}}{\\text{s}^2}'}
-</div>
+Encryption however isn't part of the Bitcoin protocol as its akin to a public, distributed ledger and data flows within the network unencrypted. 
+Blockchain, however, uses hash functions to ensure that the data is not tampered with ("signature"), an
+idea that we will explore in much greater depth in the following sections.
+
+## Hash Functions
 
 
-Some inline math, coming right up. <span className="math-inline">T_n = a + (n-1)d * e_t</span>
 
+<Quote 
+    text="No right of private conversation was enumerated in the Constitution. I don't suppose it occurred to anyone at the time that it could be prevented." 
+    src=""
+    author="Whitefield Diffie"
+    img="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Whitfield_Diffie_Royal_Society.jpg/330px-Whitfield_Diffie_Royal_Society.jpg"
+    cover={true}
+/>
 
-```javascript react-live=true hide-code
-const App = () => {
-
-    const [val, setVal] = React.useState(1704)
-
-    return (
-        <div>
-            <h1>Hashing</h1>
-
-            <p>
-                {val} Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi voluptas tenetur dignissimos 
-                <br/> Aspernatur, corrupti repellat debitis officia, odit doloribus consequatur unde amet similique ipsum laborum eveniet, maxime saepe. Inventore aliquam consequatur perferendis iste veritatis mollitia veniam odit.
-            </p>
-        </div>
-    )
-}
-render(App)
-```
