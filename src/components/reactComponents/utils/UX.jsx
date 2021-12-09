@@ -1,5 +1,6 @@
 import React from 'react';
 import { Space, Popover, Tag, Divider } from 'antd';
+import { TagsOutlined } from '@ant-design/icons';
 
 export const IconText = ({ icon, text, iconhover }) => (
   <Space>
@@ -35,8 +36,21 @@ const tagColors = [
 
 export const Tags = ({ name, list }) => {
   return (
-    <>
-      <Divider orientation="left">{name}</Divider>
+    <div
+      style={{
+        boxShadow: '2px 2px 4px hsl(0deg 0% 0% / 20%)',
+        border: '2px solid #fff',
+        borderRadius: '7px',
+        padding: '1%',
+      }}
+    >
+      <Divider orientation="left">
+        <h2>
+          <TagsOutlined />
+          {'  '}
+          {name}
+        </h2>
+      </Divider>
       <div>
         {list.map((item, index) => {
           return (
@@ -46,7 +60,7 @@ export const Tags = ({ name, list }) => {
           );
         })}
       </div>
-    </>
+    </div>
   );
 };
 
