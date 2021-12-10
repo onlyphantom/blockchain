@@ -119,7 +119,12 @@ Message Digest functions such as MD5 is no longer considered to be cryptographic
 find more readily recommended today are SHA algorithms. SHA256 is a 256-bit hash function, which has 32 bytes of output
 and belongs to the Secure Hash Algorithms (SHAs) family. 
 
+We spoke of the importance of integrity checks, but hashing functions have wide-ranging applications beyond that.
+For example, producing hash tables can quite substantially improve the query performance while using less desk spaces. 
+Hashes can also be used by cybersecurity teams to fingerprint a file, identify a file's origin, or fingerprint a known malware / virus without having to scan the entire file.
+Peer-to-peer networks for file sharing also relies on hash functions to ensure that files are not corrupted.
 
+In blockchain, the proof of work algorithm uses SHA256 as the hash function to verify the computational work done by miners.
 
 ## Knowledge Check
 
