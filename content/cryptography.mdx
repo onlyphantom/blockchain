@@ -419,7 +419,7 @@ openssl rsautl -encrypt -in message.txt -out message.enc -pubin -inkey public.pe
 openssl rsautl -decrypt -in message.enc -inkey private.pem -out message.txt
 ```
 
-#### Knowledge Check
+### Knowledge Check
 1. What would be the right decimal value for the hex of `0x22B`?
 2. Given the following private key, and [this encrypted message](https://github.com/onlyphantom/blockchain/blob/main/etc/message.enc?raw=true), what is the decrypted message (plain text)? Note: you need to keep the line that says `----BEGIN RSA PRIVATE KEY-----` as well as the `----END RSA PRIVATE KEY-----` at the end of the lines.
     ```bash

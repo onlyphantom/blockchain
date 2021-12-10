@@ -8,10 +8,21 @@ slug: '/cryptography-in-blockchain'
 keywords: ["cryptography, blockchain, bitcoin, cryptography 101"]
 ---
 import { Quote, Tags } from '../src/components/reactComponents/utils/UX';
+import { OutboundLink } from 'gatsby-plugin-gtag'
+
 
 <Tags name="Topics" list={props.frontmatter.keywords[0].split(',')} />
 
 ## Encryption and Bitcoin
+
+<Quote 
+    text="No right of private conversation was enumerated in the Constitution. I don't suppose it occurred to anyone at the time that it could be prevented." 
+    src=""
+    author="Whitefield Diffie"
+    img="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Whitfield_Diffie_Royal_Society.jpg/330px-Whitfield_Diffie_Royal_Society.jpg"
+    cover={true}
+/>
+
 The reference of the Bitcoin source code provides implementations of 
 both a node and a wallet. The wallet is responsible for generating and storing
 public and private keys, through which the node can encrypt and decrypt messages, 
@@ -29,25 +40,107 @@ following sections.
 Readers are encouraged to complete the [Cryptography 101](../cryptography) chapter before continuing.
 
 ## Hash Functions
-As compared to encryption functions, hash functions are one-way functions, keyless and serve to validate the integrity of data. As such, hashes are
-a representation of digital signatures. On a high level, this is how we could use hashing:
+As compared to encryption functions, hash functions are irreversible (one-way), keyless, fixed-sized, and serve to validate the integrity of data. As such, hashes are
+a representation of digital signatures.
+
+On a high level, this is how we could use hashing:
 
 1. Write our message to a file
-2. Use the SHA256 algorithm to hash the message
+2. Use a hashing algorithm like MD5 or sha256 to hash the message
 3. Store the hash in a file and optionally encrypt it with the private key resulting in a digitally signed message
 4. Send the message to the recipient
 5. Recipient verify the hash by comparing it to the hash stored in the file
 
-
+A quick visual diagram of that process looks like this:
 
 ![](images/hashing.png)
 
 
-<Quote 
-    text="No right of private conversation was enumerated in the Constitution. I don't suppose it occurred to anyone at the time that it could be prevented." 
-    src=""
-    author="Whitefield Diffie"
-    img="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Whitfield_Diffie_Royal_Society.jpg/330px-Whitfield_Diffie_Royal_Society.jpg"
-    cover={true}
-/>
+### Hashing with `md5sum`
+
+We could have substituted step (1) in the example above, and generalize it to let's say, web software.
+
+If Alice is asked to install Google Chrome on her computer, she would have to first download 
+the browser off an online source. Many internet sites happily host a version of Chrome online
+in the hope that the web traffic could make up for some advertising revenue. How would Alice 
+be assured that the Chrome browser she installed has not been tampered with?
+
+Well, it turns out she can check the hash of the software she downloaded. One such standard is 
+the MD5 hash, which is a 16-byte hash function. The 'MD' in MD5 stands for Message Digest.
+
+After downloading (but before executing the installer),
+she can look into the package for a file containing the hash (on Linux, typically in a location like
+`/var/lib/dpkg/info/google-chrome.md5sums`). In fact, this operation is so common that most OS ships
+with some sort of hash checking tool. A Ubuntu user can hence find the list of files with checksums 
+in `/var/lib/dpkg/info/<package_name>.md5sums`. Here's an example for my Python3 installation:
+
+```bash
+edace46345e940177c40892e87457393  usr/lib/valgrind/python3.supp
+5d52ee1b68c656621c6e2245d07f174c  usr/share/doc/python3/copyright
+3095c50e86c4e6b04e7d178bc936ac70  usr/share/doc/python3/python-policy.dbk.gz
+fce588a7b0f9617ef102dba9459c7772  usr/share/doc/python3/python-policy.html/build_dependencies.html
+52e29e520566050cbbc7dacebca223bf  usr/share/doc/python3/python-policy.html/embed.html
+128379472666538c7655e0c8ca3a29f4  usr/share/doc/python3/python-policy.html/index.html
+f4469eeb667e6f11d99f69ee3e383d1f  usr/share/doc/python3/python-policy.html/module_packages.html
+e1b6ec3e3263267076434e4d3e14aae8  usr/share/doc/python3/python-policy.html/packaging_tools.html
+c5dcbce05b95304c5e343176a6542e51  usr/share/doc/python3/python-policy.html/programs.html
+3e64ba4e2ba59b3227268fafdb2ee557  usr/share/doc/python3/python-policy.html/python.html
+faa21ee45374f12459d7979924094b37  usr/share/doc/python3/python-policy.html/python3.html
+...
+```
+I can also use `dpkg -V` to verify the integrity of the package by comparing the hash 
+it found with the database metadata.
+
+```bash
+V, --verify [package-name...]
+          Verifies  the integrity of package-name or all packages if omit‐
+          ted, by comparing information from the installed paths with  the
+          database metadata.
+```
+
+If `md5sum` is installed on your system, you can use it to generate the hash of a file. Alice
+could write a note, save it as `message.txt` and generate the MD5 hash using the command:
+
+```bash
+md5sum message.txt >> message.md5sums
+```
+
+When Bob receives this message, he can verify the integrity of the message by comparing the hash
+to the one he generate from the message following the same procedure. If even a single character has been modified, the hash output should be completely different (a property sometimes referred to as an "avalanche effect").
+
+Open source projects like R rely on community support for the hosting of their software, and often provide instructions on their installation page to verify
+the integrity of their software. For example, the first paragraph on the <OutboundLink target="_blank" href='https://cran.r-project.org/bin/windows/base/'>R installation page</OutboundLink>
+says: 
+
+> If you want to double-check that the package you have downloaded matches the package distributed by CRAN, you can compare the md5sum of the .exe <OutboundLink target="_blank" href='https://cran.r-project.org/bin/windows/base/md5sum.txt'>to the fingerprint</OutboundLink> on the master server. You will need a version of md5sum for windows: both graphical and command line versions are available.
+
+## Secure Hash Algorithms
+Message Digest functions such as MD5 is no longer considered to be cryptographically secure and what you'll
+find more readily recommended today are SHA algorithms. SHA256 is a 256-bit hash function, which has 32 bytes of output
+and belongs to the Secure Hash Algorithms (SHAs) family. 
+
+
+
+## Knowledge Check
+
+### Practical Exercises
+1. Use the `sha256sum` command to generate the hash of the file `message.txt`
+```
+sha256sum message.txt
+```
+
+### Knowledge Check
+You will need to have the appropriate software for this section. More [details here](https://ubuntu.com/tutorials/how-to-verify-ubuntu#2-necessary-software).
+
+1. The following is the `md5sum` and `sha256sum` of the file `[instructions.txt](#)`:
+
+```bash
+# md5sum
+37d84f83de2aed25f06c7536924cf308  instructions.txt
+# sha256sum
+778c8537acdc2b3fc7837996f68e9c412509ca5d194b8db5e9929f4f3673ed23 instructions.txt
+```
+Verify that, using either hash algorithm (whichever you have installed on your system):
+- [x] The file has not been tampered with.
+- [ ] The hash is incorrect. File has been altered, by even just a single character.
 

@@ -2,7 +2,7 @@ const config = {
   gatsby: {
     pathPrefix: '/',
     siteUrl: 'https://supertype.ai',
-    gaTrackingId: null,
+    gaTrackingId: 'UA-175521274-2',
     trailingSlash: false,
   },
   header: {
@@ -16,7 +16,7 @@ const config = {
     tweetText: '',
     // when this is ready, like to the FB group
     social: `<li>
-		    <a href="https://www.facebook.com/groups/blockchainindonesia" target="_blank" rel="noopener">
+		    <a href="https://www.facebook.com/groups/web3dev" target="_blank" rel="noopener">
 		      <div class="fbBtn">
 		        <img src='https://raw.githubusercontent.com/onlyphantom/blockchain/main/src/components/images/fb.svg' alt='Facebook group'/>
 		      </div>
