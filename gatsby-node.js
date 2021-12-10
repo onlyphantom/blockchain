@@ -64,7 +64,16 @@ exports.onCreateWebpackConfig = ({ actions }) => {
         $components: path.resolve(__dirname, 'src/components'),
         buble: '@philpl/buble', // to reduce bundle size
       },
+      fallback: {
+        crypto: require.resolve('crypto-browserify'),
+        stream: require.resolve('stream-browserify'),
+      }
     },
+    // resolve: {
+    //   fallback: {
+    //     crypto: require.resolve('crypto-browserify'),
+    //   }
+    // }
   });
 };
 
