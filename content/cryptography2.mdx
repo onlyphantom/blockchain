@@ -42,8 +42,9 @@ following sections.
 Readers are encouraged to complete the [Cryptography 101](../cryptography) chapter before continuing.
 
 ## Hash Functions
-As compared to encryption functions, hash functions are irreversible (one-way), keyless, fixed-sized, and serve to validate the integrity of data. As such, hashes are
-a representation of digital signatures.
+As compared to encryption functions, hash functions are irreversible (one-way), keyless, fixed-sized, and serve to validate the integrity of data. 
+While encryption preserves the original text fully, hashing produces a fixed-length signature of the original text.
+
 
 On a high level, this is how we could use hashing:
 
@@ -116,6 +117,13 @@ says:
 
 > If you want to double-check that the package you have downloaded matches the package distributed by CRAN, you can compare the md5sum of the .exe <OutboundLink target="_blank" href='https://cran.r-project.org/bin/windows/base/md5sum.txt'>to the fingerprint</OutboundLink> on the master server. You will need a version of md5sum for windows: both graphical and command line versions are available.
 
+### Security properties of hash functions
+- Fixed length: the hash function is fixed-sized, and thus can be used to generate a fixed-length signature.
+- Pre-image resistance (One way): the hash function cannot be used to generate a pre-image of the message. 
+    - <span className='math-inline'>h(x) = y</span>, where <span className='math-inline'>x</span> is the message and <span className='math-inline'>y</span> is the hash. <span className='math-inline'>x</span> is a _pre-image_ of <span className='math-inline'>y</span> and cannot be reverse-computed from <span className='math-inline'>y</span>.
+- Collision resistance: Different input message should result in different hash, that is <span className='math-inline'>h(a) \neq h(b)</span>
+    - It is impossible to fully avoid collisions in hashing functions (compression down to 32 bytes, hence subjected to the same problem as a "birthday function") -- but sufficienctly long collisions are computationally infeasible to find.
+
 ## Secure Hash Algorithms
 Message Digest functions such as MD5 is no longer considered to be cryptographically secure and what you'll
 find more readily recommended today are SHA algorithms. SHA256 is a 256-bit hash function, which has 32 bytes of output
@@ -128,8 +136,33 @@ Peer-to-peer networks for file sharing also relies on hash functions to ensure t
 
 In blockchain, the proof of work algorithm uses SHA256 as the hash function to verify the computational work done by miners.
 
+Let's take a look at the SHA family of hash functions, starting from SHA-1. 
+
+SHA-1 takes a message of arbitrary length and produces a 160-bit hash value, that is, 160 binary bits of 0 and 1. 
+
+
+### Experiment 1
+
+#### Hashing with SHA256
+1. Go ahead and type your first name into the field below.
+2. Change **one character** in your name, and observe the hash change.
+3. Notice that even a minor change (an extra space, or a capitalized letter) results in an
+entirely different hash ("avalanche effect"). 
+4. Observe that a SHA256 hash is fixed-length whether your name is 120 characters long or 3 characters short; 
+You'll always get a hash that is 32 bytes long, comprising of 64 hexadecimal digits.
 
 <SHA256 /> 
+
+The experiment above also demonstrates how password hashing is used in the real world. A good security practice 
+is to use a hash function to generate a one-way hash of the password, and store the hash in the database instead of the plain text. 
+
+When a user attempts to make a legitimate login again, they would enter the password on, say, a web form, and the hash of which is thus
+compared to the one stored in the database. A passed equality check would indicate that the password is correct and 
+that the user should be authorized.
+
+It should also be noted that precomputed table that caches the output of cryptographic hashes (known also as a <OutboundLink target="blank" href="https://en.wikipedia.org/wiki/Rainbow_table">rainbow table</OutboundLink>) for common
+strings exists and are <OutboundLink target="_blank" href='https://crackstation.net/'> quite readily</OutboundLink> <OutboundLink target="_blank" href='https://project-rainbowcrack.com/table.htm'> available</OutboundLink>. A hacker
+can thus use these pre-computed values, up to tens of millions of them at a time, to crack passwords in a dictionary attack.
 
 
 ## Knowledge Check
@@ -138,6 +171,25 @@ In blockchain, the proof of work algorithm uses SHA256 as the hash function to v
 1. Use the `sha256sum` command to generate the hash of the file `message.txt`
 ```
 sha256sum message.txt
+```
+
+2. Use the [Experiment 1](#experiment1) box to generate the hash of a common word or phrase that you suspect to be a weak password.
+This could be "password" or "secret", or "samuel" or "password123". Try and find a rainbow table or online hash database to match the hash to. 
+<OutboundLink target="_blank" href='https://crackstation.net/'>Crackstation</OutboundLink> or similar services may be used for this exercise.
+
+3. You can use the `sha256sum` command or `openssl`, whichever you have installed to generate the hash of a message. Verify that the values
+are the same as the one from [Experiment 1](#experiment1).
+
+```bash
+# 1. using openssl dgst
+echo -n 'supertype' | openssl dgst -sha256
+
+# 2. using sha256sum
+echo -n 'supertype' | sha256sum
+
+# 3. does this work?
+echo 'supertype' > firstname.txt
+sha256sum firstname.txt
 ```
 
 ### Knowledge Check

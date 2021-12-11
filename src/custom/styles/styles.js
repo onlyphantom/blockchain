@@ -47,6 +47,9 @@ const customStyles = css`
         border-color: #3b7789;
     }
 
+    .ant-divider-horizontal.ant-divider-with-text::before, .ant-divider-horizontal.ant-divider-with-text::after {
+        border-color: rgb(156, 220, 254);
+    }
 
 
     // non-antd styles
