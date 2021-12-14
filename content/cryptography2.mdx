@@ -166,9 +166,9 @@ Supposed the hashing algorithm is as simplistic as just a modulo operation thoug
 Fortunately, we've incorporated length extension into the algorithm, which is a technique called "padding". 
 We pad the messages with 1, followed by as many 0 as required (plus the bitlength of the entire message) to make the length of the message a multiple of 512 bits.
 
-This repetitive updating of the internal state with a compression function is based on the **Merkle-Damgard construction**, which we'll discuss below.
-
 ![](images/sha1.png)
+
+This repetitive updating of the internal state with a compression function is based on the **Merkle-Damgard construction**, which we'll discuss below.
 
 ### Merkle-Damgard construction
 
@@ -196,20 +196,11 @@ Consider also a strategy that pads the message with a constant string of 0s unti
 
 So by employing the two padding strategies, SHA-1 can avoid collisions (up to a certain extent).
 
-### Comparison to SHA-256 and SHA-3 (Keccak)
-SHA-256 belongs to the SHA-2 family and it generates a 256-bit (64 hexadecimal digits) hash value. It is more secure than SHA-1, and similar to 
-how SHA-1 uses an internal state size consistent to its output size, so does the SHA-256, giving it an internal state size of 256.
-
-In recent years, SHA-256 has been adopted by many cryptographic protocols, including TLS and SSL (replacing SHA-1) and it's also used by the Bitcoin protocol.
-
-
-
 With that in mind, head into the following Experiment and play with the hash function implemented for you.
-
 
 ### Experiment 1
 
-#### Hashing with SHA256
+#### SHA family of hash functions
 1. Go ahead and type your first name into the field below.
 2. Change **one character** in your name, and observe the hash change.
 3. Notice that even a minor change (an extra space, or a capitalized letter) results in an
@@ -229,6 +220,60 @@ that the user should be authorized.
 It should also be noted that precomputed table that caches the output of cryptographic hashes (known also as a <OutboundLink target="blank" href="https://en.wikipedia.org/wiki/Rainbow_table">rainbow table</OutboundLink>) for common
 strings exists and are <OutboundLink target="_blank" href='https://crackstation.net/'> quite readily</OutboundLink> <OutboundLink target="_blank" href='https://project-rainbowcrack.com/table.htm'> available</OutboundLink>. A hacker
 can thus use these pre-computed values, up to tens of millions of them at a time, to crack passwords in a dictionary attack.
+
+
+## SHA-2 and SHA-3 (Keccak)
+SHA-256 belongs to the SHA-2 family and it generates a 256-bit (64 hexadecimal digits) hash value. It is more secure than SHA-1, and similar to 
+how SHA-1 uses an internal state size consistent to its output size, so does the SHA-256, giving it an internal state size of 256.
+
+SHA-256 in considered to be vastly more secure than SHA-1, and has been adopted by many cryptographic protocols, including TLS and SSL (replacing SHA-1) in the recent years. 
+SHA-256 is used by the Bitcoin protocol.
+
+SHA-3 was developed in late 2015 by the Keccak team, or rather, it is the NIST-standardized version of Keccak.
+The submission must meet the requirement of supporting at least 4 variants, so the team submitted the following variants supporting different fixed-lengths outputs:
+
+- SHA3-224: 224-bit output
+- SHA3-256: 256-bit output
+- SHA3-384: 384-bit output
+- SHA3-512: 512-bit output
+
+It has not seen widespread use yet and its design differ from that of SHA-1 and SHA-2. 
+Notably, Keccak does not make use of the Merkle-Damgard construction, but instead uses what is known as the sponge construction.
+
+While we've learned that [AES](../cryptography#aes) has a block size of 128 bits ("state size"), 
+consider that Keccak has a state size of 1600 bits (think <span className='math-inline'>2^{1600}</span>, considerably larger -- and more secured).
+
+The 1600 bits of state size are divided into <span className='math-inline'>r</span> and <span className='math-inline'>c</span> following the allocation below:
+
+| Type     | Output (bits) | Bitrate (r) | Capacity (c) |
+|----------|---------------|-------------|--------------|
+| SHA3-224 | 224           | 1152        | 448          |
+| SHA3-256 | 256           | 1088        | 512          |
+| SHA-384  | 384           | 832         | 768          |
+| SHA3-512 | 512           | 576         | 1024         |
+
+Another parameter is the number of rounds, which is determined by <span className='math-inline'>12 + 2l</span> where state size is a function of <span className='math-inline'>25 \cdot 2^l = {25, 50, 100, 200, 400, 800, 1600}</span>.
+
+Since Ethereum uses KECCAK-256, we'll use the 256 variant here to illustrate the key ideas of the algorithm. With state size of 1,600, <span className='math-inline'>l</span> would be 6. Rounds is then 12 + 2*6 = 24. 
+
+![](images/keccak.png)
+
+Assuming SHA3-256 is used, these are the notations:
+
+- Absorbing phase:
+    - <span className='math-inline'>r</span> controls the number of bits we are going to process in each round (1,088), and is used to perform the XOR operation with the message block
+    - <span className='math-inline'>c</span> controls the capacity level, in our case of SHA3-256 it's 512.
+    - <span className='math-inline'>r</span> and <span className='math-inline'>c</span> sums up to a length of 1,600 bits and is a vector of all 0s.
+    - Our message is chunked into bits of 1,088 (<span className='math-inline'>N</span>), with padding added at the end to make the message a multiple of 1,088 bits
+    - The first chunk is fed into an exclusive-or (<span className='math-inline'>\oplus</span>) operation; In this case, we XOR-ed the first 1,088 bits of message with a 1,088-bit long vector of all 0s. 
+    - We then feed this into a permutation function (<span className='math-inline'>f</span>) which uses <OutboundLink href='https://en.wikipedia.org/wiki/SHA-3#Design' target="_blank" text='Wikipedia: XOR operation'>XOR, AND and NOT operations</OutboundLink> for easy implementation. This permutation function is repeated for 24 rounds (see above). 
+    - The result of the permutation (also length of 1,088) is then fed into the next exclusive-or operation along with the next 1,088-bit chunk of message. <span className='math-inline'>c</span> is not XOR-ed and carry over into the next <span className='math-inline'>f</span> permutation.
+    - The above process makes up the "absorbing phase" of the sponge construction, which gets its name from the fact that it absorbs the message while defining / shaping the internal state.
+- After the absorbing phase (meaning we've fully consumed the message), we move into the "squeezing phase", where we again put it through the permutation function
+    - We need to output 256 bits, so we truncate the output of the permutation function (take the first 256 bits) and output <span className='math-inline'>Z</span>, our digest / hash value.
+    - For different selection of rate (<span className='math-inline'>r</span>) and type), the output length of the permutation function will be different so repeat the process as necessary until the desired length for <span className='math-inline'>Z</span> is reached.  
+
+## Merkle Tree
 
 
 ## Knowledge Check
