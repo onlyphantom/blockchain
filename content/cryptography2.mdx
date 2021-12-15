@@ -274,6 +274,18 @@ Assuming SHA3-256 is used, these are the notations:
     - For different selection of rate (<span className='math-inline'>r</span>) and type), the output length of the permutation function will be different so repeat the process as necessary until the desired length for <span className='math-inline'>Z</span> is reached.  
 
 ## Merkle Tree
+Merkle Tree is a concept in cryptography and computer science introduced by _Ralph Merkle_ in 1974. It is the same Merkle who invented the Merkle-Damgard construction.
+Every node in the tree (except the "leaf") has two children, and the value of each node is the hash of the values of its child nodes.
+When visualized below, we get a sense of how Merkle Trees are efficient structures for secure verification of contents -- even of large sizes.
+
+![](images/merkletree.svg)
+
+In terms of application, Merkle Trees are used to ensure that data ("blocks") received from participants in a peer-to-peer network ("peers") 
+are valid and not tampered with. A peer that sends a block that has been altered will be rejected since its hash will not match the Merkle Tree's root ("root hash").
+Its application includes Git and Mercurial (revision control systems), and is used in the blockchain protocols such as Bitcoin (and by extension its forks, e.g Bitcoin Cash) and Ethereum.
+
+The famed Bitcoin inventor Satoshi Nakamoto wrote about Merkle Tree and cited Ralph's paper in the references for the Bitcoin whitepaper. 
+It is perhaps safe to say that Merkle Tree is the foundation of peer-to-peer blockchain architecture, the absence of which render the trustless consensus mechanism infeasible. 
 
 
 ## Knowledge Check
