@@ -6,19 +6,16 @@ import { Input, Divider, Alert, Form, Button } from 'antd';
 
 const hash256 = (string) => {
   const val = require('crypto').createHash('sha256').update(string).digest('hex');
-  console.log(val);
   return val;
 };
 
 const hashSha1 = (string) => {
   const val = require('crypto').createHash('sha1').update(string).digest('hex');
-  console.log(val);
   return val;
 };
 
 const hashSha512 = (string) => {
   const val = require('crypto').createHash('sha512').update(string).digest('hex');
-  console.log(val);
   return val;
 };
 

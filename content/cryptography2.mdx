@@ -9,9 +9,11 @@ keywords: ["cryptography, blockchain, bitcoin, cryptography 101"]
 ---
 import { Quote, Tags } from '../src/components/reactComponents/utils/UX';
 import SHA256 from '../src/components/reactComponents/SHA256';
+import Merkle from '../src/components/reactComponents/Merkle';
 
 import { OutboundLink } from 'gatsby-plugin-gtag'
 
+<Merkle />
 
 <Tags name="Topics" list={props.frontmatter.keywords[0].split(',')} />
 
@@ -285,7 +287,9 @@ are valid and not tampered with. A peer that sends a block that has been altered
 Its application includes Git and Mercurial (revision control systems), and is used in the blockchain protocols such as Bitcoin (and by extension its forks, e.g Bitcoin Cash) and Ethereum.
 
 The famed Bitcoin inventor Satoshi Nakamoto wrote about Merkle Tree and cited Ralph's paper in the references for the Bitcoin whitepaper. 
-It is perhaps safe to say that Merkle Tree is the foundation of peer-to-peer blockchain architecture, the absence of which render the trustless consensus mechanism infeasible. 
+It is perhaps safe to say that Merkle Tree is foundational to a peer-to-peer blockchain architecture, the absence of which render the trustless consensus mechanism infeasible. 
+
+
 
 
 ## Knowledge Check
@@ -329,4 +333,3 @@ You will need to have the appropriate software for this section. More [details h
 Verify that, using either hash algorithm (whichever you have installed on your system):
 - [x] The file has not been tampered with.
 - [ ] The hash is incorrect. File has been altered, by even just a single character.
-

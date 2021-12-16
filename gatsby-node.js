@@ -56,7 +56,7 @@ exports.createPages = ({ graphql, actions }) => {
   });
 };
 
-exports.onCreateWebpackConfig = ({ actions }) => {
+exports.onCreateWebpackConfig = ({ actions, plugins }) => {
   actions.setWebpackConfig({
     resolve: {
       modules: [path.resolve(__dirname, 'src'), 'node_modules'],
@@ -67,15 +67,39 @@ exports.onCreateWebpackConfig = ({ actions }) => {
       fallback: {
         crypto: require.resolve('crypto-browserify'),
         stream: require.resolve('stream-browserify'),
-      }
+        buffer: require.resolve('buffer'),
+      },
     },
-    // resolve: {
-    //   fallback: {
-    //     crypto: require.resolve('crypto-browserify'),
-    //   }
-    // }
+    plugins: [ 
+      plugins.provide({ 
+        process: 'process/browser', 
+        Buffer: ['buffer', 'Buffer'], 
+      }), 
+    ], 
   });
 };
+
+// exports.onCreateWebpackConfig = ({ actions, plugins }) => { 
+//   actions.setWebpackConfig({ 
+//     resolve: { 
+//       alias: { 
+//         stream: require.resolve('stream-browserify'), 
+//         zlib: require.resolve('browserify-zlib'), 
+//         path: require.resolve('path-browserify'), 
+//       }, 
+//       fallback: { 
+//         fs: false, 
+//         crypto: false, 
+//       }, 
+//     }, 
+//     plugins: [ 
+//       plugins.provide({ 
+//         process: 'process/browser', 
+//         Buffer: ['buffer', 'Buffer'], 
+//       }), 
+//     ], 
+//   });
+// };
 
 exports.onCreateBabelConfig = ({ actions }) => {
   actions.setBabelPlugin({
