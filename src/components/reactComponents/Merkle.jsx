@@ -8,6 +8,7 @@ const Merkle = () => {
   const [mtree, setMTree] = useState(null);
   // const [usernames, setUsernames] = useState(['alice +100', 'bob +60', 'charlie +30']);
   const [usernames, setUsernames] = useState([]);
+  const [validateForm] = Form.useForm();
 
   useEffect(() => {
     const { MerkleTree } = require('merkletreejs');
@@ -29,26 +30,30 @@ const Merkle = () => {
     setMTree(tree);
   }, [usernames]);
 
+  useEffect(() => {
+    validateForm.setFieldsValue({
+      root: mtree ? mtree.getRoot().toString('hex') : '',
+    });
+  }, [mtree]);
+
   const validateMtree = ({ tree, leaf }) => {
     const proof = tree.getProof(leaf);
     const root = tree.getRoot().toString('hex');
     return tree.verify(proof, leaf, root);
   };
 
-  const onFinish = ({ donors }) => {
+  const merkleConstruction = ({ donors }) => {
     console.log('Received values of form:', donors);
     setUsernames(donors.map((x) => `${x.username} +${x.amount}`));
   };
 
   return (
     <div>
-      <h1>Merkle Tree</h1>
-
-      <Collapse accordion defaultActiveKey={['1']}>
+      <Collapse defaultActiveKey={['1']}>
         <Panel header="Merkle Tree" key="1">
           <div>
             <h2>Fundraising List</h2>
-            <Form name="fundraising" onFinish={onFinish}>
+            <Form name="fundraising" onFinish={merkleConstruction}>
               <Form.List name="donors">
                 {(fields, { add, remove }) => {
                   return (
@@ -94,7 +99,7 @@ const Merkle = () => {
               </Form.List>
               <Form.Item>
                 <Button type="primary" htmlType="submit">
-                  Submit
+                  Construct
                 </Button>
               </Form.Item>
             </Form>
@@ -102,7 +107,38 @@ const Merkle = () => {
             <pre>{mtree?.toString()}</pre>
           </div>
         </Panel>
-        <Panel header="Verification" key="2"></Panel>
+        <Panel header="Verification" key="2">
+          <Form form={validateForm}>
+            <Form.Item
+              name="root"
+              label="Merkle Root"
+              rules={[{ required: true, message: 'Please input root' }]}
+            >
+              <Input name="root" placeholder="Merkle Root" />
+            </Form.Item>
+            <Input.Group compact>
+              <Form.Item
+                name="username"
+                label="Username"
+                rules={[{ required: true, message: 'Please input a username' }]}
+              >
+                <Input placeholder="Alice" />
+              </Form.Item>
+              <Form.Item
+                name="amount"
+                label="Donation Amount"
+                rules={[{ required: true, message: 'Please input donation amount' }]}
+              >
+                <Input placeholder="120" />
+              </Form.Item>
+            </Input.Group>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Verify
+              </Button>
+            </Form.Item>
+          </Form>
+        </Panel>
       </Collapse>
     </div>
   );

@@ -6,27 +6,12 @@ metaDescription: "This is the meta description"
 
 Still under development. Follow [Samuel Chan](https://github.com/onlyphantom) to follow my progress on this.
 
-# Heading H1
-Heading 1 text
+Bitcoin and the blockchain technology ushered in a new era and "developed the foundation for a new digital theory of property rights" (Nakamoto.com),
+but if your introduction to the field is through YouTube videos and social media, you may find that the education on this topic is seriously lacking compared
+to the speculation of the crypto-currency market. 
 
-## Heading H2
-Heading 2 text
+I've created Learn Blockchain Academy to help you navigate the engineering -- and sometimes philosophical -- principles of the blockchain. This is not an exhaustive, academically rigorous course,
+but it is sufficiently rich in theory, highly practical, accessible and illustrative to anyone who is interested to learn about the inner working of the blockchain.
 
-### Heading H3
-Heading 3 text
-
-#### Heading H4
-Heading 4 text
-
-##### Heading H5
-Heading 5 text
-
-###### Heading H6
-Heading 6 text
-
-## Lists
-- Item 1
-- Item 2
-- Item 3
-- Item 4
-- Item 5
+It is our belief that an education-first approach to cryptography will be the best way to acquire an appreciation for the underlying principles of blockchain, and thus increase the 
+adoption of blockchain technology. 
