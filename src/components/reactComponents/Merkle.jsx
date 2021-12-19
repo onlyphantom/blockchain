@@ -16,7 +16,8 @@ const Merkle = () => {
 
     const leaves = usernames.map((x) => SHA256(x));
     const tree = new MerkleTree(leaves, SHA256);
-    const root = tree.getRoot().toString('hex');
+    // const root = tree.getRoot().toString('hex');
+    const root = tree.getHexRoot();
     const leaf = SHA256('bob +60');
     const proof = tree.getProof(leaf);
     console.log('proof', proof);
@@ -31,8 +32,10 @@ const Merkle = () => {
   }, [usernames]);
 
   useEffect(() => {
+    console.log('mtree hashroot', mtree.getHexRoot());
+
     validateForm.setFieldsValue({
-      root: mtree ? mtree.getRoot().toString('hex') : '',
+      root: mtree ? mtree.getHexRoot() : '',
     });
   }, [mtree]);
 
