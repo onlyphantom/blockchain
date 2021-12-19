@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, Space, Collapse } from 'antd';
+import { Form, Input, Button, Space, Collapse, message } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 const { Panel } = Collapse;
 
 const Merkle = () => {
   const [mtree, setMTree] = useState(null);
-  // const [usernames, setUsernames] = useState(['alice +100', 'bob +60', 'charlie +30']);
   const [usernames, setUsernames] = useState([]);
   const [validateForm] = Form.useForm();
 
@@ -32,17 +31,37 @@ const Merkle = () => {
   }, [usernames]);
 
   useEffect(() => {
-    console.log('mtree hashroot', mtree.getHexRoot());
+    console.log('mtree hashroot', mtree?.getHexRoot());
 
     validateForm.setFieldsValue({
       root: mtree ? mtree.getHexRoot() : '',
     });
   }, [mtree]);
 
-  const validateMtree = ({ tree, leaf }) => {
-    const proof = tree.getProof(leaf);
-    const root = tree.getRoot().toString('hex');
-    return tree.verify(proof, leaf, root);
+  // const validateMtree = ({ tree, leaf }) => {
+  //   const proof = tree.getProof(leaf);
+  //   const root = tree.getRoot().toString('hex');
+  //   return tree.verify(proof, leaf, root);
+  // };
+
+  const validate = ({ root, username, amount }) => {
+    console.log('values', root, username, amount);
+
+    const SHA256 = require('crypto-js/sha256');
+    const proof = mtree.getProof(SHA256(`${username} +${amount}`));
+
+    const passed = mtree.verify(proof, SHA256(`${username} +${amount}`), root);
+    console.log('passed', passed);
+
+    if (passed) {
+      message.success(
+        `Merkle Proof verified: ${username}'s donation of ${amount} coins is in the tree`
+      );
+    } else {
+      message.error(
+        `Merkle Proof failed: ${username}'s donation of ${amount} coins is not in the tree`
+      );
+    }
   };
 
   const merkleConstruction = ({ donors }) => {
@@ -111,7 +130,7 @@ const Merkle = () => {
           </div>
         </Panel>
         <Panel header="Verification" key="2">
-          <Form form={validateForm}>
+          <Form form={validateForm} onFinish={validate}>
             <Form.Item
               name="root"
               label="Merkle Root"
