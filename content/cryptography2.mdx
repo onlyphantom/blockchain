@@ -296,6 +296,68 @@ each node in a blockchain must be able to verify the record of all transactions 
 
 <Merkle />
 
+#### Instructions
+1. Create a Merkle Tree that maps donors (through "username") to their donation amounts. Start with 3 donors, but feel free to 
+repeat the experiment with as many donors as you want. 
+
+2. Observe the Tree Representation. Supposed you entered "alice" and "100" for the _Username_ and _Donation Amount_  respectively, internally 
+the experiment concatenate them to `alice +100` and then hashes it with SHA256. Because SHA256, as a cryptographic hash function, is a deterministic function, the hash of the concatenated string is the same for every execution of the experiment. 
+In fact, if you insert `alice +100` into [Experiment 1](#experiment1), you'll obtain the same digest as the one you get here.
+
+3. Modify the donation value or any one character of the donor's username (hit 'Construct' to reconstruct the tree), and observe the avalanche effect running through the node to the root of the tree.
+
+4. Nodes (excluding leaf nodes) are hashes of their children. `Hash(0)` is computed by `sha256(hash(0-0) + hash(0-1))` and so on. 
+An implementation detail here is that this concatenation is performed on the byte sequences. 
+
+While we represent the byte sequence in hexadecimal characters (`0x`), we perform the concatenation operation on the two byte sequences
+and not on their hex digests.
+
+In Python:
+```python
+bin_a = '01100001011011000110100101100011011001010010000000101011001100010011000000110000'
+hex_a = "{0:0>4X}".format(int(bin_a,2)) # 616C696365202B313030
+m_a = binascii.a2b_hex(hex_a) # b'alice +100'
+h_a = sha256(m_a).hexdigest() # 'dc2cac4a8aaeccc0199eeb77df68b22eaa6e319d3f2b425d078dbd73419e28ac'
+dig_a = sha256(m_a).digest() # b'\xdc,\xacJ\x8a\xae\xcc\xc0\x19\x9e\xebw\xdfh\xb2.\xaan1\x9d?+B]\x07\x8d\xbdsA\x9e(\xac'
+
+m_b = b'bob +50'
+h_b = sha256(m_b).hexdigest() # 7e15e5bc1b84f458db7ced4df762ba70204f19e3a613738756f9b00653f0aee1
+dig_b = sha256(data2).digest() # b'~\x15\xe5\xbc\x1b\x84\xf4X\xdb|\xedM\xf7b\xbap O\x19\xe3\xa6\x13s\x87V\xf9\xb0\x06S\xf0\xae\xe1'
+
+sha256(dig_a+dig_b).hexdigest()
+# 'edf9a9a0e56b58fc9caccb97d85c628d5b9dc50cb94dfc41e83026d37704400f'
+
+# the + is just simple concatenation
+# b'\xdc' + b'~\x15' => b'\xdc~\x15'
+```
+
+And in Ruby:
+```ruby
+require 'digest'
+
+m1 = 'alice +100'
+m2 = 'bob +50'
+
+d1 = Digest::SHA256.new
+d2 = Digest::SHA256.new
+
+d1 << m1
+d2 << m2
+
+puts "Alice hexdigest: #{ d1.hexdigest }"
+puts "Bob hexdigest: #{ d2.hexdigest }"
+
+d3 = Digest::SHA256.new
+d3 << d1.digest
+d3 << d2.digest                                                                                                                                                
+
+puts "Concatenation hexdigest: #{ d3.hexdigest }"
+
+# Alice hexdigest: dc2cac4a8aaeccc0199eeb77df68b22eaa6e319d3f2b425d078dbd73419e28ac
+# Bob hexdigest: 7e15e5bc1b84f458db7ced4df762ba70204f19e3a613738756f9b00653f0aee1
+# Concatenation hexdigest: edf9a9a0e56b58fc9caccb97d85c628d5b9dc50cb94dfc41e83026d37704400f
+```
+
 
 ## Knowledge Check
 
@@ -322,6 +384,21 @@ echo -n 'supertype' | sha256sum
 # 3. does this work?
 echo 'supertype' > firstname.txt
 sha256sum firstname.txt
+```
+
+4. If you have Python installed, you can use the [hashlib](https://docs.python.org/3/library/hashlib.html) module to generate the hash of a message. 
+We can implement a quick and minimal version of the Merkle tree using Python:
+
+```
+>>> from hashlib import sha256
+>>> def h(s): return sha256(s.encode()).hexdigest()
+... 
+>>> ha = h('adam +100')
+>>> ha
+'6a351a3a0f2e70b51e5c188a8191f94836c149ab07a72d0feb8d5ec6f928bcf3'
+>>> hb = h('bob +100')
+>>> hb
+'d211d3e5157f5e1ca44a588c5ca4679d3c2b61bb5206707189a1ca3587ba8301'
 ```
 
 ### Knowledge Check
