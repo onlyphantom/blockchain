@@ -51,6 +51,11 @@ const customStyles = css`
         border-color: rgb(156, 220, 254);
     }
 
+    .ant-tabs {
+        color: inherit;
+        font-size: inherit;
+    }
+
 
     // non-antd styles
     // ...

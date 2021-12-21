@@ -7,11 +7,15 @@ author: Samuel Chan
 slug: '/cryptography-in-blockchain'
 keywords: ["cryptography, blockchain, bitcoin, cryptography 101"]
 ---
+import styled from '@emotion/styled';
+import { Tabs } from 'antd';
+import { Python } from '@styled-icons/fa-brands/Python';
+import { Ruby } from '@styled-icons/simple-icons/Ruby';
+import { OutboundLink } from 'gatsby-plugin-gtag'
 import { Quote, Tags } from '../src/components/reactComponents/utils/UX';
 import SHA256 from '../src/components/reactComponents/SHA256';
 import Merkle from '../src/components/reactComponents/Merkle';
 
-import { OutboundLink } from 'gatsby-plugin-gtag'
 
 <Tags name="Topics" list={props.frontmatter.keywords[0].split(',')} />
 
@@ -307,56 +311,85 @@ In fact, if you insert `alice +100` into [Experiment 1](#experiment1), you'll ob
 3. Modify the donation value or any one character of the donor's username (hit 'Construct' to reconstruct the tree), and observe the avalanche effect running through the node to the root of the tree.
 
 4. Nodes (excluding leaf nodes) are hashes of their children. `Hash(0)` is computed by `sha256(hash(0-0) + hash(0-1))` and so on. 
-An implementation detail here is that this concatenation is performed on the byte sequences. 
-
-While we represent the byte sequence in hexadecimal characters (`0x`), we perform the concatenation operation on the two byte sequences
+An implementation detail here is that this concatenation is performed on the byte sequences -- hash functions operate on bytes, i.e it takes it bytes and return bytes. 
+Because of this, while we represent the byte sequence in hexadecimal characters (`0x`) for readability, we perform the concatenation operation on the two byte sequences
 and not on their hex digests.
 
-In Python:
-```python
+
+<Tabs defaultActiveKey="1">
+    <Tabs.TabPane tab={<span>
+            <Python style={{width: '1.5em', heigh: '1.5em', marginRight: '0.5em'}}/>
+            Python
+          </span>} key="1">
+        <pre>
+            <code className='language-python'>
+            {`###
+# 1. Compute sha256 for each child node to get its binary digest
+###
 bin_a = '01100001011011000110100101100011011001010010000000101011001100010011000000110000'
 hex_a = "{0:0>4X}".format(int(bin_a,2)) # 616C696365202B313030
 m_a = binascii.a2b_hex(hex_a) # b'alice +100'
 h_a = sha256(m_a).hexdigest() # 'dc2cac4a8aaeccc0199eeb77df68b22eaa6e319d3f2b425d078dbd73419e28ac'
-dig_a = sha256(m_a).digest() # b'\xdc,\xacJ\x8a\xae\xcc\xc0\x19\x9e\xebw\xdfh\xb2.\xaan1\x9d?+B]\x07\x8d\xbdsA\x9e(\xac'
-
+dig_a = sha256(m_a).digest() # binary code
 m_b = b'bob +50'
 h_b = sha256(m_b).hexdigest() # 7e15e5bc1b84f458db7ced4df762ba70204f19e3a613738756f9b00653f0aee1
-dig_b = sha256(data2).digest() # b'~\x15\xe5\xbc\x1b\x84\xf4X\xdb|\xedM\xf7b\xbap O\x19\xe3\xa6\x13s\x87V\xf9\xb0\x06S\xf0\xae\xe1'
-
+dig_b = sha256(data2).digest() # binary code
+###
+# 2. Finally, sha256(digest of child nodes concatenated)
+###
 sha256(dig_a+dig_b).hexdigest()
 # 'edf9a9a0e56b58fc9caccb97d85c628d5b9dc50cb94dfc41e83026d37704400f'
+`}
+            </code>
+        </pre>
+    </Tabs.TabPane>
+    <Tabs.TabPane tab={<span>
+            <Ruby style={{width: '1.5em', heigh: '1.5em', marginRight: '0.5em'}}/>
+            Ruby
+          </span>} key="2">
+<pre>
+            <code className='language-ruby'>
+            {`###
+# 1. Compute sha256 for each child node to get its binary digest
+###
+require 'digest'
+m1 = 'alice +100'
+m2 = 'bob +50'
+d1 = Digest::SHA256.new
+d2 = Digest::SHA256.new
+d1 << m1
+d2 << m2
+puts "Alice hexdigest: #{ d1.hexdigest }"
+puts "Bob hexdigest: #{ d2.hexdigest }"
+###
+# 2. Finally, sha256(digest of child nodes concatenated)
+###
+d3 = Digest::SHA256.new
+d3 << d1.digest
+d3 << d2.digest                                                                                                                                                
+puts "Concatenation hexdigest: #{ d3.hexdigest }"
+# Alice hexdigest: dc2cac4a8aaeccc0199eeb77df68b22eaa6e319d3f2b425d078dbd73419e28ac
+# Bob hexdigest: 7e15e5bc1b84f458db7ced4df762ba70204f19e3a613738756f9b00653f0aee1
+# Concatenation hexdigest: edf9a9a0e56b58fc9caccb97d85c628d5b9dc50cb94dfc41e83026d37704400f
+`}
+            </code>
+        </pre>
+    </Tabs.TabPane>
+  </Tabs>
+
+
+Because the operations are performed on the binary code, the concatenation is thus the addition of two sequence of bytes.
+```python
+dig_a = sha256(m_a).digest() # b'\xdc,\xacJ\x8a\xae\xcc\xc0\x19\x9e\xebw\xdfh\xb2.\xaan1\x9d?+B]\x07\x8d\xbdsA\x9e(\xac'
+dig_b = sha256(data2).digest() # b'~\x15\xe5\xbc\x1b\x84\xf4X\xdb|\xedM\xf7b\xbap O\x19\xe3\xa6\x13s\x87V\xf9\xb0\x06S\xf0\xae\xe1'
 
 # the + is just simple concatenation
 # b'\xdc' + b'~\x15' => b'\xdc~\x15'
 ```
 
-And in Ruby:
-```ruby
-require 'digest'
+5. To validate that a donor has in fact donated said amount of money to a given fundraiser, 
+we need to perform what is known as an **inclusion proof**.
 
-m1 = 'alice +100'
-m2 = 'bob +50'
-
-d1 = Digest::SHA256.new
-d2 = Digest::SHA256.new
-
-d1 << m1
-d2 << m2
-
-puts "Alice hexdigest: #{ d1.hexdigest }"
-puts "Bob hexdigest: #{ d2.hexdigest }"
-
-d3 = Digest::SHA256.new
-d3 << d1.digest
-d3 << d2.digest                                                                                                                                                
-
-puts "Concatenation hexdigest: #{ d3.hexdigest }"
-
-# Alice hexdigest: dc2cac4a8aaeccc0199eeb77df68b22eaa6e319d3f2b425d078dbd73419e28ac
-# Bob hexdigest: 7e15e5bc1b84f458db7ced4df762ba70204f19e3a613738756f9b00653f0aee1
-# Concatenation hexdigest: edf9a9a0e56b58fc9caccb97d85c628d5b9dc50cb94dfc41e83026d37704400f
-```
 
 
 ## Knowledge Check

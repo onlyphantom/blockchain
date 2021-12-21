@@ -17,6 +17,7 @@
     "@playlyfe/gql": "^2.6.2",
     "@styled-icons/fa-brands": "^10.26.0",
     "@styled-icons/fa-solid": "^10.32.0",
+    "@styled-icons/simple-icons": "^10.45.0",
     "algoliasearch": "^4.9.1",
     "antd": "^4.16.13",
     "bignumber.js": "^9.0.1",
