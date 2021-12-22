@@ -11,6 +11,7 @@ import styled from '@emotion/styled';
 import { Tabs } from 'antd';
 import { Python } from '@styled-icons/fa-brands/Python';
 import { Ruby } from '@styled-icons/simple-icons/Ruby';
+import { Github } from '@styled-icons/simple-icons/Github';
 import { OutboundLink } from 'gatsby-plugin-gtag'
 import { Quote, Tags } from '../src/components/reactComponents/utils/UX';
 import SHA256 from '../src/components/reactComponents/SHA256';
@@ -318,7 +319,7 @@ and not on their hex digests.
 
 <Tabs defaultActiveKey="1">
     <Tabs.TabPane tab={<span>
-            <Python style={{width: '1.5em', heigh: '1.5em', marginRight: '0.5em'}}/>
+            <Python style={{width: '1.5em', height: '1.5em', marginRight: '0.5em'}}/>
             Python
           </span>} key="1">
         <pre>
@@ -344,7 +345,7 @@ sha256(dig_a+dig_b).hexdigest()
         </pre>
     </Tabs.TabPane>
     <Tabs.TabPane tab={<span>
-            <Ruby style={{width: '1.5em', heigh: '1.5em', marginRight: '0.5em'}}/>
+            <Ruby style={{width: '1.5em', height: '1.5em', marginRight: '0.5em'}}/>
             Ruby
           </span>} key="2">
 <pre>
@@ -389,6 +390,54 @@ dig_b = sha256(data2).digest() # b'~\x15\xe5\xbc\x1b\x84\xf4X\xdb|\xedM\xf7b\xba
 
 5. To validate that a donor has in fact donated said amount of money to a given fundraiser, 
 we need to perform what is known as an **inclusion proof**.
+
+6. Before you move on from this exercise, consider one more scenario. 
+Supposed we have two merkle trees(`A` and `B`), both with a parent node and two children nodes.
+
+- Merkle tree `A`'s left children node is 'alice +100' and its right children node is 'alice -20'.
+- Merkle tree `B`'s left children node is 'alice -20' and its right children node is 'alice +100'.
+
+```python
+### Merkle tree A
+        h(h(a +100) + h(a -20))
+
+    h(a +100)            h(a -20)
+### Are they equivalent?
+### Merkle tree B
+        h(h(a -20) + h(a +100))
+        
+    h(a -20)            h(a +100)
+```
+
+Would the parent node of `A` and `B` be equivalent to each other? In other words, is `hash(a+b)` the same as `hash(b+a)`?
+This may seem like a trivial question, but it is profound in the context of timestamped verifiable proofs.
+
+### Merkle Trees in Bitcoin
+<Quote 
+    text="SHA-256 is very strong.  It's not like the incremental step from MD5 to SHA1.  It can last several decades unless there's some massive breakthrough attack. If SHA-256 became completely broken, I think we could come to some agreement about what the honest block chain was before the trouble started, lock that in and continue from there with a new hash function." 
+    src="Satoshi Nakamoto"
+/>
+
+In the Bitcoin protocol, double hashing, i.e `sha256(sha256(data))` is used in place of the usual `sha256(data)` to create a merkle tree.
+Specifically, Satoshi uses `sha256(sha256(data))` in the following places of the implementation:
+
+- The hash function for each block
+- The hash function for each block header (`sha256(sha256(Block_Header))`)
+
+![](images/bitcoinmerkle.png)
+Source: <Github style={{width: '1.5em', height: '1em', margin: '0 0.2em'}}/> miguelmota/merkletreejs
+
+Since Bitcoin is an open source project, one can see <OutboundLink target="_blank" href='https://sourceforge.net/p/bitcoin/code/133/tree/trunk/main.cpp#l617'>its source code implementation</OutboundLink> (line 617)
+to see how the verification status is checked using the merkle tree.
+
+Exactly why Satoshi chose to do two rounds of hashing is up to debate, but most cryptographers agree that 
+Satoshi believed it was a more secure way to create a merkle tree, particularly in preventing a length-extension attack.
+That said, existing research doesn't point to any vulnerability in how Bitcoin uses hashes that would make it more susceptible to said length-extension attacks.
+
+We allude to the idea of "blocks" but we haven't got to an official definition of what constitutes a block. This is what the following section does.
+
+## Bitcoin Mining
+### Block chain
 
 
 

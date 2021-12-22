@@ -56,6 +56,20 @@ const customStyles = css`
         font-size: inherit;
     }
 
+    .ant-collapse-item, .ant-collapse-content, .ant-collapse, 
+    .ant-collapse > .ant-collapse-item > .ant-collapse-header,
+    .ant-input-group {
+        color: inherit;
+    }
+
+    .ant-collapse {
+        background: inherit;
+    }
+
+    .ant-collapse-content-box, .ant-collapse-content  {
+        background: none;
+    }
+
 
     // non-antd styles
     // ...
