@@ -389,7 +389,20 @@ dig_b = sha256(data2).digest() # b'~\x15\xe5\xbc\x1b\x84\xf4X\xdb|\xedM\xf7b\xba
 ```
 
 5. To validate that a donor has in fact donated said amount of money to a given fundraiser, 
-we need to perform what is known as an **inclusion proof**.
+we need to perform what is known as an **inclusion proof**. Using the Merkle tree, we need only the data we're attempting to prove, 
+and the sibling hashes along the path to the root. 
+
+```python
+          h_abcd
+     h_ab        h_cd
+  h_a   h_b   h_c   h_d
+```
+
+In the example tree above, to prove inclusivity of `d`, we need only to know `h_c` and `h_ab`.
+We then compute the hash root and compare our computed value to the actual Merkle root. We need not know the values of other nodes 
+outside this path to the root, hence allowing us to do this verification in <span className="math-inline">O(log n)</span> time 
+where <span className="math-inline">n</span> is the number of nodes in the tree, as well as requiring only <span className="math-inline">O(log n)</span> hashes 
+to be transmitted for the proof.
 
 6. Before you move on from this exercise, consider one more scenario. 
 Supposed we have two merkle trees(`A` and `B`), both with a parent node and two children nodes.
@@ -437,6 +450,24 @@ That said, existing research doesn't point to any vulnerability in how Bitcoin u
 We allude to the idea of "blocks" but we haven't got to an official definition of what constitutes a block. This is what the following section does.
 
 ## Bitcoin Mining
+All transactions on the Bitcoin protocol are grouped into blocks (Each block is a collection of transactions) on an approximately 10 minute interval.
+The block is then broadcasted to the network. 
+Considering the volume of transactions in a block (~ 10 mins), Bitcoin doesn't actually transmit a full record of all transactions in a block, but rather include the Merkle root of that block's transactions in 
+its header ("block header"). Full nodes participants can however obtain the full transactions in a block by sending a separate request.
+
+A curious reader may wonder if we could obtain the same effect by hashing all the transactions sequentially, resulting in a root? 
+This may work, but an inclusion proof will now require <span className="math-inline">O(n)</span> hashes to be transmitted, 
+where <span className="math-inline">n</span> is the number of transactions. It is expensive memory-wise and considerably less efficient.
+
+In summary, Merkle trees offer the following advantages:
+1. Inclusion proof and data integrity checks requires considerably less memory than a sequential hashing approach.
+2. Less data required to be broadcasted to all nodes in the network.
+3. A light client (crypto wallet and such) can participate in transaction verification without requiring the computational resources of full nodes since it 
+uses the Merkle root included in each block header rather than the full transaction logs itself.
+    - This is a concept known as Simplified Payment Verification (SPV), described in section 8 (titled "SPV") of the Bitcoin whitepaper. It refers to the ability 
+    of a transaction recipient to prove that the sender has control of the source funds of the payment intended for that transaction without downloading the full block chain,
+    making use of Merkle Proofs.
+
 ### Block chain
 
 
