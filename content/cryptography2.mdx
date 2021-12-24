@@ -8,7 +8,7 @@ slug: '/cryptography-in-blockchain'
 keywords: ["cryptography, blockchain, bitcoin, cryptography 101"]
 ---
 import styled from '@emotion/styled';
-import { Tabs } from 'antd';
+import { Alert, Tabs } from 'antd';
 import { Python } from '@styled-icons/fa-brands/Python';
 import { Ruby } from '@styled-icons/simple-icons/Ruby';
 import { Github } from '@styled-icons/simple-icons/Github';
@@ -447,6 +447,10 @@ Exactly why Satoshi chose to do two rounds of hashing is up to debate, but most 
 Satoshi believed it was a more secure way to create a merkle tree, particularly in preventing a length-extension attack.
 That said, existing research doesn't point to any vulnerability in how Bitcoin uses hashes that would make it more susceptible to said length-extension attacks.
 
+A small inaccuracy of the above image is that a Bitcoin Merkle tree assumes an even number of leaf nodes (transactions) to maintain its binary data structure. 
+If a block contains an odd number of transactions, the last transaction is duplicated to make it even. In the example, the transaction for `E` is duplicated and hashed 
+with itself to create a new node. 
+
 We allude to the idea of "blocks" but we haven't got to an official definition of what constitutes a block. This is what the following section does.
 
 ## Bitcoin Mining
@@ -459,14 +463,25 @@ A curious reader may wonder if we could obtain the same effect by hashing all th
 This may work, but an inclusion proof will now require <span className="math-inline">O(n)</span> hashes to be transmitted, 
 where <span className="math-inline">n</span> is the number of transactions. It is expensive memory-wise and considerably less efficient.
 
-In summary, Merkle trees offer the following advantages:
+In summary, Merkle trees offer the following advantages to a Blockchain implementation:
 1. Inclusion proof and data integrity checks requires considerably less memory than a sequential hashing approach.
 2. Less data required to be broadcasted to all nodes in the network.
 3. A light client (crypto wallet and such) can participate in transaction verification without requiring the computational resources of full nodes since it 
-uses the Merkle root included in each block header rather than the full transaction logs itself.
-    - This is a concept known as Simplified Payment Verification (SPV), described in section 8 (titled "SPV") of the Bitcoin whitepaper. It refers to the ability 
-    of a transaction recipient to prove that the sender has control of the source funds of the payment intended for that transaction without downloading the full block chain,
-    making use of Merkle Proofs.
+uses the Merkle root included in each block header rather than the full transaction logs itself. This is a concept known as **Simplified Payment Verification (SPV)**, described in section 8 (titled "SPV") of the Bitcoin whitepaper. It refers to the ability 
+of a transaction recipient to prove that the sender has control of the source funds of the payment intended for that transaction without downloading the full block chain,
+making use of Merkle Proofs.
+
+<Alert message={
+   <p>The Blockchain <a href='https://www.blockchain.com/charts/blocks-size' target="_blank" rel="nofollow">size</a> as of December 24th 2021 is around 382 gigabytes of data,
+    and is estimated to approximate the size of 1TB by the end of this decade. The average block size on the Bitcoin Blockchain is 1.2MB (8MB on Bitcoin Cash), while the Merkle root
+    included in the block header is just 80 bytes (>100,000 times smaller than 8MB).
+   </p> 
+} type="info" showIcon icon='⛓️' />
+
+Thanks for the key innovation that made SPV possible, light nodes such as mobile-wallet apps can participate in the blockchain without having to request and store 382GB of data.
+Anyone with a personal computer or smartphone can send, receive, and verify transactions without the capital cost of downloading and storing the entire blockchain.
+
+![](images/blocks.png)
 
 ### Block chain
 
