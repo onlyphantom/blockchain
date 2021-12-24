@@ -1,0 +1,51 @@
+---
+title: "Bitcoin 101"
+metaTitle: "Cryptography in Blockchain"
+metaDescription: "Hashing and Signatures used in the original Bitcoin protocol"
+date: 2021-12-24
+author: Samuel Chan
+# slug: '/bitcoin-101'
+keywords: ["cryptography, blockchain, bitcoin, cryptography 101"]
+---
+import styled from '@emotion/styled';
+import { Alert, Tabs } from 'antd';
+import { Python } from '@styled-icons/fa-brands/Python';
+import { Ruby } from '@styled-icons/simple-icons/Ruby';
+import { Github } from '@styled-icons/simple-icons/Github';
+import { OutboundLink } from 'gatsby-plugin-gtag'
+import { Quote, Tags } from '../src/components/reactComponents/utils/UX';
+import SHA256 from '../src/components/reactComponents/SHA256';
+import Merkle from '../src/components/reactComponents/Merkle';
+
+
+<Tags name="Topics" list={props.frontmatter.keywords[0].split(',')} />
+
+## Blocks and Block Header
+
+<Quote 
+    text="No right of private conversation was enumerated in the Constitution. I don't suppose it occurred to anyone at the time that it could be prevented." 
+    src=""
+    author="Whitefield Diffie"
+    img="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Whitfield_Diffie_Royal_Society.jpg/330px-Whitfield_Diffie_Royal_Society.jpg"
+    cover={true}
+/>
+
+![](images/blocks.png)
+
+All transactions on the Bitcoin protocol are grouped into blocks (Each block is a collection of transactions) on an approximately 10 minute interval. The block is then broadcasted to the network. Considering the volume of transactions in a block (~ 10 mins), Bitcoin doesn't actually transmit a full record of all transactions in a block, but rather include the Merkle root of that block's transactions in its header ("block header"). Full nodes participants can however obtain the full transactions in a block by sending a separate request.
+
+Because the [Merkle root is a cryptographic accumulator](../cryptography-in-blockchain) over all transactions in a block, 
+it is possible for any node to verify the integrity of a block -- or inclusion of a transaction -- by verifying the Merkle root. 
+
+Let's now take a deeper look at what makes up a "block chain" in the original Bitcoin protocol as conceptualized by Satoshi Nakamoto.
+
+### Block chain
+
+
+
+
+## Knowledge Check
+
+### Practical Exercises
+
+### Knowledge Check

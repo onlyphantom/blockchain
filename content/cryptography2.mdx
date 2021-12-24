@@ -451,9 +451,10 @@ A small inaccuracy of the above image is that a Bitcoin Merkle tree assumes an e
 If a block contains an odd number of transactions, the last transaction is duplicated to make it even. In the example, the transaction for `E` is duplicated and hashed 
 with itself to create a new node. 
 
-We allude to the idea of "blocks" but we haven't got to an official definition of what constitutes a block. This is what the following section does.
+We allude to the idea of "blocks" but we haven't got to an official definition of what constitutes a block. The following is a brief introduction to this subject 
+and a more in-depth treatment of [the Bitcoin protocol](../bitcoin) is available in the next module of this course.
 
-## Bitcoin Mining
+## Bitcoin Blocks
 All transactions on the Bitcoin protocol are grouped into blocks (Each block is a collection of transactions) on an approximately 10 minute interval.
 The block is then broadcasted to the network. 
 Considering the volume of transactions in a block (~ 10 mins), Bitcoin doesn't actually transmit a full record of all transactions in a block, but rather include the Merkle root of that block's transactions in 
@@ -480,10 +481,6 @@ making use of Merkle Proofs.
 
 Thanks for the key innovation that made SPV possible, light nodes such as mobile-wallet apps can participate in the blockchain without having to request and store 382GB of data.
 Anyone with a personal computer or smartphone can send, receive, and verify transactions without the capital cost of downloading and storing the entire blockchain.
-
-![](images/blocks.png)
-
-### Block chain
 
 
 
