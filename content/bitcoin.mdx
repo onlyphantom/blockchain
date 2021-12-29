@@ -1,5 +1,5 @@
 ---
-title: "Bitcoin 101"
+title: "How Bitcoin Works"
 metaTitle: "Cryptography in Blockchain"
 metaDescription: "Hashing and Signatures used in the original Bitcoin protocol"
 date: 2021-12-24
@@ -8,25 +8,18 @@ author: Samuel Chan
 keywords: ["cryptography, blockchain, bitcoin, cryptography 101"]
 ---
 import styled from '@emotion/styled';
-import { Alert, Tabs } from 'antd';
-import { Python } from '@styled-icons/fa-brands/Python';
-import { Ruby } from '@styled-icons/simple-icons/Ruby';
-import { Github } from '@styled-icons/simple-icons/Github';
+import { Timeline } from 'antd';
 import { OutboundLink } from 'gatsby-plugin-gtag'
 import { Quote, Tags } from '../src/components/reactComponents/utils/UX';
-import SHA256 from '../src/components/reactComponents/SHA256';
-import Merkle from '../src/components/reactComponents/Merkle';
-
 
 <Tags name="Topics" list={props.frontmatter.keywords[0].split(',')} />
 
-## Blocks and Block Header
+## Blockchain Introduction
 
 <Quote 
-    text="No right of private conversation was enumerated in the Constitution. I don't suppose it occurred to anyone at the time that it could be prevented." 
+    text="The root problem with conventional currency is all the trust that’s required to make it work. The central bank must be trusted not to debase the currency, but the history of fiat currencies is full of breaches of that trust." 
     src=""
-    author="Whitefield Diffie"
-    img="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Whitfield_Diffie_Royal_Society.jpg/330px-Whitfield_Diffie_Royal_Society.jpg"
+    author="Satoshi Nakamoto"
     cover={true}
 />
 
@@ -34,17 +27,66 @@ import Merkle from '../src/components/reactComponents/Merkle';
 
 All transactions on the Bitcoin protocol are grouped into blocks (Each block is a collection of transactions) on an approximately 10 minute interval. The block is then broadcasted to the network. Considering the volume of transactions in a block (~ 10 mins), Bitcoin doesn't actually transmit a full record of all transactions in a block, but rather include the Merkle root of that block's transactions in its header ("block header"). Full nodes participants can however obtain the full transactions in a block by sending a separate request.
 
-Because the [Merkle root is a cryptographic accumulator](../cryptography-in-blockchain) over all transactions in a block, 
+We've learned in earlier modules ([Cryptography in Blockchain](../cryptography-in-blockchain)) that because the [Merkle root is a cryptographic accumulator](../cryptography-in-blockchain) over all transactions in a block, 
 it is possible for any node to verify the integrity of a block -- or inclusion of a transaction -- by verifying the Merkle root. 
 
-Let's now take a deeper look at what makes up a "block chain" in the original Bitcoin protocol as conceptualized by Satoshi Nakamoto.
+As illustrated above, every block has a header, which includes a hash of the previous block, This in effect creates 
+a "block chain" that start at the genesis block up to the most recent block. A block chain also has the guarantee of being chronological and continuous 
+because the previous block's hash required in the header would otherwise be unknown.
 
-### Block chain
+A security feature of the block chain is that it is computationally infeasible to forge or modify a block once it has been included in the chain because 
+the blocks that follow it will have to be re-computed. 
+Exactly why it is computationally infeasible is elaborated later under the [Proof of Work](#proofofwork) section, 
+but the key idea is a block is accepted when the participant ("miner") has solved a cryptographic puzzle ("proof of work") to generate the block's header.
+This activity is called "mining" and simply refers to the process of finding a valid block header, i.e solving the cryptographic puzzle.
+
+Before we delve into Proof of Work, let us take a deeper look at what makes up a block header in the original Bitcoin protocol as conceptualized by Satoshi Nakamoto.
+
+## Block Header
+A block header contains the following fields:
+1. Version: The version of the block header.
+2. Previous Block Hash (`hashPrevBlock`): The hash of the previous block in the chain.
+3. Merkle Root (`hashMerkleRoot`): The Merkle root of the transactions in the block.
+4. Timestamp: The time the block was created.
+5. Difficulty Target: The target difficulty of the block.
+6. Nonce: The number of times a hash is tried before it is accepted.
+
+### Version
+Upgrades to the Bitcoin protocol are made through a mechanism described in <OutboundLink target="_blank" href='"https://github.com/bitcoin/bips/blob/master/bip-0034.mediawiki'>BIP 34</OutboundLink>. It is proposed
+as a mean for the bitcoin network to collectively consents to an upgrade to the protocol, which includes making changes to the block binary structures, rules, behaviors, and other parameters.
+
+<Timeline mode="left">
+  <Timeline.Item label="Genesis block">Version 1 was introduced in the genesis block in January 2009. Last version 1 block is block number 227,835 (24th March 2013)</Timeline.Item>
+  <Timeline.Item label="Bitcoin Core 0.7.0 (September 2012)">As described in BIP34, valid Version 2 blocks require the current block's height to be encoded into the first bytes of the coinbase field.</Timeline.Item>
+  <Timeline.Item label="Bitcoin Core 0.10.0 (February 2015)">As described in BIP66, valid blocks now require strict DER encoding of all ECDSA signatures</Timeline.Item>
+  <Timeline.Item color="green" label="Bitcoin Core 0.11.2 (November 2015)">Specified in BIP65, blocks now support the new `OP_CHECKLOCKTIMEVERIFY` opcode.</Timeline.Item>
+</Timeline>
+
+Block headers include the `version` field to indicate which set of block validation rules to follow. 
+
+### Previous Block Hash
+
+This is a `SHA256(SHA256())` hash (in internal byte order) of the previous block's header.
+This ensures that no previous blocks can be tampered with since changes to the previous block's header would invalidate the current block.
 
 
+
+What should happen if more than one 
+
+## Proof of Work
+
+### Forks
+- https://en.wikipedia.org/wiki/Fork_(blockchain)
 
 
 ## Knowledge Check
+1. What is the `hashMerkleRoot` field referring to in Bitcoin mining?
+- [ ] The 256-bit hash of the previous block header 
+- [x] The 256-bit hash of the Merkle root of the block's transactions
+- [ ] The 256-bit hash of the current block header along with the previous Merkle root
+- [ ] The 256-bit hash of the difficulty target to produce a valid Merkle root
+
+
 
 ### Practical Exercises
 
