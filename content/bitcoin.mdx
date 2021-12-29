@@ -65,10 +65,37 @@ as a mean for the bitcoin network to collectively consents to an upgrade to the 
 Block headers include the `version` field to indicate which set of block validation rules to follow. 
 
 ### Previous Block Hash
-
 This is a `SHA256(SHA256())` hash (in internal byte order) of the previous block's header.
 This ensures that no previous blocks can be tampered with since changes to the previous block's header would invalidate the current block.
 
+### Merkle Root Hash
+This is a `SHA256(SHA256())` hash (in internal byte order) of the transactions in the block. This ensures that not even a 
+single transaction can be tampered with since changes to the transactions would invalidate the current block. 
+Read more in [Cryptography in Blockchain](../cryptography-in-blockchain).
+
+### Timestamp
+The Unix timestamp as seconds since 1970-01-01T00:00:00 (UTC). 
+It is the block time when the miner started hashing the header and finding the nonce. 
+Full nodes will not accept blocks with headers more than two hours in the future according to their clock.
+
+### Target
+The target is a 256-bit (extremely large) number; the lower the number is the harder it is to find a hash that is below the target. This is because the SHA-256(SHA256()) function of a block header
+must be lower than or equal to the current target for the block to be accepted by the network.
+
+Metaphorically, block generation is akin to a lottery and not a long, set problem (eg. doing a million hashes iteratively). 
+Each time you hash, you are getting a random number between 0 and the maximum value of a 256-bit number (2^256) known as the **target**.
+If your hash is below the target, you win the lottery and the block is accepted. If it is not, you increment the nonce (completely changing the hash) and try again. 
+The main idea being that there exist some combination(s) of hash and nonce that will result in a hash below the target.
+
+Since the difficulty of finding a hash below the target is proportional to the target, 
+we can use this property to control for the proof-of-work difficulty. With the aim of producing one block every 10 minutes, 
+the network regularly (every 2016 blocks, ~2 weeks) updates the target by comparing the actual time it took in block generation to the target time and modify the target by the percentage difference. 
+
+This rebalancing of difficulty is capped so a target is never changed by more than a factor of 4 either way
+You can <OutboundLink target="_blank" href='https://www.blockchain.com/charts/difficulty'>see the current difficulty target here</OutboundLink>.
+
+### Nonce
+An arbitrary number miners change in their attempt to produce a hash less than or equal to the target. It starts at 0 and increment by 1 each time a hash is generated.
 
 
 What should happen if more than one 
