@@ -47,7 +47,7 @@ A block header contains the following fields:
 1. Version: The version of the block header.
 2. Previous Block Hash (`hashPrevBlock`): The hash of the previous block in the chain.
 3. Merkle Root (`hashMerkleRoot`): The Merkle root of the transactions in the block.
-4. Timestamp: The time the block was created.
+4. Timestamp (`nTime`): The time the block was created.
 5. Difficulty Target: The target difficulty of the block.
 6. Nonce: The number of times a hash is tried before it is accepted.
 
@@ -74,12 +74,12 @@ single transaction can be tampered with since changes to the transactions would 
 Read more in [Cryptography in Blockchain](../cryptography-in-blockchain).
 
 ### Timestamp
-The Unix timestamp as seconds since 1970-01-01T00:00:00 (UTC). 
+Specified as `nTime`, this refers to the Unix timestamp as seconds since 1970-01-01T00:00:00 (UTC). 
 It is the block time when the miner started hashing the header and finding the nonce. 
 Full nodes will not accept blocks with headers more than two hours in the future according to their clock.
 
 ### Target
-The target is a 256-bit (extremely large) number; the lower the number is the harder it is to find a hash that is below the target. This is because the SHA-256(SHA256()) function of a block header
+The target (`nBit`) is a 256-bit (extremely large) number; the lower the number is the harder it is to find a hash that is below the target. This is because the SHA-256(SHA256()) function of a block header
 must be lower than or equal to the current target for the block to be accepted by the network.
 
 Metaphorically, block generation is akin to a lottery and not a long, set problem (eg. doing a million hashes iteratively). 
@@ -96,7 +96,9 @@ You can <OutboundLink target="_blank" href='https://www.blockchain.com/charts/di
 
 ### Nonce
 An arbitrary number miners change in their attempt to produce a hash less than or equal to the target. It starts at 0 and increment by 1 each time a hash is generated.
-
+If all 32 bits of the nonce are tested (resulting in a "Nonce overflows"), the miner can either:
+- Increment `extraNonce` located in the coinbase transaction, hence changing the Merkle Root, giving the miner a chance to reset Nonce and try again.
+- Update `nTime` in the block header, hence changing the timestamp, giving the miner a chance to reset Nonce and try again.
 
 What should happen if more than one 
 
@@ -113,7 +115,12 @@ What should happen if more than one
 - [ ] The 256-bit hash of the current block header along with the previous Merkle root
 - [ ] The 256-bit hash of the difficulty target to produce a valid Merkle root
 
-
+2. Supposed the miner has exhausted all 32 bits of the nonce, what can be done to reset the nonce and try again?
+Pick all that apply.
+- [x] Increment `extraNonce` in the coinbase transaction
+- [x] Increment `nTime` in the block header
+- [ ] Increment `nBits` in the block header 
+- [ ] Modify `nBits` to reduce the difficulty of proof-of-work
 
 ### Practical Exercises
 
