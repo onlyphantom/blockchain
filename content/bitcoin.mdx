@@ -100,7 +100,59 @@ If all 32 bits of the nonce are tested (resulting in a "Nonce overflows"), the m
 - Increment `extraNonce` located in the coinbase transaction, hence changing the Merkle Root, giving the miner a chance to reset Nonce and try again.
 - Update `nTime` in the block header, hence changing the timestamp, giving the miner a chance to reset Nonce and try again.
 
-### Block generation
+In Python, an implementation of the header with all the six fields would look like:
+
+```python
+import hashlib
+from binascii import unhexlify, hexlify
+header_hex = (
+  # Block version: 2
+  '02000000' +
+  
+  # Hash of previous block's header
+  'b6ff0b1b1680a2862a30ca44d346d9e8' +
+  '910d334beb48ca0c0000000000000000' +
+  
+  # Merkle root of transactions
+  '9d10aa52ee949386ca9385695f04ede2' +
+  '70dda20810decd12bc9b048aaab31471' +
+  
+  # [Unix time][unix epoch time]: 1415239972
+  '24d95a54' +
+  
+  # Target difficulty (0x1bc330 * 256**(0x18-3))
+  '30c31b18' +
+  
+  # Nonce
+  'fe9f0864'
+) 
+header_bin = unhexlify(header_hex)
+hash = hashlib.sha256(hashlib.sha256(header_bin).digest()).digest()
+hexlify(hash).decode("utf-8")
+# returns: 
+# 2837af674e81436b09e0c937e94d96fe32e5c872391ba1090000000000000000
+hexlify(hash[::-1]).decode("utf-8")
+# returns:
+# '000000000000000009a11b3972c8e532fe964de937c9e0096b43814e67af3728'
+```
+
+For completeness sake, the <OutboundLink target="_blank" href='https://en.bitcoin.it/wiki/Genesis_block'>genesis block</OutboundLink> (first block of a blockchain) contains the following values in its block header:
+
+```python
+hashMerkleRoot = '0x4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b'
+block.nVersion = '01000000'
+block.nTime    = '1231006505'
+block.nBits    = '0x1d00ffff'
+block.nNonce   = '2083236893'
+
+# hash of this block
+hash = '000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f'
+```
+Notice the absence of a reference to the previous block's header. This is because the genesis block has no previous block.
+Keep in mind of the `nBits` field, as we will come back to this number in a later section on [the difficulty](#anoteonthedifficulty).
+
+
+## Block generation
 The merkle root is a cryptographic accumulator over all transaction ID (TXIDs) of transactions in a block. These TXIDs are 
 preceded by the **coinbase transaction**, which is the first transaction in the block. Unlike other transactions, 
 the coinbase transaction has no real inputs -- it is the transaction that pays out the subsidy and fees to the miners that generated the block. 
@@ -129,10 +181,22 @@ These are good reference charts for the historical behavior of the Bitcoin netwo
 - <OutboundLink target="_blank" href='https://www.blockchain.com/charts/mempool-size'>Mempool Size (Bytes)</OutboundLink>
 - <OutboundLink target="_blank" href='https://www.blockchain.com/charts/difficulty'>Network Difficulty</OutboundLink>
 
-Particularly, when one look at the Number of Transactions per Block and Network Difficulty graph over the years, one can make the observation that the difficulty has significantly increased over time.
+### A note on the difficulty
+
+The initial difficulty target of the Bitcoin network was 0x1d00ffff (target of 1, `nBits` of 486,604,799). A target of 1 set the network at the minimum difficulty. A theoretical maximum difficulty is when the target is 0. 
+Picking <OutboundLink target="_blank" href='https://btc.com/stats/diff'>the latest</OutboundLink> target from the time of writing, we see a difficulty of 24,272,331,996,979. This gives us the target of 386,635,947.
+
+Referring to the previous section, when one look at the Number of Transactions per Block and Network Difficulty graph over the years, one can make the observation that the difficulty has significantly increased over time.
 In the infancy of the Bitcoin network, the difficulty being much lower than it is now, miners could take a handful of transactions and iterate through the number of nonces from 0 to 4,294,967,295 to find a SHA256(SHA256()) hash that is below the target (the difficulty).
 
 This is much more difficult to do now and miners routinely iterate through the nonce space before deciding that something else needed to be changed in the headers (such as the timestamp) to reset the nonce and iteratively try again. The network's target of a block generation every ~10 minutes lend a dynamism to the difficulty.
+
+Every 2016 blocks (~2 weeks), the target is updated by comparing the actual time it took to generate the block to the target time and modify the target by the percentage difference.
+
+Before we proceed to the next section, spend some time to ponder on the fact that a coinbase transaction ("generation transaction") is included in the merkle root. 
+Recall that this is always the first transaction in a block, created by the miner to record the reward and fees paid to the miner. This in effect means that it is extremely unlikely that two miners will generate the same Merkle root since each miner will have a different Bitcoin address. This reiterate the comparison of bitcoin mining to the lottery problem -- 
+every miner has the same probability of winning as every other miner.
+
 
 ## Proof of Work
 
