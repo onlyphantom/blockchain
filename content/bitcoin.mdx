@@ -95,12 +95,44 @@ This rebalancing of difficulty is capped so a target is never changed by more th
 You can <OutboundLink target="_blank" href='https://www.blockchain.com/charts/difficulty'>see the current difficulty target here</OutboundLink>.
 
 ### Nonce
-An arbitrary number miners change in their attempt to produce a hash less than or equal to the target. It starts at 0 and increment by 1 each time a hash is generated.
+An arbitrary number between 0 and 4,294,967,295 miners change in their attempt to produce a hash less than or equal to the target. It starts at 0 and increment by 1 each time a hash is generated.
 If all 32 bits of the nonce are tested (resulting in a "Nonce overflows"), the miner can either:
 - Increment `extraNonce` located in the coinbase transaction, hence changing the Merkle Root, giving the miner a chance to reset Nonce and try again.
 - Update `nTime` in the block header, hence changing the timestamp, giving the miner a chance to reset Nonce and try again.
 
-What should happen if more than one 
+### Block generation
+The merkle root is a cryptographic accumulator over all transaction ID (TXIDs) of transactions in a block. These TXIDs are 
+preceded by the **coinbase transaction**, which is the first transaction in the block. Unlike other transactions, 
+the coinbase transaction has no real inputs -- it is the transaction that pays out the subsidy and fees to the miners that generated the block. 
+
+If a block has only one transaction, the TXIDs of those two transactions are concatenated and hashed with SHA256(SHA256()) to produce the merkle root.
+
+Supposed a block has two transactions, B and C, and transaction C spends the output from B, the TXID of B must be placed before the TXID of C. This 
+preserves the linearity when parsing transactions from a block chain. As mentioned above, the coinbase transaction's TXID will always come first (in the diagram, it is A):
+
+![](images/merklebitcoin.svg)  
+Source: developer.bitcoin.org
+
+Just as we've learned in the last module, hashes are performed in internal byte order when they're concatenated together.
+
+If you were to inspect the Bitcoin network with a blockchain explorer, you would see the network processing at <OutboundLink target="_blank" href='https://www.blockchain.com/charts/transactions-per-second'>a transaction rate per second</OutboundLink> of somewhere between 3 to 5. 
+You may think of comparing this to <OutboundLink target="_blank" href='https://www.blockchain.com/btc/blocks?page=1'>the number of blocks say in the last few hours</OutboundLink> of you reading this, and wonder if miners are generating blocks too slowly. Would it not be possible for the
+miner to be generating blocks a lot more frequently by accepting maybe a few transactions at a time and find the nonce that produces a hash below the target, hence earning more reward?
+
+That would have been a fair trade-off for the miner has the difficulty of this proof-of-work been far, far easier. 
+However, since the probability of finding the nonce remains constant whether the miner is performing proof-of-work on a block with 1 transaction or say 2,000 transactions, 
+the miner is incentivized to include more transactions as they receive more mining fees. Transactions that did not make it in the block would remain in the mempool waiting to be included in the next block.
+
+These are good reference charts for the historical behavior of the Bitcoin network:
+- <OutboundLink target="_blank" href='https://www.blockchain.com/charts/n-transactions-per-block'>Average Transactions per Block</OutboundLink>
+- <OutboundLink target="_blank" href='https://www.blockchain.com/charts/mempool-count'>Number of Unconfirmed Transactions in Mempoolk</OutboundLink>
+- <OutboundLink target="_blank" href='https://www.blockchain.com/charts/mempool-size'>Mempool Size (Bytes)</OutboundLink>
+- <OutboundLink target="_blank" href='https://www.blockchain.com/charts/difficulty'>Network Difficulty</OutboundLink>
+
+Particularly, when one look at the Number of Transactions per Block and Network Difficulty graph over the years, one can make the observation that the difficulty has significantly increased over time.
+In the infancy of the Bitcoin network, the difficulty being much lower than it is now, miners could take a handful of transactions and iterate through the number of nonces from 0 to 4,294,967,295 to find a SHA256(SHA256()) hash that is below the target (the difficulty).
+
+This is much more difficult to do now and miners routinely iterate through the nonce space before deciding that something else needed to be changed in the headers (such as the timestamp) to reset the nonce and iteratively try again. The network's target of a block generation every ~10 minutes lend a dynamism to the difficulty.
 
 ## Proof of Work
 
