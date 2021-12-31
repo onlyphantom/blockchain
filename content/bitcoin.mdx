@@ -197,6 +197,19 @@ Before we proceed to the next section, spend some time to ponder on the fact tha
 Recall that this is always the first transaction in a block, created by the miner to record the reward and fees paid to the miner. This in effect means that it is extremely unlikely that two miners will generate the same Merkle root since each miner will have a different Bitcoin address. This reiterate the comparison of bitcoin mining to the lottery problem -- 
 every miner has the same probability of winning as every other miner.
 
+### Orphan blocks
+On the topic of block generation, another interesting question pertains to the case of forks when two or more blocks are generated within seconds of each other.
+The idea of a blockchain is that the chain is a single, continuous chain of blocks. For any valid block, there can only be one parent block (except the "genesis block") and one child block. 
+Consequently, for any given block there is only one path to the genesis block.
+
+When two blocks are created within seconds of each other, one-block forks are created.
+If the fork is of equal length, the miners generate blocks onto whichever block that they receive first. Consequently, one of the chain would be longer (with 
+the addition of the new block) and this longer chain is considered the "main chain".
+
+Blocks in shorter chains are considered invalid and all valid transactions of the blocks inside the shorter chain are re-added to the queue ("mempool"). These transactions may 
+still be added to the main chain, but they would have to be included in another block. 
+
+The mining reward for the shorter chain will not be present in the longest chain.
 
 ## Proof of Work
 
