@@ -10,26 +10,6 @@ const epochSecsToDate = (epochSecs) => {
     return date.toLocaleDateString()
 }
 
-const data = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-    datasets: [
-        {
-            label: "First dataset",
-            data: [33, 53, 85, 41, 44, 65],
-            fill: true,
-            backgroundColor: "rgba(75,192,192,0.2)",
-            borderColor: "rgba(75,192,192,1)"
-        },
-        {
-            label: "Second dataset",
-            data: [33, 25, 35, 51, 54, 76],
-            fill: false,
-            borderColor: "#742774"
-        }
-    ]
-};
-
-
 export default function Difficulty() {
 
     const chartRef = useRef();
@@ -42,7 +22,8 @@ export default function Difficulty() {
                 data: [],
                 fill: true,
                 backgroundColor: "rgba(75,192,192,0.2)",
-                borderColor: "rgba(75,192,192,1)"
+                borderColor: "rgba(75,192,192,1)",
+                pointRadius: 1,
             },
         ]
     })
@@ -72,7 +53,22 @@ export default function Difficulty() {
 
     return (
         <div className="chartjs-container">
-            <Chart type='line' data={dat} ref={chartRef} onClick={onClick} />
+            <Chart
+                type='line' data={dat} ref={chartRef}
+                onClick={onClick}
+                options={{
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            // position: 'left',
+                            text: 'Bitcoin Mining Difficulty',
+                            align: 'start',
+                        }
+                    }
+                }} />
         </div>
     );
 }
