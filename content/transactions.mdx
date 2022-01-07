@@ -153,7 +153,7 @@ A summary of <a id="Gas Fee after the London Upgrade" name="Gas Fee after the Lo
 
 - Every block now has a base fee (the minimum price per unit of gas for inclusion in this block, determined by supply and demand for block space). The base fee will increase and decrease by 12.5% after blocks are more than 50% full. For example, if a block is 100% full the base fee increases by 12.5%; if it is 50% full the base fee will be the same; if it is 0% full the base fee would decrease by 12.5%. The exponential increase of 12.5% makes it economically non-viable for block size to remain high indefinitely
 
-- Prior to the Longond Upgrade, miners receive the total gas fee from any transaction included in a block. Now, a priority fee (tip) mechanism is introduced to incentivize miners to include a transaction in the block. Miners will still find it economically viable to mine empty blocks as they receive the same block reward
+- Prior to the London Upgrade, miners receive the total gas fee from any transaction included in a block. Now, a priority fee (tip) mechanism is introduced to incentivize miners to include a transaction in the block. Miners will still find it economically viable to mine empty blocks as they receive the same block reward
 
 - A sender can additionally specify a maximum limit they are willing to pay (`maxFeePerGas`), and sender is refunded the difference between the max fee and the sum of the base fee and tip. The sender will never pay more than the market price for gas on that block (`baseFeePerGas`)
 

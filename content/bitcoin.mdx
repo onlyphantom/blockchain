@@ -187,7 +187,9 @@ These are good reference charts for the historical behavior of the Bitcoin netwo
 The initial difficulty target of the Bitcoin network was 0x1d00ffff (target of 1, `nBits` of 486,604,799). A target of 1 set the network at the minimum difficulty. A theoretical maximum difficulty is when the target is 0. 
 Picking <OutboundLink target="_blank" href='https://btc.com/stats/diff'>the latest</OutboundLink> target from the time of writing, we see a difficulty of 24,272,331,996,979. This gives us the target of 386,635,947.
 
-Referring to the previous section, when one look at the Number of Transactions per Block and Network Difficulty graph over the years, one can make the observation that the difficulty has significantly increased over time.
+<Difficulty />
+
+Referring to the historical chart above, when one look at the Number of Transactions per Block and Network Difficulty graph over the years, one can make the observation that the difficulty has significantly increased over time.
 In the infancy of the Bitcoin network, the difficulty being much lower than it is now, miners could take a handful of transactions and iterate through the number of nonces from 0 to 4,294,967,295 to find a SHA256(SHA256()) hash that is below the target (the difficulty).
 
 This is much more difficult to do now and miners routinely iterate through the nonce space before deciding that something else needed to be changed in the headers (such as the timestamp) to reset the nonce and iteratively try again. The network's target of a block generation every ~10 minutes lend a dynamism to the difficulty.
@@ -197,8 +199,6 @@ Every 2016 blocks (~2 weeks), the target is updated by comparing the actual time
 Before we proceed to the next section, spend some time to ponder on the fact that a coinbase transaction ("generation transaction") is included in the merkle root. 
 Recall that this is always the first transaction in a block, created by the miner to record the reward and fees paid to the miner. This in effect means that it is extremely unlikely that two miners will generate the same Merkle root since each miner will have a different Bitcoin address. This reiterate the comparison of bitcoin mining to the lottery problem -- 
 every miner has the same probability of winning as every other miner.
-
-<Difficulty />
 
 
 ### Orphan blocks
