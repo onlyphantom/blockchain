@@ -8,9 +8,11 @@ We wanted to create an interactive portal containing step by step explanations o
 - Symmetric and Asymmetric Key Cryptograpgy
 - Encryption and Decryption with RSA
 - Secure Hash Algorithms (SHA-256, Keccak)
+- Merkle Tree and Merkle Proof
 - Consensus Mechanism
 - Proof of Work
 - Bitcoin Design
+- Mining Reward
 - Ethereum's Smart Contract
 - Transactions
 
@@ -26,6 +28,13 @@ $ npm start
 ```
 
 Visit `http://localhost:8000/` to view the app.
+
+### 🔄 Refreshing Data
+Some of the data used in this material may be periodically refreshed. Data are stored in the /etc/ subdirectory.
+
+#### Sources
+- `difficulty.json`: https://www.blockchain.com/charts/difficulty
+- `n-transactions-per-block.json`: https://www.blockchain.com/charts/n-transactions-per-block
 
 ### 🔧 Configure
 
