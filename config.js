@@ -65,7 +65,7 @@ const config = {
     favicon: 'https://supertype.ai/wp-content/uploads/2021/07/cropped-logo_sq_inv-32x32.png',
   },
   pwa: {
-    enabled: false, // disabling this will also remove the existing service worker.
+    enabled: true, // disabling this will also remove the existing service worker.
     manifest: {
       name: 'Learn Blockchain',
       short_name: 'LearnBlockchain',
