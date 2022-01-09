@@ -1,15 +1,17 @@
 ---
 title: "Features"
-metaTitle: "Syntax Highlighting is the meta title tag for this page"
-metaDescription: "This is the meta description for this page"
-date: 2021-11-25
+metaTitle: "Learn Blockchain (Interactive Workbook)"
+metaDescription: "Learn Blockchain in an interative workbook"
+date: 2022-01-01
 author: Samuel Chan
 keywords: ["encryption, decryption, aes, blockchain, bitcoin, cryptography 101"]
 ---
 
 import React from 'react'
 import { Button, Alert } from 'antd'
-import { Tags, Quote } from '../src/components/reactComponents/utils/UX';
+import { Tags, Quote } from '../../src/components/reactComponents/utils/UX';
+import Difficulty from '../../src/components/reactComponents/Difficulty';
+
 
 <Tags name="Topics" list={
     [
@@ -41,12 +43,17 @@ const elem = <button style={{color: 'seagreen'}}>
 render(elem)
 ```
 
-```javascript
-- const data = ['1','2'];
-+ const data = [1,2];
+Interactive Charts:
+<Difficulty />
+
+You can manipulate the following code if we have `react-live=true` (provided `hide=code` is not appended):
+
+```js
+- javascript react-live=true hide-code
++ javascript react-live=true
 ```
 
-```javascript react-live=true hide-code
+```javascript react-live=true
 const App = () => {
 
     const [val, setVal] = React.useState(1704)

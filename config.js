@@ -43,6 +43,7 @@ const config = {
       '/introduction', // add trailing slash if enabled above
       '/features',
       '/cryptography',
+      '/cryptography-in-blockchain'
     ],
     collapsedNav: [
       '/features', // add trailing slash if enabled above

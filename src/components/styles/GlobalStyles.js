@@ -505,9 +505,9 @@ export const baseStyles = css`
     width: 40px;
   }
 
-  .sideBarUL {
-    margin-top: 32px;
-  }
+  // .sideBarUL {
+  //   margin-top: 32px;
+  // }
 
   .sideBarUL li {
     list-style-type: none;
