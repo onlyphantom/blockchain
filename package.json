@@ -74,7 +74,7 @@
     "build": "gatsby build --prefix-paths",
     "format": "prettier --write \"src/**/*.{js,jsx,css,json}\"",
     "lint": "eslint --fix \"src/**/*.{js,jsx}\"",
-    "develop": "gatsby develop",
+    "develop": "rm -rf .cache/caches/gatsby-plugin-mdx && gatsby develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"

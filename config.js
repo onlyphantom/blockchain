@@ -6,7 +6,7 @@ const config = {
     trailingSlash: false,
   },
   header: {
-    logo: 'https://sp-ao.shortpixel.ai/client/to_auto,q_glossy,ret_img,w_300,h_300/https://supertype.ai/wp-content/uploads/2021/07/logo_sq_inv-300x300.png',
+    logo: 'https://supertype.ai/wp-content/uploads/2021/07/logo_sq_inv-768x768.png',
     logoLink: 'https://supertype.ai',
     title:
       // "<a href='https://supertype.ai'><img class='img-responsive' src='' alt='Learn logo' /></a>",
@@ -22,13 +22,13 @@ const config = {
 		      </div>
 		    </a>
 		  </li>`,
-		// 	<li>
-		//     <a href="https://discordapp.com/invite/supertypeai" target="_blank" rel="noopener">
-		//       <div class="discordBtn">
-		//         <img src='https://raw.githubusercontent.com/onlyphantom/blockchain/main/src/components/images/discord-brands-block.svg' alt={'Discord'}/>
-		//       </div>
-		//     </a>
-		//   </li>`,
+    // 	<li>
+    //     <a href="https://discordapp.com/invite/supertypeai" target="_blank" rel="noopener">
+    //       <div class="discordBtn">
+    //         <img src='https://raw.githubusercontent.com/onlyphantom/blockchain/main/src/components/images/discord-brands-block.svg' alt={'Discord'}/>
+    //       </div>
+    //     </a>
+    //   </li>`,
     links: [{ text: 'LinkedIn', link: 'https://linkedin.com/company/supertype-ai' }],
     search: {
       enabled: false,
@@ -41,10 +41,12 @@ const config = {
   sidebar: {
     forcedNavOrder: [
       '/introduction', // add trailing slash if enabled above
-      '/codeblock',
+      '/features',
+      '/cryptography',
+      '/cryptography-in-blockchain'
     ],
     collapsedNav: [
-      '/codeblock', // add trailing slash if enabled above
+      '/features', // add trailing slash if enabled above
     ],
     links: [{ text: 'Supertype', link: 'https://supertype.ai' }],
     frontline: false,
@@ -52,7 +54,7 @@ const config = {
     title:
       // "<a href='https://supertype.ai/'>graphql </a><div class='greenCircle'></div><a href=''>react</a>",
       // "Learn Blockchain Academy <small style='margin-left:2%; font-weight: 500;'> by Supertype</small>",
-      'Learn Blockchain Academy <img src="https://sp-ao.shortpixel.ai/client/to_auto,q_glossy,ret_img,w_300,h_300/https://supertype.ai/wp-content/uploads/2021/07/logo_sq_inv-300x300.png" style="width: 30px;">',
+      '<img src="https://supertype.ai/wp-content/uploads/2021/07/logo_sq_inv-768x768.png" style="width: 50px; margin-right:10px;"> Learning Modules',
   },
   siteMetadata: {
     title: 'Learn Blockchain | Supertype',
@@ -60,7 +62,7 @@ const config = {
     ogImage: null,
     keywords: 'blockchain, classroom',
     docsLocation: 'https://github.com/onlyphantom/blockchain/tree/main/content',
-    favicon: 'https://sp-ao.shortpixel.ai/client/to_auto,q_glossy,ret_img,w_32,h_32/https://supertype.ai/wp-content/uploads/2021/07/cropped-logo_sq_inv-32x32.png',
+    favicon: 'https://supertype.ai/wp-content/uploads/2021/07/cropped-logo_sq_inv-32x32.png',
   },
   pwa: {
     enabled: false, // disabling this will also remove the existing service worker.

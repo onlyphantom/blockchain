@@ -22,3 +22,9 @@ export function copyToClipboard(text) {
         }
     }
 }
+
+export const epochSecsToDate = (epochSecs) => {
+    let date = new Date(0);
+    date.setUTCSeconds(epochSecs);
+    return date.toLocaleDateString()
+}

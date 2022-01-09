@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 
 export const baseStyles = css`
   @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap');
-  @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600&display=swap');
+  // @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600&display=swap');
   @import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Vollkorn:ital,wght@0,600;1,500&display=swap');
 
   :root {
@@ -459,10 +459,10 @@ export const baseStyles = css`
   .sidebarTitle {
     /* box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16); */
     background-color: #263545;
-    padding: 18px 16px;
-    /*  font-family: 'Poppins' */
-    font-size: 0.7rem;
-    color: #cccccc;
+    padding: 10px 8px;
+    font-size: 16px;
+    font-weight: 300;
+    color: #ffffff;
     display: flex;
     align-items: center;
   }
@@ -505,9 +505,9 @@ export const baseStyles = css`
     width: 40px;
   }
 
-  .sideBarUL {
-    margin-top: 32px;
-  }
+  // .sideBarUL {
+  //   margin-top: 32px;
+  // }
 
   .sideBarUL li {
     list-style-type: none;
