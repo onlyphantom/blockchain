@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 export const Sidebar = styled('aside')`
   width: 220px;
-  min-width: 220px;
+  min-width: max-content;
   border-right: 1px solid #ede7f3;
   height: 100vh;
   overflow: auto;
@@ -77,8 +77,8 @@ export const ListItem = styled(({ className, active, level, ...props }) => {
     }
 
     ${props =>
-      props.active &&
-      `
+    props.active &&
+    `
       color: #3b7789;
       border-color: rgb(230,236,241) !important;
       border-style: solid none solid solid;
