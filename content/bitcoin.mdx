@@ -213,25 +213,130 @@ still be added to the main chain, but they would have to be included in another 
 
 The mining reward for the shorter chain will not be present in the longest chain.
 
-## Proof of Work
+## History on Proof of Work
 Bitcoin and many other blockchain protocols use a model called (or largely based on) "proof of work", which requires 
 proof of "computational resources spent" as a mean to discourage illegitimate uses or behaviors.  
 
-Consider the problem of email spam. In 1997, Adam Back proposed a novel proof-of-work function called Hashcash, 
-which was used to prevent spam. The idea was simple -- users of a network would be required to compute a hash as proof 
-that "some" computational resources were spent before the email was spent.
+Consider the problem of email spam. In 1992, Cynthia Dwork and Moni Naor used the term 'pricing function' in their introduction
+to using computational resources for email spam prevention:
 
-A legitimate user is not inhibited in the slightest but a spammer with hundreds of thousands of recipients would 
-find the computational resources required prohibitively expensive. The Hashcash algorithm by Adam Back requires a considerable
-amount of computing resources to compute but is easy to verify (that the work was done right). This is a desirable property -- much like
-what we've learned in the [Integer Factorization Problem](../cryptography#rsaalgorithm) -- because it allows the recipient to quickly
-and effortless verify the proof of work before deciding on opening the email. 
+> We present a computational technique for combatting junk mail in particular and controlling access to a shared resource in general. The main idea is to require a user to compute a moderately hard, but not intractable, function in order to gain access to the resource, thus preventing frivolous use. To this end we suggest several pricing functions...
+> - Cynthia Dwork, Moni Naor, Pricing via Processing or Combatting Junk Mail (1992)
 
-Hashcash was used by SpamAssassin, a spam filter, and by Microsoft in its Hotmail, Exchange, and Outlook services. In 1998, Wei Dai introduces 
-**b-money**, an idea of creating money by solving computational puzzles such as hashcash, combined with a peer-to-peer network where each node
-maintains its own list of transactions.
+A legitimate user is not inhibited but a spammer with hundreds of thousands of recipients would 
+find the computational resources required prohibitively expensive. In 1997, Adam Back proposed a proof-of-work function called Hashcash, 
+which was similar in motivations, but with the novelty of using hash functions as the proof of work. 
 
-Bitcoin uses Hashcash as a proof of work in its block generation.
+The idea was simple -- users of a network would be required to compute a hash as proof 
+that "some" computational resources were spent before the email was spent. The Hashcash algorithm by 
+Adam Back requires a considerable amount of computing resources to compute but is easy to verify (that the work was done right). 
+This is a desirable property -- much like what we've learned in the [Integer Factorization Problem](../cryptography#rsaalgorithm) -- because it allows the recipient to quickly
+and effortless verify the proof of work before deciding on opening the email. Adam expanded on this protocol later in a paper
+titled "Hashcash - A denial of service counter-measure", in which he explained the use of a cost / pricing function also present 
+an anti-DOS mechanism since malicious parties are required to "pay" an infeasible amount of computational resources for such an attack.
+
+```js
+From: "Satoshi Nakamoto" <satoshi@anonymousspeech.com>
+Sent: "Friday, August 22, 2008 4:38 PM"
+To: "Wei Dai" <weidai@ibiblio.org>
+Cc: "Satoshi Nakamoto" <satoshi@anonymousspeech.com>
+Subject: "Citation of your b-money page"
+
+/*
+I was very interested to read your b-money page.  I'm getting ready to
+release a paper that expands on your ideas into a complete working system.
+Adam Back (hashcash.org) noticed the similarities and pointed me to your
+site.
+
+I need to find out the year of publication of your b-money page for the
+citation in my paper. It'll look like:
+[1] W. Dai, "b-money," http://www.weidai.com/bmoney.txt, (2006?).
+
+You can download a pre-release draft at
+http://www.upload.ae/file/6157/ecash-pdf.html. Feel free to forward it to
+anyone else you think would be interested.
+
+Title: Electronic Cash Without a Trusted Third Party
+
+Abstract: A purely peer-to-peer version of electronic cash would allow
+online payments to be sent directly from one party to another without the
+burdens of going through a financial institution.  Digital signatures
+offer part of the solution, but the main benefits are lost if a trusted
+party is still required to prevent double-spending.  We propose a solution
+to the double-spending problem using a peer-to-peer network. The network
+timestamps transactions by hashing them into an ongoing chain of
+hash-based proof-of-work, forming a record that cannot be changed without
+redoing the proof-of-work. The longest chain not only serves as proof of
+the sequence of events witnessed, but proof that it came from the largest
+pool of CPU power. As long as honest nodes control the most CPU power on
+the network, they can generate the longest chain and outpace any
+attackers. The network itself requires minimal structure.  Messages are
+broadcasted on a best effort basis, and nodes can leave and rejoin the
+network at will, accepting the longest proof-of-work chain as proof of
+what happened while they were gone.
+
+Satoshi
+*/
+```
+
+Another email from Satoshi that is of interest was the one on January 10, 2009:
+
+```js
+From: Satoshi Nakamoto
+Sent: Saturday, January 10, 2009 11:17 AM
+To: weidai@weidai.com
+Subject: Re: Citation of your b-money page
+
+/*
+I wanted to let you know, I just released the full implementation of the
+paper I sent you a few months ago, Bitcoin v0.1.  Details, download and
+screenshots are at www.bitcoin.org
+
+I think it achieves nearly all the goals you set out to solve in your
+b-money paper.
+
+The system is entirely decentralized, without any server or trusted
+parties.  The network infrastructure can support a full range of escrow
+transactions and contracts, but for now the focus is on the basics of
+money and transactions.
+
+There was a discussion of the design on the Cryptography mailing list.
+Hal Finney gave a good high-level overview:
+| One thing I might mention is that in many ways bitcoin is two independent
+| ideas: a way of solving the kinds of problems James lists here, of
+| creating a globally consistent but decentralized database; and then using
+| it for a system similar to Wei Dai's b-money (which is referenced in the
+| paper) but transaction/coin based rather than account based. Solving the
+| global, massively decentralized database problem is arguably the harder
+| part, as James emphasizes. The use of proof-of-work as a tool for this
+| purpose is a novel idea well worth further review IMO.
+
+Satoshi
+*/
+```
+
+These correspondences are interesting in that it shed light on the invention of the "peer-to-peer network" and the
+contributors behind what would become the "proof-of-work" algorithm that Bitcoin uses. 
+
+### Hashcash
+The original Hashcash algorithm works by requiring a user to compute hashes repeatedly until they 
+find a value that, when hashed with SHA1, produces a digest that starts with a specific number of zeros.
+The "easily verifiable" property of this algorithm comes from the fact that any human can perform verification that the 
+work has been done correctly by computing the hash of the work using simple, pre-installed command line utilities and 
+counting by eye how many zeros are in the output.
+
+When we expand the concept further, we observe that the difficulty of finding the right value from a scan
+exponentially increases with the number of leading zero bits required.  
+
+Recall from the [hashing functions](../cryptography-in-blockchain#hash-functions) chapter in earlier modules that 
+we have the following properties for hash functions:
+
+- Fixed length: the hash function is fixed-sized, and thus can be used to generate a fixed-length signature.
+- Pre-image resistance (One way): the hash function cannot be used to generate a pre-image of the message. 
+    - <span className='math-inline'>h(x) = y</span>, where <span className='math-inline'>x</span> is the message and <span className='math-inline'>y</span> is the hash. <span className='math-inline'>x</span> is a <i>pre-image</i> of <span className='math-inline'>y</span> and cannot be reverse-computed from <span className='math-inline'>y</span>.
+    - A full hash inversion is possible, but is computationally infeasible with a complexity of <span className='math-inline'>O(2^k)</span> where <span className='math-inline'>k</span> is the hash size (e.g 256 for SHA-256)
+- Collision resistance: Different input message should result in different hash, that is <span className='math-inline'>h(a) \neq h(b)</span>
+    - It is impossible to fully avoid collisions in hashing functions (compression down to 32 bytes, hence subjected to the same problem as a "birthday function") -- but sufficienctly long collisions are computationally infeasible to find.
 
 
 

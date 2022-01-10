@@ -125,7 +125,7 @@ says:
 ### Security properties of hash functions
 - Fixed length: the hash function is fixed-sized, and thus can be used to generate a fixed-length signature.
 - Pre-image resistance (One way): the hash function cannot be used to generate a pre-image of the message. 
-    - <span className='math-inline'>h(x) = y</span>, where <span className='math-inline'>x</span> is the message and <span className='math-inline'>y</span> is the hash. <span className='math-inline'>x</span> is a _pre-image_ of <span className='math-inline'>y</span> and cannot be reverse-computed from <span className='math-inline'>y</span>.
+    - <span className='math-inline'>h(x) = y</span>, where <span className='math-inline'>x</span> is the message and <span className='math-inline'>y</span> is the hash. <span className='math-inline'>x</span> is a <i>pre-image</i> of <span className='math-inline'>y</span> and cannot be reverse-computed from <span className='math-inline'>y</span>.
 - Collision resistance: Different input message should result in different hash, that is <span className='math-inline'>h(a) \neq h(b)</span>
     - It is impossible to fully avoid collisions in hashing functions (compression down to 32 bytes, hence subjected to the same problem as a "birthday function") -- but sufficienctly long collisions are computationally infeasible to find.
 
