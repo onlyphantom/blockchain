@@ -1,9 +1,8 @@
 # Learn Blockchain
 
-This repository contains the code for the [LearnBlockchain.Academy](https://learnblockchain.academy) tutorial portal, a project in active development by [Supertype](https://supertype.ai)
+This repository contains the code for the [LearnBlockchain.Academy](https://learnblockchain.academy), a project in active development by [Supertype](https://supertype.ai). 
 ## Motivation
-We wanted to create an interactive portal containing step by step explanations of 
-
+We wanted to create an interactive workbook that help the average reader learn about the engineering marvel of blockchain, the Bitcoin protocol, and the cryptographic ideas that made it possible.
 ### 🔗 Coverage
 - Symmetric and Asymmetric Key Cryptograpgy
 - Encryption and Decryption with RSA
@@ -86,27 +85,4 @@ To setup Algolia, go to `config.js` and update the `search` object to look like 
 Values for Algolia App ID, Search Key, and Admin Key can be obtained from Algolia Dashboard with the right set of permissions. Replace `MY_INDEX_NAME` with the Algolia Index name of your choice. To build the Algolia index, you need to run `npm run build` which will do a gatsby build along with content indexing in Algolia.
 
 ### Progressive Web App, Offline
-
-To enable PWA, go to `config.js` and update the `pwa` object to look like the one below:
-
-```
-   "pwa": {
-        "enabled": false, // disabling this will also remove the existing service worker.
-        "manifest": {
-            "name": "Gatsby Gitbook Starter",
-            "short_name": "GitbookStarter",
-            "start_url": "/",
-            "background_color": "#6b37bf",
-            "theme_color": "#6b37bf",
-            "display": "standalone",
-            "crossOrigin": "use-credentials",
-            icons: [
-                {
-                    src: "src/pwa-512.png",
-                    sizes: `512x512`,
-                    type: `image/png`,
-                },
-            ],
-        },
-    }
-```
+On a mobile browser (such as Chrome on Android, Safari on iOS), you can add this to the homepage of your device. LearnBlockchain.Academy can run even in offline / airplane mode.

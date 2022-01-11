@@ -333,12 +333,47 @@ we have the following properties for hash functions:
 
 - Fixed length: the hash function is fixed-sized, and thus can be used to generate a fixed-length signature.
 - Pre-image resistance (One way): the hash function cannot be used to generate a pre-image of the message. 
-    - <span className='math-inline'>h(x) = y</span>, where <span className='math-inline'>x</span> is the message and <span className='math-inline'>y</span> is the hash. <span className='math-inline'>x</span> is a <i>pre-image</i> of <span className='math-inline'>y</span> and cannot be reverse-computed from <span className='math-inline'>y</span>.
-    - A full hash inversion is possible, but is computationally infeasible with a complexity of <span className='math-inline'>O(2^k)</span> where <span className='math-inline'>k</span> is the hash size (e.g 256 for SHA-256)
-- Collision resistance: Different input message should result in different hash, that is <span className='math-inline'>h(a) \neq h(b)</span>
+  - <span className='math-inline'>h(x) = y</span>, where <span className='math-inline'>x</span> is the message and <span className='math-inline'>y</span> is the hash. <span className='math-inline'>x</span> is a <i>pre-image</i> of <span className='math-inline'>y</span> and cannot be reverse-computed from <span className='math-inline'>y</span>.
+  - A full hash inversion is possible, but is computationally infeasible with a complexity of <span className='math-inline'>O(2^k)</span> where <span className='math-inline'>k</span> is the hash size (e.g 256 for SHA-256)
+- Second pre-image resistance: Given <span className='math-inline'>x</span> and <span className='math-inline'>h(x)</span>, it should be infeasible to find any other message, <span className='math-inline'>m</span> where <span className='math-inline'>h(m) = h(x); m \neq x</span>
+  - Also known as weak collision resistance
+- Strong collision resistance: Different input message should result in different hash, that is <span className='math-inline'>h(x) \neq h(y)</span>
     - It is impossible to fully avoid collisions in hashing functions (compression down to 32 bytes, hence subjected to the same problem as a "birthday function") -- but sufficienctly long collisions are computationally infeasible to find.
 
+Hashcash builds on these security properties, allowing a person to verify cheaply through <span className='math-inline'>y = h(x)</span> but very difficult to find the pre-image of <span className='math-inline'>y</span>. In the context of cryptocurrency mining, 
+a miner thus expend considerable effort to find a value that would hash to the required number of leading zeros, but the other nodes on the network only need to compute said hash to verify 
+that the work was performed correctly. 
 
+While we now have a model to prove that some computational resources have been expended, we have yet to "bind" this work to a specific reason. In other words, 
+any other users can reuse the same pre-image and hash to claim that they, too, have performed a proof-of-work. This is why we include a specific service string, _s_ to the 
+hash function, giving this proof-of-work some notion of purposefulness. 
+
+When expressed mathematically, this takes the form of:
+
+<div className='math-display'>
+{'H(s,c) / 2^{(n-k)} = 0'}
+</div>
+
+The miner scans for a value of counter, _c_, that satisfies the above equation. The service string, _s_ could be a web server domain name, 
+a URL, the email addresses of recipients, or any other string that is unique to the task. 
+
+_n_ is the size of the hash output in bits (SHA256 would assign the value of 256 to _n_), and _k_ is the number of leading zeros required (the "work factor").
+A _k_ of 40 would on average require a scan of 1 trillion tries while a _k_ of 20 would require a scan of 1 million tries.
+
+Often, yet another random variable is added to the mix, _r_, if the service string _s_ is not unique to the miner. The work hence becomes to 
+find <span className='math-inline'>H(s,x,c)</span> so no two miners will find the same proof-of-work (only the first to present it will be rewarded and other would have 
+just done the work for no reward).
+
+In the case of Bitcoin, the service string is the coinbase (first transaction in the block), which includes the miner's address, the block height, the mining reward,
+transactions to validate in the block, timestamp and potentially the `extraNonce` bits. This eliminates the need for a random variable, _r_, since the miner's address is unique and would serve the 
+same purpose of avoiding collisions that come with random starting points. As a related aside, miners are expected to use a random reward address for each successful block.
+
+Another way that Bitcoin differs from the original Hashcash proposal is that the original protocol scales its difficulty by adjusting the number of leading zeros in the hash output, 
+which can be expressed with <span className='math-inline'>2^{k}</span>. Since the difficulty is scaled in powers of 2, anyone can measure it by counting the number of leading zeros in the hash output.
+Bitcoin, on the other hand, requires more control to keep to a ~10-minute block interval, it uses a floating point _k_ value to represent difficulty, giving it more precision.
+
+Finally, it should be noted that the original Hashcash algorithm uses SHA1 because it was first released in 1997 and SHA1 was the standard digest algorithm recommended for use by NIST. 
+Bitcoin, having been released in 2009, uses SHA256, which is a much more secure digest algorithm.
 
 ## Knowledge Check
 1. What is the `hashMerkleRoot` field referring to in Bitcoin mining?
