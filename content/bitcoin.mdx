@@ -13,6 +13,7 @@ import { OutboundLink } from 'gatsby-plugin-gtag'
 import { Quote, Tags } from '../src/components/reactComponents/utils/UX';
 import Difficulty from '../src/components/reactComponents/Difficulty';
 import NTransPerBlock from '../src/components/reactComponents/NTransPerBlock';
+import Blockchain from '../src/components/reactComponents/Blockchain';
 
 <Tags name="Topics" list={props.frontmatter.keywords[0].split(',')} />
 
@@ -374,6 +375,8 @@ Bitcoin, on the other hand, requires more control to keep to a ~10-minute block 
 
 Finally, it should be noted that the original Hashcash algorithm uses SHA1 because it was first released in 1997 and SHA1 was the standard digest algorithm recommended for use by NIST. 
 Bitcoin, having been released in 2009, uses SHA256, which is a much more secure digest algorithm.
+
+<Blockchain />
 
 ## Knowledge Check
 1. What is the `hashMerkleRoot` field referring to in Bitcoin mining?
