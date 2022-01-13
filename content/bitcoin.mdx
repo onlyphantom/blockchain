@@ -8,7 +8,7 @@ author: Samuel Chan
 keywords: ["cryptography, blockchain, bitcoin, cryptography 101"]
 ---
 import styled from '@emotion/styled';
-import { Timeline } from 'antd';
+import { Timeline, Alert } from 'antd';
 import { OutboundLink } from 'gatsby-plugin-gtag'
 import { Quote, Tags } from '../src/components/reactComponents/utils/UX';
 import Difficulty from '../src/components/reactComponents/Difficulty';
@@ -28,13 +28,29 @@ import Blockchain from '../src/components/reactComponents/Blockchain';
 
 ![](images/blocks.png)
 
-All transactions on the Bitcoin protocol are grouped into blocks (Each block is a collection of transactions) on an approximately 10 minute interval. The block is then broadcasted to the network. Considering the volume of transactions in a block (~ 10 mins), Bitcoin doesn't actually transmit a full record of all transactions in a block, but rather include the Merkle root of that block's transactions in its header ("block header"). Full nodes participants can however obtain the full transactions in a block by sending a separate request.
+The name "blockchain" is a bit of a misnomer. A blockchain is a collection of blocks, each of which contains a transaction. 
+The first block is called the **genesis block**, and it is followed by a serties of sequential, immutable, chronological blocks.
+
+Each block contains the ledger of all transactions that have happened in the interval between the previous block and the current block.
+
+The genesis block is said to have a block height of zero, as no blocks precede it in the blockchain. Thereafter, 
+each block is said to have a block height of one higher than the previous block. In other words,
+the block height can be derived from taking the current length of the blockchain minus one.
+
+<Alert message={
+   <p>Satoshi first referred to the concept of a blockchain as "timechain" in the 2008 pre-release 
+     source code of Bitcoin. Comments in the code read "a transaction with a merkle branch linking it to the <i>timechain</i>."</p> 
+} type="info" showIcon icon='💡' />
+
+
+All transactions on the Bitcoin protocol are grouped into blocks on an approximately 10 minute interval. 
+The block is then broadcasted to the network. Considering the volume of transactions in a block (~ 10 mins), Bitcoin doesn't actually transmit a full record of all transactions in a block, but rather include the Merkle root of that block's transactions in its header ("block header"). Full nodes participants can however obtain the full transactions in a block by sending a separate request.
 
 We've learned in earlier modules ([Cryptography in Blockchain](../cryptography-in-blockchain)) that because the [Merkle root is a cryptographic accumulator](../cryptography-in-blockchain) over all transactions in a block, 
 it is possible for any node to verify the integrity of a block -- or inclusion of a transaction -- by verifying the Merkle root. 
 
 As illustrated above, every block has a header, which includes a hash of the previous block, This in effect creates 
-a "block chain" that start at the genesis block up to the most recent block. A block chain also has the guarantee of being chronological and continuous 
+a "block chain" that start at the **genesis block** up to the most recent block. A block chain also has the guarantee of being chronological and continuous 
 because the previous block's hash required in the header would otherwise be unknown.
 
 A security feature of the block chain is that it is computationally infeasible to forge or modify a block once it has been included in the chain because 
@@ -157,8 +173,10 @@ Keep in mind of the `nBits` field, as we will come back to this number in a late
 
 ## Block generation
 The merkle root is a cryptographic accumulator over all transaction ID (TXIDs) of transactions in a block. These TXIDs are 
-preceded by the **coinbase transaction**, which is the first transaction in the block. Unlike other transactions, 
-the coinbase transaction has no real inputs -- it is the transaction that pays out the subsidy and fees to the miners that generated the block. 
+preceded by the **coinbase transaction**, which is the first transaction in the block. 
+
+Unlike other transactions, the coinbase transaction has no real inputs -- it 
+is the transaction that pays out the subsidy and fees to the miners that generated the block. 
 
 If a block has only one transaction, the TXIDs of those two transactions are concatenated and hashed with SHA256(SHA256()) to produce the merkle root.
 
@@ -179,6 +197,15 @@ However, since the probability of finding the nonce remains constant whether the
 the miner is incentivized to include more transactions as they receive more mining fees. Transactions that did not make it in the block would remain in the mempool waiting to be included in the next block.
 
 <NTransPerBlock />
+
+On the topic of block rewards, all blocks with a block height less than 
+6,930,000 are entitled to receive a block subsidy of newly created bitcoin 
+value, which also should be spent in the coinbase transaction. 
+
+This subsidy started at 50 bitcoins and is being halved every 210,000 blocks — amounting to 
+approximately once every four years. As of this writing (January 2022), it's 6.25 bitcoins.
+
+The **block reward** refers to the sum of transaction fees and block subsidy.
 
 ### A note on the difficulty
 

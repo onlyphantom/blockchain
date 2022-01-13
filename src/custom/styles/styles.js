@@ -70,6 +70,10 @@ const customStyles = css`
         background: none;
     }
 
+    .ant-alert > span.ant-alert-icon {
+        font-size: 2.5em;
+    }
+
 
     // non-antd styles
     // ...
