@@ -42,7 +42,6 @@ the block height can be derived from taking the current length of the blockchain
      source code of Bitcoin. Comments in the code read "a transaction with a merkle branch linking it to the <i>timechain</i>."</p> 
 } type="info" showIcon icon='💡' />
 
-
 All transactions on the Bitcoin protocol are grouped into blocks on an approximately 10 minute interval. 
 The block is then broadcasted to the network. Considering the volume of transactions in a block (~ 10 mins), Bitcoin doesn't actually transmit a full record of all transactions in a block, but rather include the Merkle root of that block's transactions in its header ("block header"). Full nodes participants can however obtain the full transactions in a block by sending a separate request.
 
@@ -209,9 +208,17 @@ The **block reward** refers to the sum of transaction fees and block subsidy.
 
 ### A note on the difficulty
 
+This difficulty is represented as a 256-bit unsigned integer. The header hash must be equal or lower than this
+value to be considered valid. However, this field is encoded as `nBits` which only holds 32 bits, so the target number
+is actually converted into a compact version instead of the full 256-bit representation.
 
-The initial difficulty target of the Bitcoin network was 0x1d00ffff (target of 1, `nBits` of 486,604,799). A target of 1 set the network at the minimum difficulty. A theoretical maximum difficulty is when the target is 0. 
-Picking <OutboundLink target="_blank" href='https://btc.com/stats/diff'>the latest</OutboundLink> target from the time of writing, we see a difficulty of 24,272,331,996,979. This gives us the target of 386,635,947.
+The initial difficulty target of the Bitcoin network was 0x1d00ffff (target of 1), equivalent to `nBits` of 486,604,799 and a full 256-bit of `0x00000000ffff0000000000000000000000000000000000000000000000000000`. A target of 1 set the network at the minimum difficulty. 
+A theoretical maximum difficulty is when the target is 0. 
+Picking <OutboundLink target="_blank" href='https://btc.com/stats/diff'>the latest</OutboundLink> target from the time of writing, we see the difficulty has increased, and now (as of this writing) a header hash is required to be equal to or 
+lower than a value such as `0x0000000000000000000f4c3a2000000000000000000000000000000000000000`, considerably harder than the initial target.
+
+If you use a Hex calculator, you can derive the difficulty through a division <span className="math-inline">genesistarget / currenttarget </span>. In our examples above,
+this would result in a decimal of 18,399,468,057,381, or 10bbf5c1f324 in hex.
 
 <Difficulty />
 

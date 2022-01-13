@@ -12,11 +12,16 @@ const Blockchain = () => {
                         <p>04000000</p>
                         <h6>Merkle Root Hash (32 bytes)</h6>
                         <p>09BA769D82940D3AB2AFFB184AEB9767</p>
-                        <p>Unix Epoch Time</p>
+                        <h6>Unix Epoch Time</h6>
                         <p>0EE5DF61</p>
-                        <p>Difficulty</p>
-                        <p>1D00FFFF</p>
-
+                        <h6>Difficulty</h6>
+                        <p>2</p>
+                        <h6>Previous Block Header</h6>
+                        <p>00000000000000000000000000000000</p>
+                        <h6>Nonce</h6>
+                        <p>0</p>
+                        <h6>Hash</h6>
+                        <p style={{ color: 'green', fontWeight: 600 }}>00BA769D82940D3AB2AFFB184AEB9767</p>
                     </Card>
                 </Timeline.Item>
                 <Timeline.Item>
@@ -25,10 +30,10 @@ const Blockchain = () => {
                         <p>04000000</p>
                         <h6>Merkle Root Hash (32 bytes)</h6>
                         <p>61B2EF617C97A3B87533FEC5CEE5327D</p>
-                        <p>Unix Epoch Time</p>
+                        <h6>Unix Epoch Time</h6>
                         <p>9FE6DF61</p>
-                        <p>Difficulty</p>
-                        <p>01003456</p>
+                        <h6>Difficulty</h6>
+                        <p>3</p>
 
                     </Card></Timeline.Item>
                 <Timeline.Item>
@@ -37,13 +42,20 @@ const Blockchain = () => {
                         <p>04000000</p>
                         <h6>Merkle Root Hash (32 bytes)</h6>
                         <p>D0A852DFA0AA3B88B32A67397FE141EA</p>
-                        <p>Unix Epoch Time</p>
-                        <p>0EE5DF61</p>
+                        <h6>Unix Epoch Time</h6>
+                        <p>E03F5F61</p>
+                        <h6>Difficulty</h6>
+                        <p>5</p>
 
                     </Card>
                 </Timeline.Item>
             </Timeline>
 
+            <p>
+                A small disclaimer here is that I've simplied the Difficulty representation to a single integer, but
+                in the original Bitcoin protocol, this is a 32-bit unsigned integer. Read more of this in the previous
+                section discussing the difficulty (<code>nBits</code>) field.
+            </p>
         </div>
     )
 }
