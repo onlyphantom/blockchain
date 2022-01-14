@@ -13,7 +13,7 @@ const Blockchain = () => {
                         <h6>Merkle Root Hash (32 bytes)</h6>
                         <p>09BA769D82940D3AB2AFFB184AEB9767</p>
                         <h6>Unix Epoch Time</h6>
-                        <p>0EE5DF61</p>
+                        <p>61DFE50E</p>
                         <h6>Difficulty</h6>
                         <p>2</p>
                         <h6>Previous Block Header</h6>
@@ -31,10 +31,15 @@ const Blockchain = () => {
                         <h6>Merkle Root Hash (32 bytes)</h6>
                         <p>61B2EF617C97A3B87533FEC5CEE5327D</p>
                         <h6>Unix Epoch Time</h6>
-                        <p>9FE6DF61</p>
+                        <p>61DFE69F</p>
                         <h6>Difficulty</h6>
                         <p>3</p>
-
+                        <h6>Previous Block Header</h6>
+                        <p>00000000000000000000000000000000</p>
+                        <h6>Nonce</h6>
+                        <p>0</p>
+                        <h6>Hash</h6>
+                        <p style={{ color: 'green', fontWeight: 600 }}>00BA769D82940D3AB2AFFB184AEB9767</p>
                     </Card></Timeline.Item>
                 <Timeline.Item>
                     <Card title="Block 2" extra={<a href="#">Mine ⛏</a>} style={{ width: 600 }}>
@@ -43,9 +48,15 @@ const Blockchain = () => {
                         <h6>Merkle Root Hash (32 bytes)</h6>
                         <p>D0A852DFA0AA3B88B32A67397FE141EA</p>
                         <h6>Unix Epoch Time</h6>
-                        <p>E03F5F61</p>
+                        <p>61E14BD6</p>
                         <h6>Difficulty</h6>
                         <p>5</p>
+                        <h6>Previous Block Header</h6>
+                        <p>00000000000000000000000000000000</p>
+                        <h6>Nonce</h6>
+                        <p>0</p>
+                        <h6>Hash</h6>
+                        <p style={{ color: 'green', fontWeight: 600 }}>00BA769D82940D3AB2AFFB184AEB9767</p>
 
                     </Card>
                 </Timeline.Item>

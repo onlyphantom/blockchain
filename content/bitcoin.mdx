@@ -412,6 +412,22 @@ Bitcoin, having been released in 2009, uses SHA256, which is a much more secure 
 
 <Blockchain />
 
+For completeness and reproducibility, you can generate 16 random hexadecimal characters using the following command:
+```bash
+hexdump -n 16 -e '4/4 "%08X" 1 "\n"' /dev/urandom
+```
+
+You can also generate Unix Epoch time using common built-in tools:
+```bash
+date +%s
+# returns decimal Unix Epoch time
+# example: 1642154966
+
+## returns hexadecimal Unix Epoch time
+# example: 61e14e6a
+date +%s | xargs printf '%x\n'
+```
+
 ## Knowledge Check
 1. What is the `hashMerkleRoot` field referring to in Bitcoin mining?
 - [ ] The 256-bit hash of the previous block header 
