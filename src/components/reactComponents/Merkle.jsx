@@ -38,12 +38,6 @@ const Merkle = () => {
     });
   }, [mtree]);
 
-  // const validateMtree = ({ tree, leaf }) => {
-  //   const proof = tree.getProof(leaf);
-  //   const root = tree.getRoot().toString('hex');
-  //   return tree.verify(proof, leaf, root);
-  // };
-
   const validate = ({ root, username, amount }) => {
     console.log('values', root, username, amount);
 
@@ -65,7 +59,6 @@ const Merkle = () => {
   };
 
   const merkleConstruction = ({ donors }) => {
-    console.log('Received values of form:', donors);
     setUsernames(donors.map((x) => `${x.username} +${x.amount}`));
   };
 
