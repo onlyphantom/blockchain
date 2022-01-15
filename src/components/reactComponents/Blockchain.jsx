@@ -25,10 +25,18 @@ const Blockchain = () => {
     })
 
 
-    const computeMerkleRoot = (values) => {
+    const computeMerkleRoot = (values, blockInd) => {
         const { MerkleTree } = require('merkletreejs');
         const SHA256 = require('crypto-js/sha256');
-        console.log(values)
+        console.log(values.donors)
+        const leaves = values.donors.map(x => SHA256(`${x.address} +${x.amount}`))
+        const tree = new MerkleTree(leaves, SHA256);
+        const root = tree.getHexRoot()
+        setMerkleRoots({
+            ...merkleRoots,
+            [blockInd]: root
+        })
+        console.log(root)
     }
 
 
@@ -42,7 +50,7 @@ const Blockchain = () => {
                         <Form
                             form={form1}
                             name="fundraising"
-                            onValuesChange={() => computeMerkleRoot(form1.getFieldsValue(true))}>
+                            onValuesChange={() => computeMerkleRoot(form1.getFieldsValue(true), 0)}>
                             <Form.List name="donors">
                                 {(fields, { add, remove }) => {
                                     return (
