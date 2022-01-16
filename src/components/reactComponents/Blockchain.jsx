@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Form, Input, Timeline, Card, Button, Space, Collapse, message } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
@@ -9,11 +9,23 @@ const genInt = max => {
     return Math.floor(Math.random() * max) + 1;
 }
 
+const findNonce = async (rawString, difficulty, nonce) => {
+
+    const SHA256 = require('crypto-js/sha256');
+    let str = rawString + nonce;
+    let hashString = SHA256(str).toString();
+
+    if (hashString.startsWith('0'.repeat(difficulty))) {
+        console.log(`found a block at ${nonce}: hash ${hashString}`);
+        return hashString;
+    }
+}
+
 const Blockchain = () => {
     const [form1] = Form.useForm();
 
     const [merkleRoots, setMerkleRoots] = useState({
-        0: '09BA769D82940D3AB2AFFB184AEB9767',
+        0: '',
         1: '',
         2: '',
     })
@@ -24,33 +36,76 @@ const Blockchain = () => {
         2: '',
     })
 
+    const [nonces, setNonces] = useState({
+        0: 0,
+        1: 0,
+        2: 0,
+    });
 
-    const computeMerkleRoot = (values, blockInd) => {
-        const { MerkleTree } = require('merkletreejs');
-        const SHA256 = require('crypto-js/sha256');
-        console.log(values.donors)
-        const leaves = values.donors.map(x => SHA256(`${x.address} +${x.amount}`))
-        const tree = new MerkleTree(leaves, SHA256);
-        const root = tree.getHexRoot()
-        setMerkleRoots({
-            ...merkleRoots,
-            [blockInd]: root
-        })
-        console.log(root)
+    const mining = (blockInd, difficulty) => {
+        const merkleRoot = merkleRoots[blockInd];
+        const hash = hashes[blockInd];
+        const prevHash = blockInd === 0 ? '0' : hashes[blockInd - 1];
+        let nonce = nonces[blockInd];
+        const rawString = `${merkleRoot}${hash}${prevHash}${nonce}`;
+
+        const interval = setInterval(async () => {
+            setHashes(prevHashes => ({
+                ...prevHashes,
+                [blockInd]: 'Computing hash... please be patient.'
+            }))
+            const hash_found = await findNonce(rawString, difficulty, nonce);
+            if (hash_found) {
+                clearInterval(interval);
+                setNonces(prevNonces => ({
+                    ...prevNonces,
+                    [blockInd]: nonce
+                }))
+                setHashes(prevHashes => ({
+                    ...prevHashes,
+                    [blockInd]: hash_found
+                }))
+            }
+            nonce++;
+        }
+            , 1);
+
     }
+
+    const computeMerkleRoot = useCallback(
+        (values, blockInd, difficulty) => {
+            const { MerkleTree } = require('merkletreejs');
+            const SHA256 = require('crypto-js/sha256');
+            console.log(values.donors)
+            const leaves = values.donors.map(x => SHA256(`${x.address} +${x.amount}`))
+            const tree = new MerkleTree(leaves, SHA256);
+            const root = tree.getHexRoot()
+
+            setMerkleRoots({
+                ...merkleRoots,
+                [blockInd]: root
+            })
+            mining(blockInd, difficulty)
+
+        },
+        [merkleRoots]
+    )
 
 
     return (
         <div>
             <Timeline>
                 <Timeline.Item>
-                    <Card title="Genesis Block (Block 0)" extra={<a href="#">Mine ⛏</a>} style={{ width: 600 }}>
+                    <Card title="Genesis Block (Block 0)" extra={<a onClick={() => mining(0, 2)}>Mine ⛏</a>} style={{ width: 600 }}>
                         {/* add fields to add / delete transactions */}
                         <h6>Fundraising Ledger</h6>
                         <Form
                             form={form1}
                             name="fundraising"
-                            onValuesChange={() => computeMerkleRoot(form1.getFieldsValue(true), 0)}>
+                            layout="vertical"
+                            onValuesChange={async () => {
+                                computeMerkleRoot(form1.getFieldsValue(true), 0, 2)
+                            }}>
                             <Form.List name="donors">
                                 {(fields, { add, remove }) => {
                                     return (
@@ -64,7 +119,9 @@ const Blockchain = () => {
                                                     <Form.Item
                                                         {...field}
                                                         name={[name, 'address']}
+                                                        label="Wallet Address"
                                                         fieldKey={[fieldKey, 'address']}
+                                                        style={{ width: '300px' }}
                                                         rules={[{ required: true, message: 'Please input wallet address of donor' }]}
                                                     >
                                                         <Input placeholder="Address" />
@@ -72,6 +129,7 @@ const Blockchain = () => {
                                                     <Form.Item
                                                         {...field}
                                                         name={[name, 'amount']}
+                                                        label="Donation $"
                                                         fieldKey={[fieldKey, 'amount']}
                                                         rules={[{ required: true, message: 'Please input donation amount' }]}
                                                     >
@@ -87,7 +145,7 @@ const Blockchain = () => {
                                                     block
                                                     icon={<PlusOutlined />}
                                                 >
-                                                    Add field
+                                                    Add Donation Record
                                                 </Button>
                                             </Form.Item>
                                         </div>
@@ -107,7 +165,7 @@ const Blockchain = () => {
                         <h6>Previous Block Header</h6>
                         <p>00000000000000000000000000000000</p>
                         <h6>Nonce</h6>
-                        <p>0</p>
+                        <p>{nonces[0]}</p>
                         <h6>Hash</h6>
                         <p style={{ color: 'green', fontWeight: 600 }}>
                             {hashes[0]}
@@ -115,7 +173,7 @@ const Blockchain = () => {
                     </Card>
                 </Timeline.Item>
                 <Timeline.Item>
-                    <Card title="Block 1" extra={<a href="#">Mine ⛏ </a>} style={{ width: 600 }}>
+                    <Card title="Block 1" extra={<a href="#">Mine ⛏ </a>} style={{ width: 640 }}>
                         <h6>Version (4 bytes)</h6>
                         <p>04000000</p>
                         <h6>Merkle Root Hash (32 bytes)</h6>
@@ -140,7 +198,7 @@ const Blockchain = () => {
                         <h6>Unix Epoch Time</h6>
                         <p>61E14BD6</p>
                         <h6>Difficulty</h6>
-                        <p>5</p>
+                        <p>4</p>
                         <h6>Previous Block Header</h6>
                         <p>00000000000000000000000000000000</p>
                         <h6>Nonce</h6>
