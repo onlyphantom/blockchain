@@ -74,6 +74,10 @@ const customStyles = css`
         font-size: 2.5em;
     }
 
+    .ant-card-head {
+        background: #263545;
+        color: white;
+    }
 
     // non-antd styles
     // ...

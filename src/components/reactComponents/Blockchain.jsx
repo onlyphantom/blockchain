@@ -9,6 +9,10 @@ const genInt = max => {
     return Math.floor(Math.random() * max) + 1;
 }
 
+const genUnixEpoch = () => {
+    return Math.floor(Date.now() / 1000).toString(16)
+}
+
 const findNonce = async (rawString, difficulty, nonce) => {
 
     const SHA256 = require('crypto-js/sha256');
@@ -26,10 +30,11 @@ const Blockchain = () => {
 
     const [state, setState] = useState({
         0: {
-            hash: '',
+            hash: 'Hit the Mine ⛏ button or Add a Donation 💰',
             nonce: 0,
-            merkleRoot: '',
-            isMining: false
+            merkleRoot: 'Add a Donation 💰',
+            isMining: false,
+            epoch: genUnixEpoch()
         },
         1: {
             hash: '',
@@ -45,11 +50,15 @@ const Blockchain = () => {
         },
     })
 
+    useEffect(() => {
+
+    }, [])
+
     const mining = (blockInd, difficulty) => {
         const merkleRoot = state[blockInd].merkleRoot;
         const prevHash = blockInd === 0 ? '000' : state[blockInd - 1].hash;
         let nonce = state[blockInd].nonce;
-        const rawString = `${merkleRoot}${prevHash}${nonce}`;
+        const rawString = `${merkleRoot}${prevHash}${nonce}${state[blockInd].epoch}`;
 
         const interval = setInterval(async () => {
             setState(prevState => ({
@@ -111,14 +120,14 @@ const Blockchain = () => {
                     <Card title="Genesis Block (Block 0)"
                         extra={
                             <Button
+                                type="primary"
                                 loading={state[0].isMining}
                                 onClick={() => mining(0, 2)}
+                                style={{ fontWeight: 600 }}
                             >
-                                <span style={{ 'marginRight': 10 }}>Mine</span>  ⛏
+                                <span style={{ 'marginRight': 10 }}>Mine</span> ⛏
                             </Button>
-                            // <a onClick={() => mining(0, 2)}>Mine ⛏</a>} style={{ width: 640 }
                         }>
-                        {/* add fields to add / delete transactions */}
                         <h6>Fundraising Ledger</h6>
                         <Form
                             form={form1}
@@ -152,23 +161,41 @@ const Blockchain = () => {
                                                         name={[name, 'amount']}
                                                         label="Donation $"
                                                         fieldKey={[fieldKey, 'amount']}
-                                                        rules={[{ required: true, message: 'Please input donation amount' }]}
+                                                        rules={[{ required: true, message: 'Please input 💰 donation amount' }]}
                                                     >
-                                                        <Input placeholder="Donation Amount" />
+                                                        <Input placeholder="Donation Amount 💰" />
                                                     </Form.Item>
                                                     <MinusCircleOutlined onClick={() => remove(name)} />
                                                 </Space>
                                             ))}
-                                            <Form.Item>
-                                                <Button
-                                                    type="dashed"
-                                                    onClick={() => add({ address: genHex(32), amount: genInt(100) })}
-                                                    block
-                                                    icon={<PlusOutlined />}
-                                                >
-                                                    Add Donation Record
-                                                </Button>
-                                            </Form.Item>
+
+                                            {
+                                                state[0].isMining ?
+                                                    <div>
+                                                        <h6>Mining... ⛏</h6>
+                                                        <p>Please be patient. This may take a while.</p>
+                                                    </div>
+                                                    : <Form.Item>
+                                                        <Button
+                                                            type="dashed"
+                                                            onClick={() => {
+                                                                add({ address: genHex(32), amount: genInt(100) })
+                                                                setState(prevState => ({
+                                                                    ...prevState,
+                                                                    0: {
+                                                                        ...prevState[0],
+                                                                        epoch: genUnixEpoch()
+                                                                    }
+                                                                }))
+                                                            }}
+                                                            block
+                                                            icon={<PlusOutlined />}
+                                                        >
+                                                            Add Donation Record 💰
+                                                        </Button>
+                                                    </Form.Item>
+                                            }
+
                                         </div>
                                     );
                                 }}
@@ -180,15 +207,19 @@ const Blockchain = () => {
                         <h6>Merkle Root Hash (32 bytes)</h6>
                         <p>{state[0].merkleRoot}</p>
                         <h6>Unix Epoch Time</h6>
-                        <p>61DFE50E</p>
+                        <p>{state[0].epoch}</p>
                         <h6>Difficulty</h6>
                         <p>2</p>
                         <h6>Previous Block Header</h6>
                         <p>0000000000000000000000000000000000000000000000000000000000000000</p>
                         <h6>Nonce</h6>
-                        <p>{state[0].nonce}</p>
+                        {
+                            state[0].isMining ?
+                                <p>Finding nonce...</p>
+                                : <p>{state[0].nonce}</p>
+                        }
                         <h6>Hash</h6>
-                        <p style={{ color: 'green', fontWeight: 600 }}>
+                        <p style={{ color: '#263545', fontWeight: 600 }}>
                             {state[0].hash}
                         </p>
                     </Card>
