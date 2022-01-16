@@ -56,7 +56,8 @@ const Blockchain = () => {
                 ...prevState,
                 [blockInd]: {
                     ...prevState[blockInd],
-                    hash: `${nonce}: Finding the right nonce... please be patient.`
+                    hash: `${nonce}: Finding the right nonce... please be patient.`,
+                    isMining: true
                 }
             }))
 
@@ -68,13 +69,7 @@ const Blockchain = () => {
                     [blockInd]: {
                         ...prevState[blockInd],
                         nonce: nonce,
-                    }
-                }))
-
-                setState(prevState => ({
-                    ...prevState,
-                    [blockInd]: {
-                        ...prevState[blockInd],
+                        isMining: false,
                         hash: hash_found
                     }
                 }))
@@ -116,7 +111,7 @@ const Blockchain = () => {
                     <Card title="Genesis Block (Block 0)"
                         extra={
                             <Button
-                                loading={false}
+                                loading={state[0].isMining}
                                 onClick={() => mining(0, 2)}
                             >
                                 <span style={{ 'marginRight': 10 }}>Mine</span>  ⛏
