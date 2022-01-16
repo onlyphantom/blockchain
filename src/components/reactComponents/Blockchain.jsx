@@ -24,46 +24,59 @@ const findNonce = async (rawString, difficulty, nonce) => {
 const Blockchain = () => {
     const [form1] = Form.useForm();
 
-    const [merkleRoots, setMerkleRoots] = useState({
-        0: '',
-        1: '',
-        2: '',
+    const [state, setState] = useState({
+        0: {
+            hash: '',
+            nonce: 0,
+            merkleRoot: '',
+            isMining: false
+        },
+        1: {
+            hash: '',
+            nonce: 0,
+            merkleRoot: '',
+            isMining: false
+        },
+        2: {
+            hash: '',
+            nonce: 0,
+            merkleRoot: '',
+            isMining: false
+        },
     })
-
-    const [hashes, setHashes] = useState({
-        0: '',
-        1: '',
-        2: '',
-    })
-
-    const [nonces, setNonces] = useState({
-        0: 0,
-        1: 0,
-        2: 0,
-    });
 
     const mining = (blockInd, difficulty) => {
-        const merkleRoot = merkleRoots[blockInd];
-        const hash = hashes[blockInd];
-        const prevHash = blockInd === 0 ? '0' : hashes[blockInd - 1];
-        let nonce = nonces[blockInd];
-        const rawString = `${merkleRoot}${hash}${prevHash}${nonce}`;
+        const merkleRoot = state[blockInd].merkleRoot;
+        const prevHash = blockInd === 0 ? '000' : state[blockInd - 1].hash;
+        let nonce = state[blockInd].nonce;
+        const rawString = `${merkleRoot}${prevHash}${nonce}`;
 
         const interval = setInterval(async () => {
-            setHashes(prevHashes => ({
-                ...prevHashes,
-                [blockInd]: 'Computing hash... please be patient.'
+            setState(prevState => ({
+                ...prevState,
+                [blockInd]: {
+                    ...prevState[blockInd],
+                    hash: `${nonce}: Finding the right nonce... please be patient.`
+                }
             }))
+
             const hash_found = await findNonce(rawString, difficulty, nonce);
             if (hash_found) {
                 clearInterval(interval);
-                setNonces(prevNonces => ({
-                    ...prevNonces,
-                    [blockInd]: nonce
+                setState(prevState => ({
+                    ...prevState,
+                    [blockInd]: {
+                        ...prevState[blockInd],
+                        nonce: nonce,
+                    }
                 }))
-                setHashes(prevHashes => ({
-                    ...prevHashes,
-                    [blockInd]: hash_found
+
+                setState(prevState => ({
+                    ...prevState,
+                    [blockInd]: {
+                        ...prevState[blockInd],
+                        hash: hash_found
+                    }
                 }))
             }
             nonce++;
@@ -81,14 +94,18 @@ const Blockchain = () => {
             const tree = new MerkleTree(leaves, SHA256);
             const root = tree.getHexRoot()
 
-            setMerkleRoots({
-                ...merkleRoots,
-                [blockInd]: root
-            })
+            setState(prevState => ({
+                ...prevState,
+                [blockInd]: {
+                    ...prevState[blockInd],
+                    merkleRoot: root
+                }
+            }))
+
             mining(blockInd, difficulty)
 
         },
-        [merkleRoots]
+        [state]
     )
 
 
@@ -96,7 +113,16 @@ const Blockchain = () => {
         <div>
             <Timeline>
                 <Timeline.Item>
-                    <Card title="Genesis Block (Block 0)" extra={<a onClick={() => mining(0, 2)}>Mine ⛏</a>} style={{ width: 600 }}>
+                    <Card title="Genesis Block (Block 0)"
+                        extra={
+                            <Button
+                                loading={false}
+                                onClick={() => mining(0, 2)}
+                            >
+                                <span style={{ 'marginRight': 10 }}>Mine</span>  ⛏
+                            </Button>
+                            // <a onClick={() => mining(0, 2)}>Mine ⛏</a>} style={{ width: 640 }
+                        }>
                         {/* add fields to add / delete transactions */}
                         <h6>Fundraising Ledger</h6>
                         <Form
@@ -157,23 +183,23 @@ const Blockchain = () => {
                         <h6>Version (4 bytes)</h6>
                         <p>04000000</p>
                         <h6>Merkle Root Hash (32 bytes)</h6>
-                        <p>{merkleRoots[0]}</p>
+                        <p>{state[0].merkleRoot}</p>
                         <h6>Unix Epoch Time</h6>
                         <p>61DFE50E</p>
                         <h6>Difficulty</h6>
                         <p>2</p>
                         <h6>Previous Block Header</h6>
-                        <p>00000000000000000000000000000000</p>
+                        <p>0000000000000000000000000000000000000000000000000000000000000000</p>
                         <h6>Nonce</h6>
-                        <p>{nonces[0]}</p>
+                        <p>{state[0].nonce}</p>
                         <h6>Hash</h6>
                         <p style={{ color: 'green', fontWeight: 600 }}>
-                            {hashes[0]}
+                            {state[0].hash}
                         </p>
                     </Card>
                 </Timeline.Item>
                 <Timeline.Item>
-                    <Card title="Block 1" extra={<a href="#">Mine ⛏ </a>} style={{ width: 640 }}>
+                    <Card title="Block 1" extra={<a href="#">Mine ⛏ </a>}>
                         <h6>Version (4 bytes)</h6>
                         <p>04000000</p>
                         <h6>Merkle Root Hash (32 bytes)</h6>
@@ -190,7 +216,7 @@ const Blockchain = () => {
                         <p style={{ color: 'green', fontWeight: 600 }}>00BA769D82940D3AB2AFFB184AEB9767</p>
                     </Card></Timeline.Item>
                 <Timeline.Item>
-                    <Card title="Block 2" extra={<a href="#">Mine ⛏</a>} style={{ width: 600 }}>
+                    <Card title="Block 2" extra={<a href="#">Mine ⛏</a>}>
                         <h6>Version (4 bytes)</h6>
                         <p>04000000</p>
                         <h6>Merkle Root Hash (32 bytes)</h6>
