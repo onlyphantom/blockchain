@@ -417,7 +417,23 @@ For completeness and reproducibility, you can generate 16 random hexadecimal cha
 hexdump -n 16 -e '4/4 "%08X" 1 "\n"' /dev/urandom
 ```
 
-You can also generate Unix Epoch time using common built-in tools:
+If you find the Unix epoch time representation in the above blockchain confusing,
+try experimenting with it in the following code snippet:
+```javascript react-live=true
+// Date.now() method returns the number of milliseconds elapsed 
+// since January 1, 1970 00:00:00 UTC
+// Epoch is the number of seconds elapsed: hence divide by 1000
+const genUnixEpoch = () => {
+    return Math.floor(Date.now() / 1000)
+}
+
+render(<>
+  <h3>Decimal: {genUnixEpoch()}</h3>
+  <h3>Hexadecimal: {genUnixEpoch().toString(16)}</h3>
+</>)
+```
+
+You can also generate Unix Epoch time using common built-in tools on your machine:
 ```bash
 date +%s
 # returns decimal Unix Epoch time
