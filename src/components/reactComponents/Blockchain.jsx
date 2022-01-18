@@ -25,8 +25,18 @@ const findNonce = async (rawString, difficulty, nonce) => {
     }
 }
 
+let initValues = {
+    hash: 'Hit the Mine ⛏ button or Add a Donation 💰',
+    nonce: 0,
+    merkleRoot: 'Add a Donation 💰',
+    isMining: false,
+    epoch: genUnixEpoch()
+}
+
 const Blockchain = () => {
     const [form1] = Form.useForm();
+    const [form2] = Form.useForm();
+    const [form3] = Form.useForm();
 
     const [state, setState] = useState({
         0: {
@@ -37,22 +47,20 @@ const Blockchain = () => {
             epoch: genUnixEpoch()
         },
         1: {
-            hash: '',
-            nonce: 0,
-            merkleRoot: '',
-            isMining: false
+            ...initValues
         },
         2: {
-            hash: '',
-            nonce: 0,
-            merkleRoot: '',
-            isMining: false
+            ...initValues
         },
     })
 
+    // hook runs whenever state[0] is updated
     useEffect(() => {
-
-    }, [])
+        if (!state[0].isMining) {
+            console.log("state[0] updated. Re-mining...");
+            mining(1, 3)
+        }
+    }, [state[0]])
 
     const mining = (blockInd, difficulty) => {
         const merkleRoot = state[blockInd].merkleRoot;
@@ -225,21 +233,36 @@ const Blockchain = () => {
                     </Card>
                 </Timeline.Item>
                 <Timeline.Item>
-                    <Card title="Block 1" extra={<a href="#">Mine ⛏ </a>}>
+                    <Card title="Block 1" extra={
+                        <Button
+                            type="primary"
+                            loading={state[1].isMining}
+                            onClick={() => mining(1, 3)}
+                            style={{ fontWeight: 600 }}
+                        >
+                            <span style={{ 'marginRight': 10 }}>Mine</span> ⛏
+                        </Button>
+                    }>
                         <h6>Version (4 bytes)</h6>
                         <p>04000000</p>
                         <h6>Merkle Root Hash (32 bytes)</h6>
-                        <p>61B2EF617C97A3B87533FEC5CEE5327D</p>
+                        <p>{state[1].merkleRoot}</p>
                         <h6>Unix Epoch Time</h6>
-                        <p>61DFE69F</p>
+                        <p>{state[1].epoch}</p>
                         <h6>Difficulty</h6>
                         <p>3</p>
                         <h6>Previous Block Header</h6>
-                        <p>00000000000000000000000000000000</p>
+                        <p>{state[1 - 1].hash}</p>
                         <h6>Nonce</h6>
-                        <p>0</p>
+                        {
+                            state[1].isMining ?
+                                <p>Finding nonce...</p>
+                                : <p>{state[1].nonce}</p>
+                        }
                         <h6>Hash</h6>
-                        <p style={{ color: 'green', fontWeight: 600 }}>00BA769D82940D3AB2AFFB184AEB9767</p>
+                        <p style={{ color: '#263545', fontWeight: 600 }}>
+                            {state[1].hash}
+                        </p>
                     </Card></Timeline.Item>
                 <Timeline.Item>
                     <Card title="Block 2" extra={<a href="#">Mine ⛏</a>}>
