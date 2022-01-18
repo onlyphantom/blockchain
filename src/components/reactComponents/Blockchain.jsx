@@ -26,25 +26,24 @@ const findNonce = async (rawString, difficulty, nonce) => {
 }
 
 let initValues = {
-    hash: 'Hit the Mine ⛏ button or Add a Donation 💰',
+    hash: 'Hit the Mine ⛏ button or Add a Donation 💰.',
     nonce: 0,
     merkleRoot: 'Add a Donation 💰',
     isMining: false,
     epoch: genUnixEpoch()
 }
 
+const blockDifficulty = [2, 3, 4]
+
 const Blockchain = () => {
     const [form1] = Form.useForm();
     const [form2] = Form.useForm();
     const [form3] = Form.useForm();
+    const forms = [form1, form2, form3];
 
     const [state, setState] = useState({
         0: {
-            hash: 'Hit the Mine ⛏ button or Add a Donation 💰',
-            nonce: 0,
-            merkleRoot: 'Add a Donation 💰',
-            isMining: false,
-            epoch: genUnixEpoch()
+            ...initValues
         },
         1: {
             ...initValues
@@ -56,11 +55,18 @@ const Blockchain = () => {
 
     // hook runs whenever state[0] is updated
     useEffect(() => {
-        if (!state[0].isMining) {
+        if (!state[0].isMining && state[0].hash.slice(-1) !== '.') {
             console.log("state[0] updated. Re-mining...");
             mining(1, 3)
         }
-    }, [state[0]])
+    }, [state[0].hash])
+
+    useEffect(() => {
+        if (!state[1].isMining && state[1].hash.slice(-1) !== '.') {
+            console.log("state[1] updated. Re-mining...");
+            mining(2, 4)
+        }
+    }, [state[1].hash])
 
     const mining = (blockInd, difficulty) => {
         const merkleRoot = state[blockInd].merkleRoot;
@@ -124,164 +130,119 @@ const Blockchain = () => {
     return (
         <div>
             <Timeline>
-                <Timeline.Item>
-                    <Card title="Genesis Block (Block 0)"
-                        extra={
-                            <Button
-                                type="primary"
-                                loading={state[0].isMining}
-                                onClick={() => mining(0, 2)}
-                                style={{ fontWeight: 600 }}
+                {
+                    blockDifficulty.map((difficulty, ind) => {
+                        return <Timeline.Item>
+                            <Card
+                                title={ind === 0 ? "Genesis Block (Block 0)" : `Block ${ind}`}
+                                extra={
+                                    <Button
+                                        type="primary"
+                                        loading={state[ind].isMining}
+                                        onClick={() => mining(ind, difficulty)}
+                                        style={{ fontWeight: 600 }}
+                                    >
+                                        <span style={{ 'marginRight': 10 }}>Mine</span> ⛏
+                                    </Button>
+                                }
                             >
-                                <span style={{ 'marginRight': 10 }}>Mine</span> ⛏
-                            </Button>
-                        }>
-                        <h6>Fundraising Ledger</h6>
-                        <Form
-                            form={form1}
-                            name="fundraising"
-                            layout="vertical"
-                            onValuesChange={async () => {
-                                computeMerkleRoot(form1.getFieldsValue(true), 0, 2)
-                            }}>
-                            <Form.List name="donors">
-                                {(fields, { add, remove }) => {
-                                    return (
-                                        <div>
-                                            {fields.map(({ key, name, fieldKey, ...field }) => (
-                                                <Space
-                                                    key={key}
-                                                    style={{ display: 'flex', marginBottom: 8 }}
-                                                    align="baseline"
-                                                >
-                                                    <Form.Item
-                                                        {...field}
-                                                        name={[name, 'address']}
-                                                        label="Wallet Address"
-                                                        fieldKey={[fieldKey, 'address']}
-                                                        style={{ width: '300px' }}
-                                                        rules={[{ required: true, message: 'Please input wallet address of donor' }]}
-                                                    >
-                                                        <Input placeholder="Address" />
-                                                    </Form.Item>
-                                                    <Form.Item
-                                                        {...field}
-                                                        name={[name, 'amount']}
-                                                        label="Donation $"
-                                                        fieldKey={[fieldKey, 'amount']}
-                                                        rules={[{ required: true, message: 'Please input 💰 donation amount' }]}
-                                                    >
-                                                        <Input placeholder="Donation Amount 💰" />
-                                                    </Form.Item>
-                                                    <MinusCircleOutlined onClick={() => remove(name)} />
-                                                </Space>
-                                            ))}
-
-                                            {
-                                                state[0].isMining ?
-                                                    <div>
-                                                        <h6>Mining... ⛏</h6>
-                                                        <p>Please be patient. This may take a while.</p>
-                                                    </div>
-                                                    : <Form.Item>
-                                                        <Button
-                                                            type="dashed"
-                                                            onClick={() => {
-                                                                add({ address: genHex(32), amount: genInt(100) })
-                                                                setState(prevState => ({
-                                                                    ...prevState,
-                                                                    0: {
-                                                                        ...prevState[0],
-                                                                        epoch: genUnixEpoch()
-                                                                    }
-                                                                }))
-                                                            }}
-                                                            block
-                                                            icon={<PlusOutlined />}
+                                <h6>Fundraising Ledger</h6>
+                                <Form
+                                    form={forms[ind]}
+                                    name="fundraising"
+                                    layout="vertical"
+                                    onValuesChange={async () => {
+                                        computeMerkleRoot(forms[ind].getFieldsValue(true), ind, difficulty)
+                                    }}>
+                                    <Form.List name="donors">
+                                        {(fields, { add, remove }) => {
+                                            return (
+                                                <div>
+                                                    {fields.map(({ key, name, fieldKey, ...field }) => (
+                                                        <Space
+                                                            key={key}
+                                                            style={{ display: 'flex', marginBottom: 8 }}
+                                                            align="baseline"
                                                         >
-                                                            Add Donation Record 💰
-                                                        </Button>
-                                                    </Form.Item>
-                                            }
+                                                            <Form.Item
+                                                                {...field}
+                                                                name={[name, 'address']}
+                                                                label="Wallet Address"
+                                                                fieldKey={[fieldKey, 'address']}
+                                                                style={{ width: '300px' }}
+                                                                rules={[{ required: true, message: 'Please input wallet address of donor' }]}
+                                                            >
+                                                                <Input placeholder="Address" />
+                                                            </Form.Item>
+                                                            <Form.Item
+                                                                {...field}
+                                                                name={[name, 'amount']}
+                                                                label="Donation $"
+                                                                fieldKey={[fieldKey, 'amount']}
+                                                                rules={[{ required: true, message: 'Please input 💰 donation amount' }]}
+                                                            >
+                                                                <Input placeholder="Donation Amount 💰" />
+                                                            </Form.Item>
+                                                            <MinusCircleOutlined onClick={() => remove(name)} />
+                                                        </Space>
+                                                    ))}
 
-                                        </div>
-                                    );
-                                }}
-                            </Form.List>
-                        </Form>
+                                                    {
+                                                        state[ind].isMining ?
+                                                            <div>
+                                                                <h6>Mining... ⛏</h6>
+                                                                <p>Please be patient. This may take a while.</p>
+                                                            </div>
+                                                            : <Form.Item>
+                                                                <Button
+                                                                    type="dashed"
+                                                                    onClick={() => {
+                                                                        add({ address: genHex(32), amount: genInt(100) })
+                                                                        setState(prevState => ({
+                                                                            ...prevState,
+                                                                            0: {
+                                                                                ...prevState[0],
+                                                                                epoch: genUnixEpoch()
+                                                                            }
+                                                                        }))
+                                                                    }}
+                                                                    block
+                                                                    icon={<PlusOutlined />}
+                                                                >
+                                                                    Add Donation Record 💰
+                                                                </Button>
+                                                            </Form.Item>
+                                                    }
+                                                </div>
+                                            );
+                                        }}
+                                    </Form.List>
+                                </Form>
+                                <h6>Version (4 bytes)</h6>
+                                <p>04000000</p>
+                                <h6>Merkle Root Hash (32 bytes)</h6>
+                                <p>{state[ind].merkleRoot}</p>
+                                <h6>Unix Epoch Time</h6>
+                                <p>{state[ind].epoch}</p>
+                                <h6>Difficulty</h6>
+                                <p>{difficulty}</p>
+                                <h6>Previous Block Header</h6>
+                                <p>{ind === 0 ? '0000000000000000000000000000000000000000000000000000000000000000' : state[ind - 1].hash}</p>
+                                <h6>Nonce</h6>
+                                {
+                                    state[ind].isMining ?
+                                        <p>Finding nonce...</p>
+                                        : <p>{state[ind].nonce}</p>
+                                }
+                                <h6>Hash</h6>
+                                <p style={{ color: '#263545', fontWeight: 600 }}>
+                                    {state[ind].hash}
+                                </p>
+                            </Card>
+                        </Timeline.Item>
+                    })
+                }
 
-                        <h6>Version (4 bytes)</h6>
-                        <p>04000000</p>
-                        <h6>Merkle Root Hash (32 bytes)</h6>
-                        <p>{state[0].merkleRoot}</p>
-                        <h6>Unix Epoch Time</h6>
-                        <p>{state[0].epoch}</p>
-                        <h6>Difficulty</h6>
-                        <p>2</p>
-                        <h6>Previous Block Header</h6>
-                        <p>0000000000000000000000000000000000000000000000000000000000000000</p>
-                        <h6>Nonce</h6>
-                        {
-                            state[0].isMining ?
-                                <p>Finding nonce...</p>
-                                : <p>{state[0].nonce}</p>
-                        }
-                        <h6>Hash</h6>
-                        <p style={{ color: '#263545', fontWeight: 600 }}>
-                            {state[0].hash}
-                        </p>
-                    </Card>
-                </Timeline.Item>
-                <Timeline.Item>
-                    <Card title="Block 1" extra={
-                        <Button
-                            type="primary"
-                            loading={state[1].isMining}
-                            onClick={() => mining(1, 3)}
-                            style={{ fontWeight: 600 }}
-                        >
-                            <span style={{ 'marginRight': 10 }}>Mine</span> ⛏
-                        </Button>
-                    }>
-                        <h6>Version (4 bytes)</h6>
-                        <p>04000000</p>
-                        <h6>Merkle Root Hash (32 bytes)</h6>
-                        <p>{state[1].merkleRoot}</p>
-                        <h6>Unix Epoch Time</h6>
-                        <p>{state[1].epoch}</p>
-                        <h6>Difficulty</h6>
-                        <p>3</p>
-                        <h6>Previous Block Header</h6>
-                        <p>{state[1 - 1].hash}</p>
-                        <h6>Nonce</h6>
-                        {
-                            state[1].isMining ?
-                                <p>Finding nonce...</p>
-                                : <p>{state[1].nonce}</p>
-                        }
-                        <h6>Hash</h6>
-                        <p style={{ color: '#263545', fontWeight: 600 }}>
-                            {state[1].hash}
-                        </p>
-                    </Card></Timeline.Item>
-                <Timeline.Item>
-                    <Card title="Block 2" extra={<a href="#">Mine ⛏</a>}>
-                        <h6>Version (4 bytes)</h6>
-                        <p>04000000</p>
-                        <h6>Merkle Root Hash (32 bytes)</h6>
-                        <p>D0A852DFA0AA3B88B32A67397FE141EA</p>
-                        <h6>Unix Epoch Time</h6>
-                        <p>61E14BD6</p>
-                        <h6>Difficulty</h6>
-                        <p>4</p>
-                        <h6>Previous Block Header</h6>
-                        <p>00000000000000000000000000000000</p>
-                        <h6>Nonce</h6>
-                        <p>0</p>
-                        <h6>Hash</h6>
-                        <p style={{ color: 'green', fontWeight: 600 }}>00BA769D82940D3AB2AFFB184AEB9767</p>
-                    </Card>
-                </Timeline.Item>
             </Timeline>
 
             <p>
