@@ -91,6 +91,32 @@ const customStyles = css`
         padding: 0.8rem 0.5rem;
     }
 
+    .loadingGradient {
+        background: rgb(59,119,137);
+        background: linear-gradient(90deg, rgba(59,119,137,1) 0%, rgba(226,143,56,1) 100%);
+        background: linear-gradient(
+            -45deg
+            , #ee7752, #e73c7e, #23a6d5, #23d5ab);
+                color: white;
+                animation: gradient 5s ease infinite;
+                background-size: 400% 400%;
+    }
+
+    .loadingGradient h6 {
+        color: black;
+    }
+
+    @keyframes gradient {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
 
 
 

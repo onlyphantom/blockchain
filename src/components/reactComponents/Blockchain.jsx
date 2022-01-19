@@ -138,13 +138,14 @@ const Blockchain = () => {
                                 extra={
                                     <Button
                                         type="primary"
-                                        loading={state[ind].isMining}
+                                        loading={Object.values(state).some(x => x.isMining)}
                                         onClick={() => mining(ind, difficulty)}
                                         style={{ fontWeight: 600 }}
                                     >
                                         <span style={{ 'marginRight': 10 }}>Mine</span> ⛏
                                     </Button>
                                 }
+                                className={state[ind].isMining ? 'loadingGradient' : ''}
                             >
                                 <h6>Fundraising Ledger</h6>
                                 <Form
@@ -183,7 +184,10 @@ const Blockchain = () => {
                                                             >
                                                                 <Input placeholder="Donation Amount 💰" />
                                                             </Form.Item>
-                                                            <MinusCircleOutlined onClick={() => remove(name)} />
+                                                            {
+                                                                !Object.values(state).some(x => x.isMining) &&
+                                                                <MinusCircleOutlined onClick={() => remove(name)} />
+                                                            }
                                                         </Space>
                                                     ))}
 
@@ -193,25 +197,27 @@ const Blockchain = () => {
                                                                 <h6>Mining... ⛏</h6>
                                                                 <p>Please be patient. This may take a while.</p>
                                                             </div>
-                                                            : <Form.Item>
-                                                                <Button
-                                                                    type="dashed"
-                                                                    onClick={() => {
-                                                                        add({ address: genHex(32), amount: genInt(100) })
-                                                                        setState(prevState => ({
-                                                                            ...prevState,
-                                                                            0: {
-                                                                                ...prevState[0],
-                                                                                epoch: genUnixEpoch()
-                                                                            }
-                                                                        }))
-                                                                    }}
-                                                                    block
-                                                                    icon={<PlusOutlined />}
-                                                                >
-                                                                    Add Donation Record 💰
-                                                                </Button>
-                                                            </Form.Item>
+                                                            : Object.values(state).some(x => x.isMining)
+                                                                ? "Please wait for other blocks to complete mining."
+                                                                : <Form.Item>
+                                                                    <Button
+                                                                        type="dashed"
+                                                                        onClick={() => {
+                                                                            add({ address: genHex(32), amount: genInt(100) })
+                                                                            setState(prevState => ({
+                                                                                ...prevState,
+                                                                                0: {
+                                                                                    ...prevState[0],
+                                                                                    epoch: genUnixEpoch()
+                                                                                }
+                                                                            }))
+                                                                        }}
+                                                                        block
+                                                                        icon={<PlusOutlined />}
+                                                                    >
+                                                                        Add Donation Record 💰
+                                                                    </Button>
+                                                                </Form.Item>
                                                     }
                                                 </div>
                                             );
@@ -248,7 +254,9 @@ const Blockchain = () => {
             <p>
                 A small disclaimer here is that I've simplied the Difficulty representation to a single integer, but
                 in the original Bitcoin protocol, this is a 32-bit unsigned integer. Read more of this in the previous
-                section discussing the difficulty (<code>nBits</code>) field.
+                section discussing the difficulty (<code>nBits</code>) field. The equivalent of the current difficulty level
+                would be closer to finding a nonce that yields a hash with 17-20 leading zeroes where in this example we used
+                4 leading zeroes to reduce the computational resources required.
             </p>
         </div>
     )
