@@ -412,6 +412,16 @@ Bitcoin, having been released in 2009, uses SHA256, which is a much more secure 
 
 <Blockchain />
 
+A small disclaimer here is that I've simplied the Difficulty representation to a single integer, but
+in the original Bitcoin protocol, this is a 32-bit unsigned integer. When we adjust the difficulty from 
+120 (decimal) to 60 (decimal), we operate on the binary level, which is to say we narrow down the 
+qualifying range of values from 0111 1000 (120) to 0011 1100 (60). You can read more of this in the 
+previous section discussing the difficulty (`nBits`) field. 
+
+The equivalent of the current difficulty level of Bitcoin mining would be closer to finding a nonce 
+that yields a hash with 17-20 leading zeroes where in this example we only used 4 leading zeroes to reduce 
+the computational resources required.
+
 For completeness and reproducibility, you can generate 16 random hexadecimal characters using the following command:
 ```bash
 hexdump -n 16 -e '4/4 "%08X" 1 "\n"' /dev/urandom

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Form, Input, Timeline, Card, Button, Space, Collapse, message } from 'antd';
+import { Form, Input, Timeline, Card, Button, Space, Rate, Divider } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 
@@ -13,7 +13,7 @@ const genUnixEpoch = () => {
     return Math.floor(Date.now() / 1000).toString(16)
 }
 
-const findNonce = async (rawString, difficulty, nonce) => {
+let findNonce = async (rawString, difficulty, nonce) => {
 
     const SHA256 = require('crypto-js/sha256');
     let str = rawString + nonce;
@@ -33,8 +33,6 @@ let initValues = {
     epoch: genUnixEpoch()
 }
 
-const blockDifficulty = [2, 3, 4]
-
 const Blockchain = () => {
     const [form1] = Form.useForm();
     const [form2] = Form.useForm();
@@ -53,26 +51,33 @@ const Blockchain = () => {
         },
     })
 
-    // hook runs whenever state[0] is updated
+    const [blockDifficulty, setBlockDifficulty] = useState({
+        0: 2,
+        1: 3,
+        2: 4,
+    });
+
     useEffect(() => {
         if (!state[0].isMining && state[0].hash.slice(-1) !== '.') {
             console.log("state[0] updated. Re-mining...");
-            mining(1, 3)
+            mining(1)
         }
     }, [state[0].hash])
 
     useEffect(() => {
         if (!state[1].isMining && state[1].hash.slice(-1) !== '.') {
             console.log("state[1] updated. Re-mining...");
-            mining(2, 4)
+            mining(2)
         }
     }, [state[1].hash])
 
-    const mining = (blockInd, difficulty) => {
+    const mining = (blockInd) => {
         const merkleRoot = state[blockInd].merkleRoot;
-        const prevHash = blockInd === 0 ? '000' : state[blockInd - 1].hash;
+        const prevHash = blockInd === '0' ? '000' : state[blockInd - 1].hash;
         let nonce = state[blockInd].nonce;
         const rawString = `${merkleRoot}${prevHash}${nonce}${state[blockInd].epoch}`;
+
+        const diff = blockDifficulty[blockInd];
 
         const interval = setInterval(async () => {
             setState(prevState => ({
@@ -84,7 +89,7 @@ const Blockchain = () => {
                 }
             }))
 
-            const hash_found = await findNonce(rawString, difficulty, nonce);
+            const hash_found = await findNonce(rawString, diff, nonce);
             if (hash_found) {
                 clearInterval(interval);
                 setState(prevState => ({
@@ -120,7 +125,7 @@ const Blockchain = () => {
                 }
             }))
 
-            mining(blockInd, difficulty)
+            mining(blockInd)
 
         },
         [state]
@@ -129,17 +134,35 @@ const Blockchain = () => {
 
     return (
         <div>
+            <Divider dashed orientation="left">Mining Difficulty</Divider>
+            {
+                Object.entries(blockDifficulty).map(([ind, diff]) =>
+                    <Rate
+                        key={ind}
+                        defaultValue={diff}
+                        character={({ index }) => index + 1}
+                        allowClear={false}
+                        onChange={e =>
+                            // console.log(`Difficulty for ${ind} changed to ${e}. Need to update components.`)
+                            setBlockDifficulty(prev => ({
+                                ...prev,
+                                [ind]: e
+                            }))
+                        } />
+                )
+            }
+            <Divider dashed orientation="left">Fundraising Blockchain</Divider>
             <Timeline>
                 {
-                    blockDifficulty.map((difficulty, ind) => {
-                        return <Timeline.Item>
+                    Object.entries(blockDifficulty).map(([ind, difficulty]) => {
+                        return <Timeline.Item key={ind}>
                             <Card
                                 title={ind === 0 ? "Genesis Block (Block 0)" : `Block ${ind}`}
                                 extra={
                                     <Button
                                         type="primary"
                                         loading={Object.values(state).some(x => x.isMining)}
-                                        onClick={() => mining(ind, difficulty)}
+                                        onClick={() => mining(ind)}
                                         style={{ fontWeight: 600 }}
                                     >
                                         <span style={{ 'marginRight': 10 }}>Mine</span> ⛏
@@ -233,7 +256,7 @@ const Blockchain = () => {
                                 <h6>Difficulty</h6>
                                 <p>{difficulty}</p>
                                 <h6>Previous Block Header</h6>
-                                <p>{ind === 0 ? '0000000000000000000000000000000000000000000000000000000000000000' : state[ind - 1].hash}</p>
+                                <p>{ind === '0' ? '0000000000000000000000000000000000000000000000000000000000000000' : state[ind - 1].hash}</p>
                                 <h6>Nonce</h6>
                                 {
                                     state[ind].isMining ?
@@ -250,14 +273,6 @@ const Blockchain = () => {
                 }
 
             </Timeline>
-
-            <p>
-                A small disclaimer here is that I've simplied the Difficulty representation to a single integer, but
-                in the original Bitcoin protocol, this is a 32-bit unsigned integer. Read more of this in the previous
-                section discussing the difficulty (<code>nBits</code>) field. The equivalent of the current difficulty level
-                would be closer to finding a nonce that yields a hash with 17-20 leading zeroes where in this example we used
-                4 leading zeroes to reduce the computational resources required.
-            </p>
         </div>
     )
 }

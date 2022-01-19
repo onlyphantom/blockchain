@@ -79,6 +79,16 @@ const customStyles = css`
         color: white;
     }
 
+    .ant-rate-star-half .ant-rate-star-first, 
+    .ant-rate-star-full .ant-rate-star-second,
+    ant-rate-star-first, .ant-rate-star-second  {
+        color: #bedcd9;
+    }
+
+    .ant-rate-star-full .ant-rate-star-second {
+        color: #3b7789;
+    }
+
     // non-antd styles
     // ...
     // ...
