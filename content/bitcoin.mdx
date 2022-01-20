@@ -422,11 +422,6 @@ The equivalent of the current difficulty level of Bitcoin mining would be closer
 that yields a hash with 17-20 leading zeroes where in this example we only used 4 leading zeroes to reduce 
 the computational resources required.
 
-For completeness and reproducibility, you can generate 16 random hexadecimal characters using the following command:
-```bash
-hexdump -n 16 -e '4/4 "%08X" 1 "\n"' /dev/urandom
-```
-
 If you find the Unix epoch time representation in the above blockchain confusing,
 try experimenting with it in the following code snippet:
 ```javascript react-live=true
@@ -443,15 +438,19 @@ render(<>
 </>)
 ```
 
-You can also generate Unix Epoch time using common built-in tools on your machine:
+For experimentation purposes, you may also want to generate random hexadecimal characters or 
+Unix Epoch time using common built-in tools on your machine:
 ```bash
-date +%s
 # returns decimal Unix Epoch time
 # example: 1642154966
+date +%s
 
 ## returns hexadecimal Unix Epoch time
 # example: 61e14e6a
 date +%s | xargs printf '%x\n'
+
+# 16 random hexadecimal characters
+hexdump -n 16 -e '4/4 "%08X" 1 "\n"' /dev/urandom
 ```
 
 ## Knowledge Check
