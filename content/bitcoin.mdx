@@ -199,9 +199,9 @@ the miner is incentivized to include more transactions as they receive more mini
 
 On the topic of block rewards, all blocks with a block height less than 
 6,930,000 are entitled to receive a block subsidy of newly created bitcoin 
-value, which also should be spent in the coinbase transaction. 
+value, which is recorded in the coinbase transaction. 
 
-This subsidy started at 50 bitcoins and is being halved every 210,000 blocks — amounting to 
+This reward started at 50 bitcoins and is being halved every 210,000 blocks — amounting to 
 approximately once every four years. As of this writing (January 2022), it's 6.25 bitcoins.
 
 The **block reward** refers to the sum of transaction fees and block subsidy.
@@ -422,6 +422,25 @@ The equivalent of the current difficulty level of Bitcoin mining would be closer
 that yields a hash with 17-20 leading zeroes where in this example we only used 4 leading zeroes to reduce 
 the computational resources required.
 
+As we add new fundraising records to the blockchain, observe that the record is practically immutable as any 
+alterations to the record will nullify the resulting proof-of-work and all subsequent blocks. As a user, one 
+need only to compare the hashes between the obtained and what was broadcasted to the network to have practically 
+full certainty that the records were not altered or tampered with. 
+
+Similarly, the mechanism of allowing two or more peers to directly compare hashes allow the node participants 
+to have practically full certainty that the records were not tampered with, without sequentially scanning 
+every transactions ever recorded in the blockchain. A malicious node may still try to temper with our 
+fundraising ledger, but the actor will now have to:
+- Find the right nonce for the block, and all subsequent blocks
+- Gain 51% of the total network hashrate to be able to validate the block ("51% attack")
+
+As blocks are added ~10 minutes and the network hashrate is ~219 quintillion (18 zeros) hashes per second (as of this writing, block height 719,609), 
+this is a monumental task to be performed by anyone, even with the most powerful machines in the world. Furthermore, this would also mean
+that the attacker will have obtained such enormous computational resources that their mining speed exceed the speed of 
+all the remaining participants combined. Even setting aside the near-impossible feat of acquiring such computational resources, 
+there is still the question of incentives. The participant, if they should exist, would have strong incentives to maintain 
+the longevity of its blockchain, such that the value of the mining rewards would be greater than the value of such maintenance and upkeep.
+
 If you find the Unix epoch time representation in the above blockchain confusing,
 try experimenting with it in the following code snippet:
 ```javascript react-live=true
@@ -460,7 +479,7 @@ hexdump -n 16 -e '4/4 "%08X" 1 "\n"' /dev/urandom
 - [ ] The 256-bit hash of the current block header along with the previous Merkle root
 - [ ] The 256-bit hash of the difficulty target to produce a valid Merkle root
 
-2. Supposed the miner has exhausted all 32 bits of the nonce, what can be done to reset the nonce and try again?
+2. Supposed the miner has exhausted all possible bits of the nonce, what can be done to reset the nonce and try again?
 Pick all that apply.
 - [x] Increment `extraNonce` in the coinbase transaction
 - [x] Increment `nTime` in the block header
@@ -472,8 +491,14 @@ how is this fork resolved?
 - [ ] All transactions from forks are considered orphaned blocks and added to the mempool for inclusion again
 - [ ] Nonce is incremented for every block and the miner will try again with a higher difficulty target, in the
 hopes of resolving a fork
-- [ ] Wait for subsequent blocks to be mined, so one chain becomes longer than the other(s) and the 
+- [x] Wait for subsequent blocks to be mined, so one chain becomes longer than the other(s) and the 
 network abandons the blocks not in the longest chain
+
+4. What is the search space for the nonce?
+- [x] The range of values from 0 to 2^32
+- [ ] The range of values from 0 to 2^64
+- [ ] The range of values from 0 to 2^128
+- [ ] There is no search space, the nonce is incremented indefinitely until a hash that meets the difficulty target is found
 
 ### Practical Exercises
 
