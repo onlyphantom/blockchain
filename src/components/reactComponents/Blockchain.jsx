@@ -85,7 +85,8 @@ const Blockchain = () => {
                 [blockInd]: {
                     ...prevState[blockInd],
                     hash: `${nonce}: Finding the right nonce... please be patient.`,
-                    isMining: true
+                    isMining: true,
+                    epoch: genUnixEpoch()
                 }
             }))
 
@@ -96,9 +97,9 @@ const Blockchain = () => {
                     ...prevState,
                     [blockInd]: {
                         ...prevState[blockInd],
-                        nonce: nonce,
+                        hash: hash_found,
                         isMining: false,
-                        hash: hash_found
+                        nonce: nonce,
                     }
                 }))
             }
@@ -151,6 +152,12 @@ const Blockchain = () => {
                         } />
                 )
             }
+            <p>
+                The default block difficulty of 2,3, and 4 may take a while to mine. <br />
+                If this isn't desired or if you're on a limited computer, you can reduce the difficulty by decrementing the numbers above.
+            </p>
+
+
             <Divider dashed orientation="left">Fundraising Blockchain</Divider>
             <Timeline>
                 {
