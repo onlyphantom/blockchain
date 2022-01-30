@@ -70,7 +70,7 @@ A block header contains the following fields:
 6. Nonce: The number of times a hash is tried before it is accepted.
 
 ### Version
-Upgrades to the Bitcoin protocol are made through a mechanism described in <OutboundLink target="_blank" href='"https://github.com/bitcoin/bips/blob/master/bip-0034.mediawiki'>BIP 34</OutboundLink>. It is proposed
+Upgrades to the Bitcoin protocol are made through a mechanism described in <OutboundLink target="_blank" href='https://github.com/bitcoin/bips/blob/master/bip-0034.mediawiki'>BIP 34</OutboundLink>. It is proposed
 as a mean for the bitcoin network to collectively consents to an upgrade to the protocol, which includes making changes to the block binary structures, rules, behaviors, and other parameters.
 
 <Timeline mode="left">
@@ -410,6 +410,8 @@ Bitcoin, on the other hand, requires more control to keep to a ~10-minute block 
 Finally, it should be noted that the original Hashcash algorithm uses SHA1 because it was first released in 1997 and SHA1 was the standard digest algorithm recommended for use by NIST. 
 Bitcoin, having been released in 2009, uses SHA256, which is a much more secure digest algorithm.
 
+## Blockchain Mental Model 
+
 <Blockchain />
 
 A small disclaimer here is that I've simplied the Difficulty representation to a single integer, but
@@ -472,6 +474,29 @@ date +%s | xargs printf '%x\n'
 hexdump -n 16 -e '4/4 "%08X" 1 "\n"' /dev/urandom
 ```
 
+## Bitcoin Mining Summary
+To further solidify the concepts, I recommend that you use blockchain explorer and look for the latest (most recently mined) blocks. 
+For example, the most recently mined block as of this writing would be <OutboundLink target="_blank" href='https://www.blockchain.com/btc/block/00000000000000000004265bafef34cee54da03d5eca6d95c57faeca6cfdb0c3'>Block 721031</OutboundLink>, mined on January 30, 2022.
+
+The blockchain explorer will prominently display the hash of the block, the block height, the number of transactions in the block, the miner and the block header fields described above. 
+Block 721031 has a block reward of 6.25 BTC, which is easy to understand. 
+
+Since block reward starts at 50 and halves every 210,000 blocks, a simple floor division will yield 3 halvings:
+
+```javascript react-live=true
+// change blockNum to the block number you want to check
+
+let blockNum = 721031
+let reward = 50*1/(2**(Math.floor(blockNum/210000)))
+
+render(<>
+  <h3>Decimal: {reward}</h3>
+</>)
+```
+
+
+
+
 ## Knowledge Check
 1. What is the `hashMerkleRoot` field referring to in Bitcoin mining?
 - [ ] The 256-bit hash of the previous block header 
@@ -501,5 +526,10 @@ network abandons the blocks not in the longest chain
 - [ ] There is no search space, the nonce is incremented indefinitely until a hash that meets the difficulty target is found
 
 ### Practical Exercises
+Inspect block 500000 in any blockchain explorer. 
+1. What is the number of transactions in this block?
+2. What is the sum of block reward and fee reward?
+3. Inspect the miner responsible for this block. Note the first few digits of its address (<OutboundLink target="_blank" href='https://www.blockchain.com/btc/address/34qkc2iac6RsyxZVfyE2S5U5WcRsbg2dpK'>34qkc2iac6RsyxZVfyE2S5U5WcRsbg2dpK</OutboundLink>).
+In the coinbase transaction of this block, how many bitcoins are transferred and to whom? Do not perform any rounding. 
 
 ### Knowledge Check
