@@ -118,6 +118,10 @@ If all 32 bits of the nonce are tested (resulting in a "Nonce overflows"), the m
 - Increment `extraNonce` located in the coinbase transaction, hence changing the Merkle Root, giving the miner a chance to reset Nonce and try again.
 - Update `nTime` in the block header, hence changing the timestamp, giving the miner a chance to reset Nonce and try again.
 
+Without the nonce mechanism, miners in their search for a hash below the target would have to do a of arbitrary work such as modifying the 
+transaction set (which include recomputing the Merkle Root), change the timestamp, and rehash the entire header. With the nonce parameter,
+miners can keep all variables constant while varying the nonce value. 
+
 In Python, an implementation of the header with all the six fields would look like:
 
 ```python
@@ -494,8 +498,11 @@ render(<>
 </>)
 ```
 
+In addition to the block reward of 6.25 BTC, block #721031 also includes the fee reward of 
+0.00064084 BTC, which is the sum of transaction fees rewarded to the miner for calculating the hash for this block.
 
-
+In this block, the first transaction (coinbase transaction) is hence a miner's reward transaction, 
+where the payout of 6.25 BTC + 0.00064084 BTC to the miner's address is recorded.
 
 ## Knowledge Check
 1. What is the `hashMerkleRoot` field referring to in Bitcoin mining?
