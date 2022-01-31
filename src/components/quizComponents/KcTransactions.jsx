@@ -1,7 +1,7 @@
 import React from 'react';
 import { Space, Alert, Form, Button, Radio, Divider } from 'antd';
 
-export const KnowledgeCheckTransactions = () => {
+export const KcTransactions = () => {
   const [form] = Form.useForm();
   const [correctness, setCorrectness] = React.useState({ q1: false, q2: false, q3: false });
 

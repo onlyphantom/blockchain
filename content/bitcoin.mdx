@@ -478,7 +478,7 @@ date +%s | xargs printf '%x\n'
 hexdump -n 16 -e '4/4 "%08X" 1 "\n"' /dev/urandom
 ```
 
-## Bitcoin Mining Summary
+## Coinbase Transaction
 To further solidify the concepts, I recommend that you use blockchain explorer and look for the latest (most recently mined) blocks. 
 For example, the most recently mined block as of this writing would be <OutboundLink target="_blank" href='https://www.blockchain.com/btc/block/00000000000000000004265bafef34cee54da03d5eca6d95c57faeca6cfdb0c3'>Block 721031</OutboundLink>, mined on January 30, 2022.
 
@@ -494,7 +494,7 @@ let blockNum = 721031
 let reward = 50*1/(2**(Math.floor(blockNum/210000)))
 
 render(<>
-  <h3>Decimal: {reward}</h3>
+  <h3>Block Reward: {reward}</h3>
 </>)
 ```
 
