@@ -14,6 +14,7 @@ import { Quote, Tags } from '../src/components/reactComponents/utils/UX';
 import Difficulty from '../src/components/reactComponents/Difficulty';
 import NTransPerBlock from '../src/components/reactComponents/NTransPerBlock';
 import Blockchain from '../src/components/reactComponents/Blockchain';
+import { PeBitcoin, KcBitcoin } from '../src/components/quizComponents/Bitcoin'
 
 <Tags name="Topics" list={props.frontmatter.keywords[0].split(',')} />
 
@@ -505,6 +506,9 @@ In this block, the first transaction (coinbase transaction) is hence a miner's r
 where the payout of 6.25 BTC + 0.00064084 BTC to the miner's address is recorded.
 
 ## Knowledge Check
+
+<PeBitcoin />
+
 1. What is the `hashMerkleRoot` field referring to in Bitcoin mining?
 - [ ] The 256-bit hash of the previous block header 
 - [x] The 256-bit hash of the Merkle root of the block's transactions
@@ -531,12 +535,3 @@ network abandons the blocks not in the longest chain
 - [ ] The range of values from 0 to 2^64
 - [ ] The range of values from 0 to 2^128
 - [ ] There is no search space, the nonce is incremented indefinitely until a hash that meets the difficulty target is found
-
-### Practical Exercises
-Inspect block 500000 in any blockchain explorer. 
-1. What is the number of transactions in this block?
-2. What is the sum of block reward and fee reward?
-3. Inspect the miner responsible for this block. Note the first few digits of its address (<OutboundLink target="_blank" href='https://www.blockchain.com/btc/address/34qkc2iac6RsyxZVfyE2S5U5WcRsbg2dpK'>34qkc2iac6RsyxZVfyE2S5U5WcRsbg2dpK</OutboundLink>).
-In the coinbase transaction of this block, how many bitcoins are transferred and to whom? Do not perform any rounding. 
-
-### Knowledge Check

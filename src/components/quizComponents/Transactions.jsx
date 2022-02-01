@@ -3,7 +3,7 @@ import { Checkbox, Space, Alert, Form, Button, Radio, Progress, Divider } from '
 
 export const KcTransactions = () => {
   const [form] = Form.useForm();
-  const [correctness, setCorrectness] = React.useState({ q1: false, q2: false, q3: false });
+  const [correctness, setCorrectness] = useState({ q1: false, q2: false, q3: false });
 
   const validateAnswer = (userAnswer, correctAnswer, errorMsg) => {
     if (userAnswer === correctAnswer) {
