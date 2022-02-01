@@ -51,7 +51,10 @@ const customStyles = css`
         border-color: rgb(156, 220, 254);
     }
 
-    .ant-tabs {
+    .ant-tabs,
+    .ant-checkbox-wrapper,
+    .ant-progress-circle .ant-progress-text,
+    .ant-progress {
         color: inherit;
         font-size: inherit;
     }

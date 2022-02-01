@@ -2,14 +2,14 @@
 title: "Transactions"
 metaTitle: "Transactions on Ethereum (Currency, Gas Mechanisms, EIP-1559)"
 metaDescription: "Understanding how Ethereum transactions work"
-date: 2021-11-01
+date: 2022-01-31
 author: Samuel Chan
 keywords: ["hashing, ethereum, blockchain"]
 ---
 import { StyledHeading } from '../src/components/styles/Docs';
-import { Alert } from 'antd';
+import { Alert, Checkbox } from 'antd';
 import GasFeeOracle from '../src/components/reactComponents/GasFeeOracle'
-import { KcTransactions } from '../src/components/quizComponents/KcTransactions'
+import { PeTransactions, KcTransactions } from '../src/components/quizComponents/Transactions'
 
 <StyledHeading>{props.frontmatter.metaTitle}</StyledHeading>
 
@@ -158,15 +158,6 @@ A summary of <a id="Gas Fee after the London Upgrade" name="Gas Fee after the Lo
 - A sender can additionally specify a maximum limit they are willing to pay (`maxFeePerGas`), and sender is refunded the difference between the max fee and the sum of the base fee and tip. The sender will never pay more than the market price for gas on that block (`baseFeePerGas`)
 
 ## Knowledge Check
-#### Practical Exercises
-- [ ] Use the Gas Oracle [Experiment](#experiment) set up above, find the **estimated time** right now for an Ethereum transaction that pays 200 Gwei of gas fee (_it is strongly recommended that you obtain an API key from Etherscan.io_)
 
-- [ ] Use the Gas Oracle [Experiment](#experiment) set up above, find the **Low-priority Gas Price** for an Ethereum transaction right now 
-(_it is strongly recommended that you obtain an API key from Etherscan.io_)
-
-- [ ] Log in to your MetaMask wallet (or your preferred crypto wallet), mock a transaction from a Test Network (Goerli, Kovan, Rinkeby etc) but edit the gas fee to get some familiarity with the priority fee mechanics (low / medium / high). You should be able to edit your gas limit, priority fee and max fee for your transaction. **Make sure you are doing this on a Test Network**. You can reject the transaction at the end of your experimentation.
-
-- [ ] Explore how much ETH has been burned in total on [Watch The Burn](https://watchtheburn.com/)
-
-
+<PeTransactions />
 <KcTransactions />

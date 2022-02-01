@@ -1,5 +1,5 @@
-import React from 'react';
-import { Space, Alert, Form, Button, Radio, Divider } from 'antd';
+import React, { useState } from 'react';
+import { Checkbox, Space, Alert, Form, Button, Radio, Progress, Divider } from 'antd';
 
 export const KcTransactions = () => {
   const [form] = Form.useForm();
@@ -27,7 +27,7 @@ export const KcTransactions = () => {
 
   return (
     <Form form={form} onFinish={onAttempt}>
-      <h3>Knowledge Check: Transactions</h3>
+      <h2>Quizzes</h2>
 
       <Divider orientation="left" dashed>
         Question 1
@@ -153,4 +153,44 @@ export const KcTransactions = () => {
       )}
     </Form>
   );
+};
+
+export const PeTransactions = () => {
+
+  const [done, setDone] = useState(0);
+
+  const onChange = e => {
+    if (e.target.checked) {
+      setDone(prev => prev + 1);
+    } else {
+      setDone(prev => prev - 1);
+    }
+  }
+
+  return <div>
+    <Progress type="dashboard" percent={done / 4 * 100} format={() => `${done} Tasks`} width={80} />
+    <h3 style={{ display: 'inline', marginLeft: '4%' }}>Practical Exercises</h3>
+    <ul>
+      <li>
+        <Checkbox onChange={onChange}>
+          Use the Gas Oracle <a href="#experiment">Experiment</a> set up above, find the <b>estimated time</b> right now for an Ethereum transaction that pays 200 Gwei of gas fee (<i>it is strongly recommended that you obtain an API key from Etherscan.io</i>)
+        </Checkbox>
+      </li>
+      <li>
+        <Checkbox onChange={onChange}>
+          Use the Gas Oracle <a href="#experiment">Experiment</a> set up above, find the <b>Low-priority Gas Price</b> right now for an Ethereum transaction that pays 200 Gwei of gas fee (<i>it is strongly recommended that you obtain an API key from Etherscan.io</i>)
+        </Checkbox>
+      </li>
+      <li>
+        <Checkbox onChange={onChange}>
+          Log in to your MetaMask wallet (or your preferred crypto wallet), mock a transaction from a Test Network (Goerli, Kovan, Rinkeby etc) but edit the gas fee to get some familiarity with the priority fee mechanics (low / medium / high). You should be able to edit your gas limit, priority fee and max fee for your transaction. <b>Make sure you are doing this on a Test Network</b>. You can reject the transaction at the end of your experimentation.
+        </Checkbox>
+      </li>
+      <li>
+        <Checkbox onChange={onChange}>
+          Explore how much ETH has been burned in total on <a href="https://watchtheburn.com/">Watch The Burn</a>
+        </Checkbox>
+      </li>
+    </ul>
+  </div>
 };
