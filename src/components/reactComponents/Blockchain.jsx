@@ -153,9 +153,11 @@ const Blockchain = () => {
                 )
             }
             <p>
-                The default block difficulty of 2,3 and 4 may take a while to mine. <br />
-                If this isn't desired or if you're on a limited computer, you can reduce the difficulty by decrementing the numbers above. <br />
-                For example, setting it to 1,1 and 1 will reduce the time it take to find the nonces to literal seconds.
+                <small>
+                    The default block difficulty of 2,3 and 4 may take a while to mine. <br />
+                    If this isn't desired or if you're on a limited computer, you can reduce the difficulty by decrementing the numbers above. <br />
+                    For example, setting it to 1,1 and 1 will reduce the time it take to find the nonces to literal seconds.
+                </small>
             </p>
 
 

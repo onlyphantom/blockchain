@@ -100,7 +100,8 @@ const customStyles = css`
         color: white
     }
 
-    .ant-input.correct, .ant-input.correct:focus {
+    .ant-input.correct, .ant-input.correct:focus,
+    input.ant-input.ant-input-disabled.correct, input.ant-input.ant-input-disabled.correct:focus {
         border-color: #3b7789;
     }
 
