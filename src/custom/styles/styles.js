@@ -15,8 +15,13 @@ const customStyles = css`
 
     .ant-form-item-label > label, 
     .ant-descriptions-item-content, 
-    .ant-descriptions-title {
+    .ant-descriptions-title,
+    .ant-checkbox-group {
         color: inherit;
+    }
+
+    .ant-checkbox-group {
+        display: grid;
     }
 
     .ant-descriptions-bordered .ant-descriptions-item-label {
@@ -101,7 +106,8 @@ const customStyles = css`
     }
 
     .ant-input.correct, .ant-input.correct:focus,
-    input.ant-input.ant-input-disabled.correct, input.ant-input.ant-input-disabled.correct:focus {
+    input.ant-input.ant-input-disabled.correct, input.ant-input.ant-input-disabled.correct:focus,
+    span.ant-input-affix-wrapper.correct, span.ant-input-affix-wrapper.correct:hover {
         border-color: #3b7789;
     }
 

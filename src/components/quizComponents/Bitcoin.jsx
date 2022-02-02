@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Checkbox, Space, Alert, Form, Input, Tooltip, Button, Radio, Progress, Divider } from 'antd';
-import { LinkOutlined, CheckCircleTwoTone, CheckCircleFilled } from '@ant-design/icons';
+import { Checkbox, Space, Input, Tooltip, Button, Radio, Progress, notification, Divider } from 'antd';
+import { LinkOutlined, CheckCircleFilled } from '@ant-design/icons';
 
-export const KcBitcoin = () => {
-
-    return (
-        <h2>Quizzes</h2>
-    )
-}
+const successNotification = () => {
+    notification.open({
+        message: 'Job well done!',
+        description:
+            'You have completed the knowledge check for this chapter. Fantastic work!',
+        icon: <CheckCircleFilled style={{ color: '#52c41a' }} />,
+    });
+};
 
 export const PeBitcoin = () => {
 
-    const correct = { q1: 2701, q2: 15.89351625, q3: { address: '34qkc2iac6RsyxZVfyE2S5U5WcRsbg2dpK', amount: 15.89351625 } };
+    const correct = { q1: 2701, q2: 15.89351625, q3: { address: '34qkc2iac6RsyxZVfyE2S5U5WcRsbg2dpK', amount: 15.89351625 }, q4: 'b', q5: ['a', 'b'], q6: 'c', q7: 'a' };
 
     const [correctness, setCorrectness] = useState({ q1: false, q2: false, q3: false, q4: false, q5: false, q6: false, q7: false });
     const [miningFee, setMiningFee] = useState({ blockReward: 0, feeReward: 0 })
@@ -23,10 +25,15 @@ export const PeBitcoin = () => {
         }
     }, [coinbase])
 
+
+    useEffect(() => {
+        if (Object.values(correctness).every(Boolean)) {
+            successNotification()
+        }
+    }, [correctness])
+
     const validateAnswer = (qindex, userAnswer) => {
-        if (typeof userAnswer === 'object' &&
-            !Array.isArray(userAnswer) &&
-            userAnswer !== null) {
+        if (typeof userAnswer === 'object') {
             setCorrectness(prev => ({ ...prev, [qindex]: JSON.stringify(userAnswer) === JSON.stringify(correct[qindex]) }));
         } else {
             setCorrectness(prev => ({ ...prev, [qindex]: userAnswer === correct[qindex] }));
@@ -40,7 +47,7 @@ export const PeBitcoin = () => {
         <div>
             <Progress type="dashboard" percent={Math.round(Object.values(correctness).filter(Boolean).length / Object.keys(correctness).length * 100)} width={80} />
             <h3 style={{ display: 'inline', marginLeft: '4%' }}>Practical Exercises</h3>
-            <p>Inspect block 500000 in any blockchain explorer to answer question (1) to (3). </p>
+            <p>Inspect block <b>500000</b> in any blockchain explorer to answer question (1) to (3). </p>
             <a href="https://www.blockchain.com/btc/block/500000" target="_blank" rel="nofollow">
                 <Button type="primary" shape="round" icon={<LinkOutlined />}>
                     Blockchain.com: #500000
@@ -78,7 +85,7 @@ export const PeBitcoin = () => {
 
                 </li>
 
-                <li style={{ marginTop: 10 }}>
+                <li style={{ marginTop: '6%' }}>
                     <p>
                         What is the sum of block reward and fee reward?
                     </p>
@@ -107,7 +114,7 @@ export const PeBitcoin = () => {
                         className={correctness['q2'] ? 'correct' : ''}
                         suffix={correctness['q2'] ? <CheckCircleFilled style={{ color: '#52c41a' }} /> : ''} />
                 </li>
-                <li style={{ marginTop: 10 }}>
+                <li style={{ marginTop: '6%' }}>
                     <p>
                         Inspect the miner responsible for block #500000. In the coinbase transaction of this block, how many bitcoins are transferred and to whom? Paste the full address into the answer field. Do not perform any rounding to the transaction amount.
                     </p>
@@ -147,10 +154,67 @@ export const PeBitcoin = () => {
                 <Divider orientation="left" dashed>
                     The following are general questions relating to the Bitcoin protocol
                 </Divider>
-                <li style={{ marginTop: 10 }}>What is the `hashMerkleRoot` field referring to in Bitcoin mining?</li>
+                <li style={{ marginTop: '6%' }}>
+                    <p>
+                        What is the <code>hashMerkleRoot</code> field referring to in Bitcoin mining?
+                    </p>
+                    <Radio.Group onChange={e => validateAnswer('q4', e.target.value)}>
+                        <Space direction="vertical">
+                            <Radio value="a">The 256-bit hash of the previous block header</Radio>
+                            <Radio value="b">The 256-bit hash of the Merkle root of the block's transactions</Radio>
+                            <Radio value="c">The 256-bit hash of the current block header along with the previous Merkle root</Radio>
+                            <Radio value="d">The 256-bit hash of the difficulty target to produce a valid Merkle root</Radio>
+                        </Space>
+                    </Radio.Group>
+                </li>
+                <li style={{ marginTop: '6%' }}>
+                    <p>
+                        Supposed the miner has exhausted all possible bits of the nonce, what can be done to reset the nonce and try again?
+                        <br /><b>Pick all that apply.</b>
+                    </p>
+                    <Checkbox.Group
+                        options={[
+                            { label: <span>Increment <code>extraNonce</code> in the coinbase transaction</span>, value: 'a' },
+                            { label: <span>Increment <code>nTime</code> in the block header</span>, value: 'b' },
+                            { label: <span>Decrement <code>nBits</code> in the block header</span>, value: 'c' },
+                            { label: <span>Increment <code>nBits</code> to reduce the difficulty for finding a qualifying nonce</span>, value: 'd' },
+                        ]}
+                        onChange={(val) => {
+                            console.log(val)
+                            validateAnswer('q5', val)
+                        }}
+                    />
+                </li>
+                <li style={{ marginTop: '6%' }}>
+                    <p>
+                        When an accidental fork occur from two or more miners finding a block within seconds of each other,
+                        how is this fork resolved?
+                    </p>
+                    <Radio.Group onChange={e => validateAnswer('q6', e.target.value)}>
+                        <Space direction="vertical">
+                            <Radio value="a">All transactions from forks are considered orphaned blocks and added to the mempool for inclusion again</Radio>
+                            <Radio value="b">Nonce is incremented for every block and the miner will try again with a higher difficulty target, in the
+                                hopes of resolving a fork</Radio>
+                            <Radio value="c">Wait for subsequent blocks to be mined, so one chain becomes longer than the other(s) and the
+                                network abandons the blocks not in the longest chain</Radio>
+                        </Space>
+                    </Radio.Group>
+                </li>
+                <li style={{ marginTop: '6%' }}>
+                    <p>What is the search space for the nonce?</p>
+                    <Radio.Group onChange={e => validateAnswer('q7', e.target.value)}>
+                        <Space direction="vertical">
+                            <Radio value="a">The range of values from 0 to 2^32</Radio>
+                            <Radio value="b">The range of values from 0 to 2^64</Radio>
+                            <Radio value="c">The range of values from 0 up to the number of transactions in the block</Radio>
+                            <Radio value="d">There is no search space, the nonce is incremented indefinitely until a hash that meets the difficulty target is found</Radio>
+                        </Space>
+                    </Radio.Group>
+                </li>
+
             </ol>
 
-        </div>
+        </div >
     )
 }
 

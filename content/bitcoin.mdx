@@ -508,30 +508,3 @@ where the payout of 6.25 BTC + 0.00064084 BTC to the miner's address is recorded
 ## Knowledge Check
 
 <PeBitcoin />
-
-1. What is the `hashMerkleRoot` field referring to in Bitcoin mining?
-- [ ] The 256-bit hash of the previous block header 
-- [x] The 256-bit hash of the Merkle root of the block's transactions
-- [ ] The 256-bit hash of the current block header along with the previous Merkle root
-- [ ] The 256-bit hash of the difficulty target to produce a valid Merkle root
-
-2. Supposed the miner has exhausted all possible bits of the nonce, what can be done to reset the nonce and try again?
-Pick all that apply.
-- [x] Increment `extraNonce` in the coinbase transaction
-- [x] Increment `nTime` in the block header
-- [ ] Increment `nBits` in the block header 
-- [ ] Modify `nBits` to reduce the difficulty of proof-of-work
-
-3. When an accidental fork occur from two or more miners finding a block within seconds of each other, 
-how is this fork resolved?
-- [ ] All transactions from forks are considered orphaned blocks and added to the mempool for inclusion again
-- [ ] Nonce is incremented for every block and the miner will try again with a higher difficulty target, in the
-hopes of resolving a fork
-- [x] Wait for subsequent blocks to be mined, so one chain becomes longer than the other(s) and the 
-network abandons the blocks not in the longest chain
-
-4. What is the search space for the nonce?
-- [x] The range of values from 0 to 2^32
-- [ ] The range of values from 0 to 2^64
-- [ ] The range of values from 0 to 2^128
-- [ ] There is no search space, the nonce is incremented indefinitely until a hash that meets the difficulty target is found
