@@ -11,22 +11,18 @@ export const KcBitcoin = () => {
 
 export const PeBitcoin = () => {
 
-    const [correctness, setCorrectness] = useState({ q1: false, q2: false, q3: false });
+    const correct = { q1: 2701, q2: 15.89351625, q3: [15.89351625, '34qkc2iac6RsyxZVfyE2S5U5WcRsbg2dpK'] };
+    const [correctness, setCorrectness] = useState({ q1: false, q2: false, q3: false, q4: false, q5: false, q6: false, q7: false });
 
-    const validateAnswer = (userAnswer, correctAnswer, errorMsg) => {
-        if (userAnswer === correctAnswer) {
-            return Promise.resolve();
-        } else {
-            return Promise.reject(new Error(errorMsg || 'Incorrect answer, please try again.'));
-        }
+    const validateAnswer = (qindex, userAnswer) => {
+        setCorrectness(prev => ({ ...prev, [qindex]: userAnswer === correct[qindex] }));
     };
 
-    const correct = { q1: 2701, q2: 15.89351625, q3: [15.89351625, '34qkc2iac6RsyxZVfyE2S5U5WcRsbg2dpK'] };
 
 
     return (
         <div>
-            <Progress type="dashboard" percent={0 / 4 * 100} format={() => `${0} Tasks`} width={80} />
+            <Progress type="dashboard" percent={Math.round(Object.values(correctness).filter(Boolean).length / Object.keys(correctness).length * 100)} width={80} />
             <h3 style={{ display: 'inline', marginLeft: '4%' }}>Practical Exercises</h3>
             <p>Inspect block 500000 in any blockchain explorer to answer question (1) to (3). </p>
             <a href="https://www.blockchain.com/btc/block/500000" target="_blank" rel="nofollow">
@@ -57,8 +53,7 @@ export const PeBitcoin = () => {
                         title="Do not use comma or decimal point."
                         placement="topLeft"
                     >
-
-                        <Input placeholder="100000" />
+                        <Input placeholder="100000" className={correctness['q1'] ? 'correct' : ''} onChange={e => validateAnswer('q1', Number(e.target.value))} />
                     </Tooltip>
 
                 </li>

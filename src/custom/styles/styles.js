@@ -100,6 +100,10 @@ const customStyles = css`
         color: white
     }
 
+    .ant-input.correct, .ant-input.correct:focus {
+        border-color: #3b7789;
+    }
+
     #primeTable .td {
         padding: 0.8rem 0.5rem;
     }
