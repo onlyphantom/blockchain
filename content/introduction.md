@@ -4,8 +4,6 @@ metaTitle: "Blockchain 101 (an Introduction)"
 metaDescription: "Learn Blockchain from First Principles"
 ---
 
-Still under development. Follow [Samuel Chan](https://github.com/onlyphantom) to follow my progress on this.
-
 Bitcoin and the blockchain technology ushered in a new era and "developed the foundation for a new digital theory of property rights" (Nakamoto.com),
 but if your introduction to the field is through YouTube videos and social media, you may find that the education on this topic is seriously lacking compared
 to the speculation of the crypto-currency market. 

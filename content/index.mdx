@@ -8,78 +8,85 @@ keywords: ["encryption, decryption, aes, blockchain, bitcoin, cryptography 101"]
 ---
 
 import React from 'react'
-import { Button, Alert } from 'antd'
+import { Button, Alert, Timeline } from 'antd'
 import { Tags, Quote } from '../src/components/reactComponents/utils/UX';
+import { LinkOutlined } from '@ant-design/icons';
+
 
 <Tags name="Topics" list={
     [
-        "Encryption",
-        "Decryption",
-        "AES",
         "Blockchain",
         "Bitcoin",
-        "Cryptography 101"
+        "Learn Blockchain",
+        "Cryptography"
     ]
 } />
 
+## Motivation
+Bitcoin and the blockchain technology ushered in a new era. 
+It "<b>developed the foundation for a new digital theory of property rights</b>" (Nakamoto.com).
 
-Bitcoin and the blockchain technology ushered in a new era and "developed the foundation for a new digital theory of property rights" (Nakamoto.com),
-but if your introduction to the field is through YouTube videos and social media, you may find that the education on this topic is seriously lacking compared
-to the speculation of the crypto-currency market. 
+If your introduction to the field is through YouTube videos and social media, you may find 
+that the education on this topic is severely lacking compared to the amount of content that encourages 
+reckless speculation in the crypto-currency market. 
 
-I've created Learn Blockchain Academy to help you navigate the engineering -- and sometimes philosophical -- principles of the blockchain. This is not an exhaustive, academically rigorous course,
-but it is sufficiently rich in theory, highly practical, accessible and illustrative to anyone who is interested to learn about the inner working of the blockchain.
-
-It is our belief that an education-first approach to cryptography will be the best way to acquire an appreciation for the underlying principles of blockchain, and thus increase the 
-adoption of blockchain technology. 
 
 <Quote 
-    text="Blockchain isn't about money. It isn't even about transactions. It is a libertarian's view on our relationship with the world, and the creation of a new form of trust." 
+    text="Blockchain isn't about money. It isn't even about transactions. It is the creation of a new form of trust and ownership, backed by verifiable cryptographic truth." 
     src="Supertype"
     author="Samuel Chan"
     img="https://sp-ao.shortpixel.ai/client/to_auto,q_glossy,ret_img,w_150,h_150/https://supertype.ai/wp-content/uploads/2020/12/IMG_8266.jpg"
     cover={true}
 />
 
-### Update 2022-01-09
-Still under development. Follow [Samuel on Github](https://github.com/onlyphantom) to stay updated on the progress,
+We wanted to create an interactive workbook that help the average reader 
+learn about the engineering marvel of blockchain, the Bitcoin protocol, 
+and the cryptographic ideas that made the Bitcoin protocol possible. It is created 
+to facilitate a self-learning approach guided by interactive quizzes, live code editors, and other interactive elements to 
+help the reader acquire theoretical knowledge through experimentation.
 
-LearnBlockchain is developed as an interactive workbook. You will learn while interacting
-with live examples, interactive elements, quizzes and live code "sandbox":
+It is our belief that an education-first approach to cryptography will be the best way to acquire an appreciation for the underlying principles of blockchain, and thus increase the 
+adoption of blockchain technology. 
 
-<Button type="primary">Primary Button</Button>
-    <Button>Default Button</Button>
-    <Button type="dashed">Dashed Button</Button>
-<Alert message="Success Text" type="success" />
+## Content
+If you'd like an illustrative infographic-style depiction of Bitcoin transaction lifecyle, this is one from wiki.p2pfoundation.com. Clicking on the 
+image opens it in full size in a new tab.
 
-An example of interactive code:
-```javascript react-live=true
-const elem = <button style={{color: 'seagreen'}}>
-                Change me to blue.
-             </button>
-render(elem)
-```
+![](images/bitcoinworks.jpeg)
 
-```javascript
-- const data = ['1','2'];
-+ const data = [1,2];
-```
+You can consume the workbook in the order that best made sense for you since most chapters are fairly self-contained.
+If you are new to cryptography and blockchain, you may want to begin your journey in the following order:
 
-```javascript react-live=true hide-code
-const App = () => {
+<Timeline>
+    <Timeline.Item>
+        <a href="/cryptography">
+            <Button type="primary" shape="round" icon={<LinkOutlined />}>
+                Cryptograhy 101
+            </Button>
+        </a>
+        <p>
+            Learn the basics of classical and modern cryptography, including how to encrypt and decrypt data, RSA, and the Advanced Encryption Standard (AES).
+        </p>
+    </Timeline.Item>
+    <Timeline.Item>
+        <a href="/cryptography-in-blockchain">
+            <Button type="primary" shape="round" icon={<LinkOutlined />}>
+                Cryptograhy in Blockchain
+            </Button>
+        </a>
+        <p>
+            Understand the role of encryption and modern cryptography in blockchain, with an emphasis on hashing, SHA-2, SHA-3 and Merkle trees. 
+        </p>
+    </Timeline.Item>
+    <Timeline.Item>
+        <a href="/bitcoin">
+            <Button type="primary" shape="round" icon={<LinkOutlined />}>
+                How Bitcoin Works
+            </Button>
+        </a>
+        <p>
+            An in-depth look at the Bitcoin protocol, including its block generation mechanism, proof-of-work and bitcoin mining.
+        </p>
+    </Timeline.Item>
 
-    const [val, setVal] = React.useState(1704)
-
-    return (
-        <div>
-            <h1>Hashing</h1>
-
-            <p>
-                {val} Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi voluptas tenetur dignissimos 
-                <br/> Aspernatur, corrupti repellat debitis officia, odit doloribus consequatur unde amet similique ipsum laborum eveniet, maxime saepe. Inventore aliquam consequatur perferendis iste veritatis mollitia veniam odit.
-            </p>
-        </div>
-    )
-}
-render(App)
-```
+</Timeline>
