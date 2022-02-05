@@ -37,7 +37,7 @@ const customStyles = css`
         color: #61a0e0;
     }
 
-    .ant-radio-wrapper, .ant-radio-group, .ant-form-item, .ant-form {
+    .ant-radio-wrapper, .ant-radio-group, .ant-form-item, .ant-form, ul.ant-timeline {
         color: inherit;
     }
 
