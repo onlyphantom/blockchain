@@ -16,7 +16,7 @@ import { OutboundLink } from 'gatsby-plugin-gtag'
 import { Quote, Tags } from '../src/components/reactComponents/utils/UX';
 import SHA256 from '../src/components/reactComponents/SHA256';
 import Merkle from '../src/components/reactComponents/Merkle';
-
+import Signing from '../src/components/reactComponents/Signing';
 
 <Tags name="Topics" list={props.frontmatter.keywords[0].split(',')} />
 
@@ -277,6 +277,11 @@ Assuming SHA3-256 is used, these are the notations:
 - After the absorbing phase (meaning we've fully consumed the message), we move into the "squeezing phase", where we again put it through the permutation function
     - We need to output 256 bits, so we truncate the output of the permutation function (take the first 256 bits) and output <span className='math-inline'>Z</span>, our digest / hash value.
     - For different selection of rate (<span className='math-inline'>r</span>) and type), the output length of the permutation function will be different so repeat the process as necessary until the desired length for <span className='math-inline'>Z</span> is reached.  
+
+## Digital Signatures Algorithm
+
+
+<Signing />
 
 ## Merkle Tree
 Merkle Tree is a concept in cryptography and computer science introduced by _Ralph Merkle_ in 1974. It is the same Merkle who invented the Merkle-Damgard construction.
