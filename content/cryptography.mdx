@@ -186,10 +186,10 @@ Let's begin by picking two prime numbers; let's say 3 and 11. Following the proc
 #### RSA in Practice
 
 Be reminded that calculating <span className='math-inline'>x^k \mod n</span> is easy but 
-the inverse <span className='math-inline'>c^-k \mod n</span> is very difficult for a sufficiently large number of <span className='math-inline'>n</span>. The problem becomes easy,
+the inverse <span className='math-inline'>c^{-k} \mod n</span> is very difficult for a sufficiently large number of <span className='math-inline'>n</span>. The problem becomes easy,
 if we are able to factor <span className='math-inline'>n</span> into a product of two primes, using what we've learned in Euler's Totient Function.
 
-In practice, a modulus of size in the thousands is not feasible to factor, and e 
+In practice, a modulus of size in the thousands is not feasible to factor, and we 
 often pick a value such as 1,024 bits (309 decimal digits). A large number allow us to encode a full-length message
 in a single block, convert it to hexadecimal and then convert it into a decimal.
 

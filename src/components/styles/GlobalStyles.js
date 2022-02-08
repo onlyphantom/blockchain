@@ -44,6 +44,11 @@ export const baseStyles = css`
     /* color: #663399; */
   }
 
+  em {
+    color: var(--accent-color);
+    font-weight: 700;
+  }
+
   body {
     font-family: 'Roboto';
   }

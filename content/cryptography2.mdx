@@ -279,7 +279,68 @@ Assuming SHA3-256 is used, these are the notations:
     - For different selection of rate (<span className='math-inline'>r</span>) and type), the output length of the permutation function will be different so repeat the process as necessary until the desired length for <span className='math-inline'>Z</span> is reached.  
 
 ## Digital Signatures Algorithm
+In the next experiment, you will put into practice many of the concepts you've learned in the previous sections. 
+We are going to create a public and private key pair, and then sign a message with the private key.
 
+Your public key will be broadcasted to everyone, and your private key will be kept private. Anyone in a peer to peer network 
+can use your public key to verify the signature of the message, and hence establishing the authenticity of the message. In other 
+words, anyone can verify that a blockchain transaction originating from your wallet to another's is indeed initiated by you.
+
+### Diffie-Helman Key Exchange
+This idea is first introduced in the earlier chapter on [public key cryptography](./cryptography#asymmetriccryptography). In it, 
+we've learned how any sender can sign the message using their private key before transmitting the message along with the signature
+to the receiver. Anyone can verify the integrity of this message using the public key of the sender.
+
+We've seen an example of this in the previous chapter, where we used the [RSA](./cryptography#rsa) algorithm to create a public key.
+RSA works by relying on the fact that large prime numbers are difficult to factor (the **integer factorization problem**).
+
+Another way to develop public key algorithms is based on the idea of the **discrete logarithm problem**, which describes how computationally 
+infeasible it is to find the exponent of the generator. The **Diffie-Helman Key Exchange** algorithm makes use of this problem, which is described
+as follows:
+
+- Alice and Bob agree publicly on a **prime modulus** and a **generator**. The **generator** is also a primitive root of the **prime modulus** and
+they're selected this way to ensure that the resulting shared secret can take on any value from 1 to <span className='math-inline'>p-1</span>.
+  - The prime modulus they agreed on is 31 (<span className='math-inline'>p</span>), and the base is 3 (<span className='math-inline'>g</span>)
+- Alice chooses a secret integer <span className='math-inline'>a</span> and Bob chooses a secret integer <span className='math-inline'>b</span>.
+    - Alice's secret number <span className='math-inline'>a</span> is <em>13</em>.
+    - Bob's secret number <span className='math-inline'>b</span> is <em>17</em>.
+- Alice and Bob perform the calculation <span className='math-inline'>3^x \mod 31</span> and send the result to each other.
+    - Alice sends Bob the number 24: <span className='math-inline'>3^{13} \mod 31 = 24</span>
+    - Bob sends Alice the number 22: <span className='math-inline'>3^{17} \mod 31 = 22</span>
+- Upon receiving the number, each of them perform the calculation <span className='math-inline'>s^x \mod 31</span> where <span className='math-inline'>s</span> is the received number and <span className='math-inline'>x</span> is the secret number
+    - Alice computes <span className='math-inline'>s=22^{13} \mod 31 = 13</span>
+    - Bob computes <span className='math-inline'>s=24^{17} \mod 31 = 13</span>
+- They now arrive at the same number <span className='math-inline'>s=13</span>, and this is the 
+secret they use as an encryption key for sending messages across the network.
+
+Notice that <em>a</em> is known only to Alice, and <em>b</em> is known only to Bob. Additionally, one can 
+also observe that the final calculation Alice makes are equivalent to the final calculation Bob makes
+- Alice: <span className='math-inline'>3^{17^{13}} \mod 31</span>
+- Bob: <span className='math-inline'>3^{13^{17}} \mod 31</span>
+
+The exponents are ordered differently but that doesn't change the result, and so in effect both
+Alice and Bob performed a calculation that involves raising the <span className='math-inline'>g</span> to the power of both their secret numbers without ever knowing the other's secret number.
+
+Using the discrete logarithm problem this way to create a public key isn't exclusive to 
+the **Diffie-Helman Key Exchange** algorithm. Elliptic curves (an algebraic cubic curve over a field, such as the field of real numbers or prime finite fields) are also used to create public keys.
+What RSA does with prime numbers, elliptic curve cryptography (ECC) does with elliptic curves, and the two are very similar. Notable schemes in ECC are 
+Elliptic Curve Diffie-Hellman (ECDH) for key exchange and Elliptic Curve Digital Signature Algorithm (ECDSA), which is based on the idea of signing a message with a private key and verifying the signature with the public key.
+
+### Experiment 2: ECDSA
+In the following experiment we will be creating a public and private key pair using Secp256k1, the specific ECDSA algorithm used in Bitcoin. All points on
+the curve are valid Bitcoin public keys, generated by taking a random 256-bit number ("private key") and multiplying it by the generator point before returning the 
+coordinates of the resulting point.
+
+Due to the discrete log problem, dividing by the generator point is not possible, which gives it the desired property of being intractable. 
+
+#### Instructions
+- Create a private key and public key pair using the Secp256k1 curve
+- Write a plain text message and sign it with the private key. This message is a representation of what could be a transaction of some sort on a blockchain
+- Take note of the signature that was generated when you sign it with your private key
+- Your private key will remain private but your public key will be broadcasted to everyone. 
+Anyone in a peer to peer network can use your public key to verify the signature of the message, and hence establishing the authenticity of the message.
+- Try to have a failed verification by entering a different message and/or signature. Changing even a small punctuation, or capitalizing a letter will invalidate
+the signature. This is the mechanism that keep transactions honest and secure, for as long as private keys remain secret.
 
 <Signing />
 
@@ -297,9 +358,8 @@ Its application includes Git and Mercurial (revision control systems), and is us
 The famed Bitcoin inventor Satoshi Nakamoto wrote about Merkle Tree and cited Ralph's paper in the references for the Bitcoin whitepaper. 
 It is perhaps safe to say that Merkle Tree is foundational to a peer-to-peer blockchain architecture, the absence of which render the trustless consensus mechanism infeasible. 
 
-### Experiment 2
+### Experiment 3: Merkle Proof
 
-#### Merkle Proof
 One of blockchain's central tenet is the idea of a trustless infrastructure. 
 "Don't trust. Verify." is an often cited statement, and is well embedded in its design. To fully mitigate trust in a third party mediator, 
 each node in a blockchain must be able to verify the record of all transactions independently, but doing so may incur a huge computational cost if not for the merkle proof mechanism. 

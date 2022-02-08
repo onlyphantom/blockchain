@@ -38,7 +38,6 @@ const Signing = () => {
       const key = ec.keyFromPrivate(privateKey);
       const pubKey = key.getPublic('hex');
       return pubKey;
-      setPubK(pubKey);
     }
   };
 
@@ -61,7 +60,6 @@ const Signing = () => {
     const EC = require('elliptic').ec;
     const ec = new EC('secp256k1');
     const keyPair = ec.keyFromPrivate(priK);
-    console.log(keyPair);
     const messageBuffer = Buffer.from(message, 'utf8');
     const hexSignature = Buffer.from(keyPair.sign(messageBuffer).toDER()).toString('hex');
     setSignature(hexSignature);
@@ -73,12 +71,19 @@ const Signing = () => {
     const keyPair = ec.keyFromPublic(pubK, 'hex');
     let msgBuffer = Buffer.from(msg, 'utf8');
     let signatureBuff = Buffer.from(signature, 'hex');
-    let result = keyPair.verify(msgBuffer, signatureBuff);
-    console.log(result);
 
-    if (result) {
-      message.success('Signature verified');
-    } else {
+    if (signature.length % 2 != 0) {
+      signatureBuff = Buffer.from(signature + '0', 'hex');
+    }
+
+    try {
+      let result = keyPair.verify(msgBuffer, signatureBuff, 'hex');
+      if (result) {
+        message.success('Signature verified');
+      } else {
+        message.error('Failed verification. Message is not authentic.');
+      }
+    } catch (error) {
       message.error('Failed verification. Message is not authentic.');
     }
   };
