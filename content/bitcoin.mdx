@@ -505,6 +505,22 @@ In addition to the block reward of 6.25 BTC, block #721031 also includes the fee
 In this block, the first transaction (coinbase transaction) is hence a miner's reward transaction, 
 where the payout of 6.25 BTC + 0.00064084 BTC to the miner's address is recorded.
 
+## Peer-to-peer Network
+With the right incentives in place, the blockchain can now be maintained by a peer-to-peer network of nodes. 
+But what makes a great peer-to-peer network?
+
+With Bitcoin, anybody can download a piece of software that can be used to create a node, and then connect to the Bitcoin network, whether the intention is to validate blocks ("mining"), or to participate in transactions, or simple to observe and audit the blockchain.
+This is what gives Bitcoin the property of being truly decentralized, in that the network is not controlled by a single entity but by anyone who wants to participate.
+
+The fact that Bitcoin is a truly decentralized network also means that it is resilient to attacks or any kind of malicious activity. The impact of any single compromised node is easily mitigated by the network, and this network cannot easily be "taken down" by a centralized 
+entity since the network comprises of many, geographically diverse independent nodes. 
+Each node in essence stores a history of all transactions ever recorded in the blockchain, and so long as there is one node somewhere, the network is able to validate the authenticity of any transaction. Any node that attempts to act maliciously will quickly be detected since 
+its hashes will be different and will not be accepted by the network.
+
+Users in this network can transact by sending bitcoins, and they do so by broadcasting digitally signed messages to the network using the Bitcoin protocol. 
+Using ECDSA, the sender signs the message with their private key, and node participants can verify the signature with the public key of the sender. Once the signature is verified, 
+the message is accepted by the network and bitcoin miners will perform the proof to work to validate this transaction and include it into the ledger.
+
 ## Knowledge Check
 
 <PeBitcoin />
