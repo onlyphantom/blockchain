@@ -71,18 +71,41 @@ const config = {
     manifest: {
       name: 'Learn Blockchain',
       short_name: 'LearnBlockchain',
-      start_url: '/',
-      background_color: '#6b37bf',
-      theme_color: '#6b37bf',
+      start_url: '/?source=pwa',
+      background_color: '#0e1b28',
+      theme_color: '#0e1b28',
       display: 'standalone',
       crossOrigin: 'use-credentials',
+      description: 'Learn Blockchain from first principles',
       icons: [
+        {
+            "src": "src/pwa-512.svg",
+            "sizes": "512x512",
+            "type": "image/svg+xml",
+        },
+        {
+          src: 'src/pwa-192.png',
+          sizes: `192x192`,
+          type: `image/png`,
+        },
         {
           src: 'src/pwa-512.png',
           sizes: `512x512`,
           type: `image/png`,
         },
       ],
+      "screenshots": [
+        {
+            "src": "/images/screenshot1.png",
+            "type": "image/png",
+            "sizes": "540x720"
+        },
+        {
+            "src": "/images/screenshot2.jpg",
+            "type": "image/jpg",
+            "sizes": "540x720"
+        }
+    ]
     },
   },
 };
