@@ -65,6 +65,7 @@ const config = {
     keywords: 'blockchain, classroom',
     docsLocation: 'https://github.com/onlyphantom/blockchain/tree/main/content',
     favicon: 'https://supertype.ai/wp-content/uploads/2021/07/cropped-logo_sq_inv-32x32.png',
+    appleTouchIcon: 'https://github.com/onlyphantom/blockchain/blob/main/src/img/192.png?raw=true'
   },
   pwa: {
     enabled: true, // disabling this will remove the existing service worker.
@@ -77,24 +78,25 @@ const config = {
       display: 'standalone',
       crossOrigin: 'use-credentials',
       description: 'Learn Blockchain from first principles',
+      icon:`${__dirname}/src/1024.png`,
       icons: [
         {
-          src: 'src/img/192.png',
+          src: `/favicons/192.png`,
           sizes: `192x192`,
           type: `image/png`,
         },
         {
-          src: 'src/img/256.png',
+          src: `/favicons/256.png`,
           sizes: `256x256`,
           type: `image/png`,
         },
         {
-          src: 'src/img/512.png',
+          src: `/favicons/512.png`,
           sizes: `512x512`,
           type: `image/png`,
         },
-                {
-          src: 'src/img/1024.png',
+        {
+          src: `/favicons/1024.png`,
           sizes: `1024x1024`,
           type: `image/png`,
         },
