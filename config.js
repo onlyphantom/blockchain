@@ -67,7 +67,7 @@ const config = {
     favicon: 'https://supertype.ai/wp-content/uploads/2021/07/cropped-logo_sq_inv-32x32.png',
   },
   pwa: {
-    enabled: true, // disabling this will also remove the existing service worker.
+    enabled: true, // disabling this will remove the existing service worker.
     manifest: {
       name: 'Learn Blockchain',
       short_name: 'LearnBlockchain',
@@ -79,33 +79,66 @@ const config = {
       description: 'Learn Blockchain from first principles',
       icons: [
         {
-            "src": "src/pwa-512.svg",
-            "sizes": "512x512",
-            "type": "image/svg+xml",
-        },
-        {
-          src: 'src/pwa-192.png',
+          src: 'src/img/192.png',
           sizes: `192x192`,
           type: `image/png`,
         },
         {
-          src: 'src/pwa-512.png',
+          src: 'src/img/256.png',
+          sizes: `256x256`,
+          type: `image/png`,
+        },
+        {
+          src: 'src/img/512.png',
           sizes: `512x512`,
           type: `image/png`,
         },
+                {
+          src: 'src/img/1024.png',
+          sizes: `1024x1024`,
+          type: `image/png`,
+        },
       ],
-      "screenshots": [
+      // "screenshots": [
+      //   {
+      //       "src": "src/img/screenshot1.png",
+      //       "type": "image/png",
+      //       "sizes": "540x720"
+      //   },
+      //   {
+      //       "src": "src/img/screenshot2.jpg",
+      //       "type": "image/jpg", 
+      //       "sizes": "540x720"
+      //   },
+      //   {
+      //     "src": "screenshot1.webp",
+      //     "sizes": "1280x720",
+      //     "type": "image/webp",
+      //     "label": "Homescreen of Blockchain App"
+      //   },
+      // ],
+      "shortcuts" : [
         {
-            "src": "/images/screenshot1.png",
-            "type": "image/png",
-            "sizes": "540x720"
+          "name": "Cryptography 101",
+          "url": "/cryptography",
+          "description": "Basics of classical and modern cryptography"
         },
         {
-            "src": "/images/screenshot2.jpg",
-            "type": "image/jpg",
-            "sizes": "540x720"
-        }
-    ]
+          "name": "Cryptography in Blockchain",
+          "url": "/cryptography-in-blockchain",
+          "description": "Role of encryption and hashing in blockchain"
+        },
+        {
+          "name": "How Bitcoin Works",
+          "url": "/bitcoin",
+          "description": "In-depth look at the Bitcoin protocol"
+        },
+        {
+          "name": "Transactions",
+          "url": "/transactions",
+          "description": "Understanding Ethereum transactions"
+        },
+      ]
     },
   },
 };
